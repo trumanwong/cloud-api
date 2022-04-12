@@ -1,0 +1,157 @@
+syntax = "proto3";
+
+package api.region.v1;
+
+option go_package = "/api/instance/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.instance.v1";
+
+service Instance {
+  // 可使用的阿里云地域
+  rpc ListRegion (ListRegionRequest) returns (ListRegionResponse);
+  // 选择镜像
+  rpc ListImage (ListImageRequest) returns (ListImageResponse);
+  // 选择实例规格
+  rpc ListInstanceType(ListInstanceTypeRequest) returns (ListInstanceTypeResponse);
+  // 创建实例
+  rpc CreateInstance (CreateInstanceRequest) returns (CreateInstanceResponse);
+  // 更新实例
+  // 开机
+  rpc StartInstance(StartInstanceRequest) returns (StartInstanceResponse);
+  // 关机
+  rpc StopInstance(StopInstanceRequest) returns (StopInstanceResponse);
+  // 重启
+  rpc RebootInstance(RebootInstanceRequest) returns (RebootInstanceResponse);
+  // 删除实例
+  rpc DeleteInstance(DeleteInstanceRequest) returns (DeleteInstanceResponse);
+}
+
+message CreateInstanceRequest {
+  // 区域id
+  string region_id = 1;
+  // 镜像id
+  string image_id = 2;
+  // 实例名称
+  string name = 3;
+  // 实例规格
+  string instance_type = 4;
+  // 系统盘大小
+  uint32 system_disk_size = 5;
+  // 是否为instance_name自动添加有序后缀（默认false）
+  bool unique_suffix = 6;
+  // 创建数量(1-100，默认1)
+  uint32 amount = 7;
+  // 实例密码
+  string password = 8;
+}
+
+message CreateInstanceResponse {
+  // 阿里云请求id
+  string request_id = 1;
+  // 订单id，该参数只有创建包年包月ECS实例（请求参数InstanceChargeType=PrePaid）时有返回值
+  string order_id = 2;
+  // 订单成交价
+  float trade_price = 3;
+  // 实例id列表
+  repeated string instance_id_sets = 4;
+}
+
+message ListRegionRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  string instance_charge_type = 3;
+  string resource_type = 4;
+  string accept_language = 5;
+}
+
+message RegionResponse {
+  string region_end_point = 1;
+  string local_name = 2;
+  string region_id = 3;
+}
+
+message ListRegionResponse {
+  repeated RegionResponse regions = 1;
+}
+
+message ListImageRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  string region_id = 3;
+}
+
+message ImageResponse {
+  string image_name = 1;
+  string os_name = 2;
+  string os_name_en = 3;
+  string architecture = 4;
+  string os_type = 5;
+}
+
+message ListImageResponse {
+  repeated ImageResponse image_responses = 1;
+}
+
+message ListInstanceTypeRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+}
+
+message ListInstanceTypeResponse {
+  string instance_type_id = 1;
+  string instance_type_family = 2;
+  int32 memory_size = 3;
+  int32 cpu_core_count = 4;
+  string gpu_sec = 5;
+}
+
+message StartInstanceRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  string instance_id = 3;
+}
+
+message StartInstanceResponse {
+  // 请求ID
+  string request_id = 1;
+  // 实例操作结果错误码。返回值200为成功
+  string code = 2;
+  // 实例操作返回错误信息。返回值success为成功
+  string message = 3;
+  // 实例ID
+  string instance_id = 4;
+  // 实例当前状态
+  string current_status = 5;
+  // 操作前实例的状态
+  string previous_status = 6;
+}
+
+message StopInstanceRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  string instance_id = 3;
+}
+
+message StopInstanceResponse {
+  string request_id = 1;
+}
+
+message RebootInstanceRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  string instance_id = 3;
+}
+
+message RebootInstanceResponse {
+  string request_id = 1;
+}
+
+message DeleteInstanceRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  string instance_id = 3;
+}
+
+message DeleteInstanceResponse {
+  string request_id = 1;
+}
