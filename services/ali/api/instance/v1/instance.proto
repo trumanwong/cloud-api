@@ -136,6 +136,15 @@ message ListInstanceResponse {
       // 弹性公网IP
       uint32 bandwidth = 5;
     }
+    EipAddress eip_address = 22;
+    // 实例是否可以挂载数据盘
+    bool device_available = 23;
+    // 实例挂载的本地存储容量
+    uint64 local_storage_capacity = 24;
+    // 实例挂载的本地存储数量
+    uint32 local_storage_amount = 25;
+    // 实例运行的镜像ID
+    string image_id = 26;
   }
   // 实例信息
   repeated Instance instances = 6;

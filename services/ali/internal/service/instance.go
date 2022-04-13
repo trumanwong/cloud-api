@@ -7,23 +7,37 @@ import (
 	"ali/internal/biz"
 )
 
-// GreeterService is a greeter service.
-type GreeterService struct {
+// InstanceService is a instance service.
+type InstanceService struct {
 	v1.UnimplementedInstanceServer
 
-	uc *biz.GreeterUsecase
+	uc *biz.InstanceUseCase
 }
 
-// NewGreeterService new a greeter service.
-func NewGreeterService(uc *biz.GreeterUsecase) *GreeterService {
-	return &GreeterService{uc: uc}
+// NewInstanceService new a Instance service.
+func NewInstanceService(uc *biz.InstanceUseCase) *InstanceService {
+	return &InstanceService{uc: uc}
 }
 
-// SayHello implements helloworld.GreeterServer.
-func (s *GreeterService) SayHello(ctx context.Context, in *v1.HelloRequest) (*v1.HelloReply, error) {
-	g, err := s.uc.CreateGreeter(ctx, &biz.Greeter{Hello: in.Name})
+// Create Instance
+func (s *InstanceService) Create(ctx context.Context, in *v1.CreateInstanceRequest) (*v1.CreateInstanceResponse, error) {
+	g, err := s.uc.CreateInstance(ctx, &biz.CreateInstanceRequest{
+		RegionId:       in.RegionId,
+		ImageId:        in.ImageId,
+		Name:           in.Name,
+		InstanceType:   in.InstanceType,
+		SystemDiskSize: in.SystemDiskSize,
+		UniqueSuffix:   in.UniqueSuffix,
+		Amount:         in.Amount,
+		Password:       in.Password,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.HelloReply{Message: "Hello " + g.Hello}, nil
+	return &v1.CreateInstanceResponse{
+		RequestId:      g.RequestId,
+		OrderId:        g.OrderId,
+		TradePrice:     g.TradePrice,
+		InstanceIdSets: g.InstanceIdSets,
+	}, nil
 }

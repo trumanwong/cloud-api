@@ -30,7 +30,8 @@ type InstanceClient interface {
 	ListInstanceType(ctx context.Context, in *ListInstanceTypeRequest, opts ...grpc.CallOption) (*ListInstanceTypeResponse, error)
 	// 创建实例
 	CreateInstance(ctx context.Context, in *CreateInstanceRequest, opts ...grpc.CallOption) (*CreateInstanceResponse, error)
-	// 更新实例
+	// 实例列表
+	ListInstance(ctx context.Context, in *ListInstanceRequest, opts ...grpc.CallOption) (*ListInstanceResponse, error)
 	// 开机
 	StartInstance(ctx context.Context, in *StartInstanceRequest, opts ...grpc.CallOption) (*StartInstanceResponse, error)
 	// 关机
@@ -85,6 +86,15 @@ func (c *instanceClient) CreateInstance(ctx context.Context, in *CreateInstanceR
 	return out, nil
 }
 
+func (c *instanceClient) ListInstance(ctx context.Context, in *ListInstanceRequest, opts ...grpc.CallOption) (*ListInstanceResponse, error) {
+	out := new(ListInstanceResponse)
+	err := c.cc.Invoke(ctx, "/api.region.v1.Instance/ListInstance", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *instanceClient) StartInstance(ctx context.Context, in *StartInstanceRequest, opts ...grpc.CallOption) (*StartInstanceResponse, error) {
 	out := new(StartInstanceResponse)
 	err := c.cc.Invoke(ctx, "/api.region.v1.Instance/StartInstance", in, out, opts...)
@@ -133,7 +143,8 @@ type InstanceServer interface {
 	ListInstanceType(context.Context, *ListInstanceTypeRequest) (*ListInstanceTypeResponse, error)
 	// 创建实例
 	CreateInstance(context.Context, *CreateInstanceRequest) (*CreateInstanceResponse, error)
-	// 更新实例
+	// 实例列表
+	ListInstance(context.Context, *ListInstanceRequest) (*ListInstanceResponse, error)
 	// 开机
 	StartInstance(context.Context, *StartInstanceRequest) (*StartInstanceResponse, error)
 	// 关机
@@ -160,6 +171,9 @@ func (UnimplementedInstanceServer) ListInstanceType(context.Context, *ListInstan
 }
 func (UnimplementedInstanceServer) CreateInstance(context.Context, *CreateInstanceRequest) (*CreateInstanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateInstance not implemented")
+}
+func (UnimplementedInstanceServer) ListInstance(context.Context, *ListInstanceRequest) (*ListInstanceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListInstance not implemented")
 }
 func (UnimplementedInstanceServer) StartInstance(context.Context, *StartInstanceRequest) (*StartInstanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartInstance not implemented")
@@ -258,6 +272,24 @@ func _Instance_CreateInstance_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Instance_ListInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListInstanceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstanceServer).ListInstance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.region.v1.Instance/ListInstance",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstanceServer).ListInstance(ctx, req.(*ListInstanceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Instance_StartInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StartInstanceRequest)
 	if err := dec(in); err != nil {
@@ -352,6 +384,10 @@ var Instance_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateInstance",
 			Handler:    _Instance_CreateInstance_Handler,
+		},
+		{
+			MethodName: "ListInstance",
+			Handler:    _Instance_ListInstance_Handler,
 		},
 		{
 			MethodName: "StartInstance",
