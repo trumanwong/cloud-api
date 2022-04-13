@@ -15,7 +15,8 @@ service Instance {
   rpc ListInstanceType(ListInstanceTypeRequest) returns (ListInstanceTypeResponse);
   // 创建实例
   rpc CreateInstance (CreateInstanceRequest) returns (CreateInstanceResponse);
-  // 更新实例
+  // 实例列表
+  rpc ListInstance (ListInstanceRequest) returns (ListInstanceResponse);
   // 开机
   rpc StartInstance(StartInstanceRequest) returns (StartInstanceResponse);
   // 关机
@@ -54,6 +55,90 @@ message CreateInstanceResponse {
   float trade_price = 3;
   // 实例id列表
   repeated string instance_id_sets = 4;
+}
+
+message ListInstanceRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  // 实例所属的地域ID
+  string region_id = 3;
+  // 实例状态列表的页码，起始值1，默认值1
+  uint32 page_number = 4;
+  // 分页查询时设置的每页行数
+  uint32 page_size = 5;
+  // 查询凭证（Token），取值为上一次API调用返回的NextToken参数值
+  string next_token = 6;
+}
+
+message ListInstanceResponse {
+  string request_id = 1;
+  // 实例状态列表的页码，起始值1，默认值1
+  uint32 page_number = 2;
+  // 分页查询时设置的每页行数
+  uint32 page_size = 3;
+  // 查询到的实例总数
+  uint32 total_count = 4;
+  // 本次调用返回的查询凭证值
+  string next_token = 5;
+  message Instance {
+    // 实例ID
+    string instance_id = 1;
+    // 实例名称
+    string instance_name = 2;
+    // 实例规格
+    string instance_type = 3;
+    // 实例的计费方式
+    string instance_charge_type = 4;
+    // 实例所属地域ID
+    string region_id = 5;
+    // vCPU数
+    uint32 cpu = 6;
+    // 实例操作系统的英文名称
+    string os_name_en = 7;
+    // 实例状态
+    string status = 8;
+    // 实例创建时间，UTC+0时间
+    string creation_time = 9;
+    // 实例网络类型
+    string instance_network_type = 10;
+    // 内存大小，单位为MiB
+    uint32 memory = 11;
+    // 实例规格附带的GPU类型
+    string gpu_spec = 12;
+    // 按量付费实例的自动释放时间
+    string auto_release_time = 13;
+    // 实例规格附带的GPU数量
+    uint32 gpu_amount = 14;
+    // 实例的操作系统类型
+    string os_type = 15;
+    // 过期时间
+    string expired_time = 16;
+    // 实例最近一次的启动时间
+    string start_time = 17;
+    // 实例公网IP地址
+    repeated string public_ip_address= 18;
+    // 经典网络类型实例的内网IP地址
+    repeated string inner_ip_address = 19;
+    // HPC实例的Rdma网络IP
+    repeated string rdma_ip_address = 20;
+    // 实例所属安全组集合
+    repeated string security_group_ids = 21;
+    // 弹性公网IP绑定信息
+    message EipAddress {
+      // 弹性公网IP的ID
+      string allocation_id = 1;
+      // 是否可以解绑弹性公网IP
+      bool is_support_un_associate = 2;
+      // 弹性公网IP的计费方式
+      string internal_charge_type = 3;
+      // 弹性公网IP
+      string ip_address = 4;
+      // 弹性公网IP
+      uint32 bandwidth = 5;
+    }
+  }
+  // 实例信息
+  repeated Instance instances = 6;
 }
 
 message ListRegionRequest {
