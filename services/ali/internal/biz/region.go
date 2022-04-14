@@ -2,25 +2,12 @@ package biz
 
 import (
 	"context"
+	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v4/client"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
-type Region struct {
-	RegionEndPoint string
-	LocalName      string
-	RegionId       string
-}
-
-type ListRegionRequest struct {
-	AccessKeyId        string
-	AccessKeySecret    string
-	InstanceChargeType string
-	ResourceType       string
-	AcceptLanguage     string
-}
-
 type RegionResponse interface {
-	ListAll(ctx context.Context, request *ListRegionRequest) ([]*Region, error)
+	ListAll(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.DescribeRegionsRequest) ([]*ecs20140526.DescribeRegionsResponseBodyRegionsRegion, error)
 }
 
 // RegionUseCase is a Region UseCase.
@@ -35,6 +22,6 @@ func NewRegionUseCase(repo RegionResponse, logger log.Logger) *RegionUseCase {
 }
 
 // ListAll List All Regions
-func (uc *RegionUseCase) ListAll(ctx context.Context, g *ListRegionRequest) ([]*Region, error) {
-	return uc.repo.ListAll(ctx, g)
+func (uc *RegionUseCase) ListAll(ctx context.Context, accessKeyId, accessKeySecret string, g *ecs20140526.DescribeRegionsRequest) ([]*ecs20140526.DescribeRegionsResponseBodyRegionsRegion, error) {
+	return uc.repo.ListAll(ctx, accessKeyId, accessKeySecret, g)
 }

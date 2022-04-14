@@ -21,30 +21,17 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	}
 }
 
-func (r *regionResponse) ListAll(ctx context.Context, request *biz.ListRegionRequest) ([]*biz.Region, error) {
+func (r *regionResponse) ListAll(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.DescribeRegionsRequest) ([]*ecs20140526.DescribeRegionsResponseBodyRegionsRegion, error) {
 	client, err := createClient(
-		tea.String(request.AccessKeyId),
-		tea.String(request.AccessKeySecret),
+		tea.String(accessKeyId),
+		tea.String(accessKeySecret),
 	)
 	if err != nil {
 		return nil, err
 	}
-	describeRegionRequest := &ecs20140526.DescribeRegionsRequest{
-		AcceptLanguage:     tea.String(request.AcceptLanguage),
-		InstanceChargeType: tea.String(request.InstanceChargeType),
-		ResourceType:       tea.String(request.ResourceType),
-	}
-	result, err := client.DescribeRegions(describeRegionRequest)
+	result, err := client.DescribeRegions(request)
 	if err != nil {
 		return nil, err
 	}
-	regions := make([]*biz.Region, len(result.Body.Regions.Region))
-	for i, region := range result.Body.Regions.Region {
-		regions[i] = &biz.Region{
-			RegionEndPoint: *region.RegionEndpoint,
-			LocalName:      *region.LocalName,
-			RegionId:       *region.RegionId,
-		}
-	}
-	return regions, nil
+	return result.Body.Regions.Region, nil
 }

@@ -10,14 +10,15 @@ import (
 type InstanceService struct {
 	v1.UnimplementedInstanceServer
 
-	uc *biz.InstanceUseCase
-	rc *biz.RegionUseCase
-	ic *biz.ImageUseCase
+	uc  *biz.InstanceUseCase
+	rc  *biz.RegionUseCase
+	ic  *biz.ImageUseCase
+	itc *biz.InstanceTypeUseCase
 }
 
 // NewInstanceService new a Instance service.
-func NewInstanceService(uc *biz.InstanceUseCase, rc *biz.RegionUseCase, ic *biz.ImageUseCase) *InstanceService {
-	return &InstanceService{uc: uc, rc: rc, ic: ic}
+func NewInstanceService(uc *biz.InstanceUseCase, rc *biz.RegionUseCase, ic *biz.ImageUseCase, itc *biz.InstanceTypeUseCase) *InstanceService {
+	return &InstanceService{uc: uc, rc: rc, ic: ic, itc: itc}
 }
 
 // ProviderSet is service providers.

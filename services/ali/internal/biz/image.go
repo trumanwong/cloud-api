@@ -2,26 +2,13 @@ package biz
 
 import (
 	"context"
+	"github.com/alibabacloud-go/ecs-20140526/v4/client"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
-type Image struct {
-	ImageName    string
-	OsName       string
-	OsNameEn     string
-	Architecture string
-	OsType       string
-}
-
-type ListImageRequest struct {
-	AccessKeyId     string
-	AccessKeySecret string
-	RegionId        string
-}
-
 // ImageResponse is a Greater repo.
 type ImageResponse interface {
-	ListImage(context.Context, *ListImageRequest) ([]*Image, error)
+	ListImage(context context.Context, accessKeyId, accessKeySecret, regionId string) ([]*client.DescribeImagesResponseBodyImagesImage, error)
 }
 
 // ImageUseCase is a Image UseCase.
@@ -36,6 +23,6 @@ func NewImageUseCase(repo ImageResponse, logger log.Logger) *ImageUseCase {
 }
 
 // ListImage List Image
-func (uc *ImageUseCase) ListImage(ctx context.Context, g *ListImageRequest) ([]*Image, error) {
-	return uc.repo.ListImage(ctx, g)
+func (uc *ImageUseCase) ListImage(ctx context.Context, accessKeyId, accessKeySecret, regionId string) ([]*client.DescribeImagesResponseBodyImagesImage, error) {
+	return uc.repo.ListImage(ctx, accessKeyId, accessKeySecret, regionId)
 }

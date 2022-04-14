@@ -21,30 +21,20 @@ func NewImageRepo(data *Data, logger log.Logger) biz.ImageResponse {
 	}
 }
 
-func (r *imageResponse) ListImage(ctx context.Context, request *biz.ListImageRequest) ([]*biz.Image, error) {
+func (r *imageResponse) ListImage(ctx context.Context, accessKeyId, accessKeySecret, regionId string) ([]*ecs20140526.DescribeImagesResponseBodyImagesImage, error) {
 	client, err := createClient(
-		tea.String(request.AccessKeyId),
-		tea.String(request.AccessKeySecret),
+		tea.String(accessKeyId),
+		tea.String(accessKeySecret),
 	)
 	if err != nil {
 		return nil, err
 	}
 	describeImagesRequest := &ecs20140526.DescribeImagesRequest{
-		RegionId: tea.String(request.RegionId),
+		RegionId: tea.String(regionId),
 	}
 	result, err := client.DescribeImages(describeImagesRequest)
 	if err != nil {
 		return nil, err
 	}
-	images := make([]*biz.Image, len(result.Body.Images.Image))
-	for i, region := range result.Body.Images.Image {
-		images[i] = &biz.Image{
-			ImageName:    *region.ImageName,
-			OsName:       *region.OSName,
-			OsNameEn:     *region.OSNameEn,
-			Architecture: *region.Architecture,
-			OsType:       *region.OSType,
-		}
-	}
-	return images, nil
+	return result.Body.Images.Image, nil
 }

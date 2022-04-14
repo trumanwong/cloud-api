@@ -3,6 +3,8 @@ package data
 import (
 	"ali/internal/biz"
 	"context"
+	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v4/client"
+	"github.com/alibabacloud-go/tea/tea"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -19,10 +21,93 @@ func NewInstanceRepo(data *Data, logger log.Logger) biz.InstanceResponse {
 	}
 }
 
-func (r *instanceResponse) Create(ctx context.Context, request *biz.CreateInstanceRequest) (*biz.CreateInstanceResponse, error) {
-	return nil, nil
+func (r *instanceResponse) Create(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error) {
+	client, err := createClient(
+		tea.String(accessKeyId),
+		tea.String(accessKeySecret),
+	)
+	if err != nil {
+		return nil, err
+	}
+	result, err := client.RunInstances(request)
+	if err != nil {
+		return nil, err
+	}
+
+	return result.Body, nil
 }
 
-func (r *instanceResponse) ListAll(context.Context, *biz.Instance) ([]*biz.Instance, error) {
-	return nil, nil
+func (r *instanceResponse) ListInstance(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error) {
+	client, err := createClient(
+		tea.String(accessKeyId),
+		tea.String(accessKeySecret),
+	)
+	if err != nil {
+		return nil, err
+	}
+	result, err := client.DescribeInstances(request)
+	if err != nil {
+		return nil, err
+	}
+	return result.Body, nil
+}
+
+func (r *instanceResponse) StartInstance(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.StartInstanceRequest) (*string, error) {
+	client, err := createClient(
+		tea.String(accessKeyId),
+		tea.String(accessKeySecret),
+	)
+	if err != nil {
+		return nil, err
+	}
+	result, err := client.StartInstance(request)
+	if err != nil {
+		return nil, err
+	}
+	return result.Body.RequestId, nil
+}
+
+func (r *instanceResponse) StopInstance(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.StopInstanceRequest) (*string, error) {
+	client, err := createClient(
+		tea.String(accessKeyId),
+		tea.String(accessKeySecret),
+	)
+	if err != nil {
+		return nil, err
+	}
+	result, err := client.StopInstance(request)
+	if err != nil {
+		return nil, err
+	}
+	return result.Body.RequestId, nil
+}
+
+func (r *instanceResponse) RebootInstance(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.RebootInstanceRequest) (*string, error) {
+	client, err := createClient(
+		tea.String(accessKeyId),
+		tea.String(accessKeySecret),
+	)
+	if err != nil {
+		return nil, err
+	}
+	result, err := client.RebootInstance(request)
+	if err != nil {
+		return nil, err
+	}
+	return result.Body.RequestId, nil
+}
+
+func (r *instanceResponse) DeleteInstance(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.DeleteInstanceRequest) (*string, error) {
+	client, err := createClient(
+		tea.String(accessKeyId),
+		tea.String(accessKeySecret),
+	)
+	if err != nil {
+		return nil, err
+	}
+	result, err := client.DeleteInstance(request)
+	if err != nil {
+		return nil, err
+	}
+	return result.Body.RequestId, nil
 }

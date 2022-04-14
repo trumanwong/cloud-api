@@ -36,7 +36,7 @@ type CreateInstanceRequest struct {
 	// 实例规格
 	InstanceType string `protobuf:"bytes,6,opt,name=instance_type,json=instanceType,proto3" json:"instance_type,omitempty"`
 	// 系统盘大小
-	SystemDiskSize uint32 `protobuf:"varint,7,opt,name=system_disk_size,json=systemDiskSize,proto3" json:"system_disk_size,omitempty"`
+	SystemDiskSize string `protobuf:"bytes,7,opt,name=system_disk_size,json=systemDiskSize,proto3" json:"system_disk_size,omitempty"`
 	// 是否为instance_name自动添加有序后缀（默认false）
 	UniqueSuffix bool `protobuf:"varint,8,opt,name=unique_suffix,json=uniqueSuffix,proto3" json:"unique_suffix,omitempty"`
 	// 创建数量(1-100，默认1)
@@ -119,11 +119,11 @@ func (x *CreateInstanceRequest) GetInstanceType() string {
 	return ""
 }
 
-func (x *CreateInstanceRequest) GetSystemDiskSize() uint32 {
+func (x *CreateInstanceRequest) GetSystemDiskSize() string {
 	if x != nil {
 		return x.SystemDiskSize
 	}
-	return 0
+	return ""
 }
 
 func (x *CreateInstanceRequest) GetUniqueSuffix() bool {
@@ -701,11 +701,7 @@ type ListInstanceTypeResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	InstanceTypeId     string `protobuf:"bytes,1,opt,name=instance_type_id,json=instanceTypeId,proto3" json:"instance_type_id,omitempty"`
-	InstanceTypeFamily string `protobuf:"bytes,2,opt,name=instance_type_family,json=instanceTypeFamily,proto3" json:"instance_type_family,omitempty"`
-	MemorySize         int32  `protobuf:"varint,3,opt,name=memory_size,json=memorySize,proto3" json:"memory_size,omitempty"`
-	CpuCoreCount       int32  `protobuf:"varint,4,opt,name=cpu_core_count,json=cpuCoreCount,proto3" json:"cpu_core_count,omitempty"`
-	GpuSec             string `protobuf:"bytes,5,opt,name=gpu_sec,json=gpuSec,proto3" json:"gpu_sec,omitempty"`
+	InstanceTypes []*ListInstanceTypeResponse_InstanceType `protobuf:"bytes,1,rep,name=instance_types,json=instanceTypes,proto3" json:"instance_types,omitempty"`
 }
 
 func (x *ListInstanceTypeResponse) Reset() {
@@ -740,39 +736,11 @@ func (*ListInstanceTypeResponse) Descriptor() ([]byte, []int) {
 	return file_api_instance_v1_instance_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *ListInstanceTypeResponse) GetInstanceTypeId() string {
+func (x *ListInstanceTypeResponse) GetInstanceTypes() []*ListInstanceTypeResponse_InstanceType {
 	if x != nil {
-		return x.InstanceTypeId
+		return x.InstanceTypes
 	}
-	return ""
-}
-
-func (x *ListInstanceTypeResponse) GetInstanceTypeFamily() string {
-	if x != nil {
-		return x.InstanceTypeFamily
-	}
-	return ""
-}
-
-func (x *ListInstanceTypeResponse) GetMemorySize() int32 {
-	if x != nil {
-		return x.MemorySize
-	}
-	return 0
-}
-
-func (x *ListInstanceTypeResponse) GetCpuCoreCount() int32 {
-	if x != nil {
-		return x.CpuCoreCount
-	}
-	return 0
-}
-
-func (x *ListInstanceTypeResponse) GetGpuSec() string {
-	if x != nil {
-		return x.GpuSec
-	}
-	return ""
+	return nil
 }
 
 type StartInstanceRequest struct {
@@ -1760,6 +1728,85 @@ func (x *ListImageResponse_Image) GetOsType() string {
 	return ""
 }
 
+type ListInstanceTypeResponse_InstanceType struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	InstanceTypeId     string  `protobuf:"bytes,1,opt,name=instance_type_id,json=instanceTypeId,proto3" json:"instance_type_id,omitempty"`
+	InstanceTypeFamily string  `protobuf:"bytes,2,opt,name=instance_type_family,json=instanceTypeFamily,proto3" json:"instance_type_family,omitempty"`
+	MemorySize         float32 `protobuf:"fixed32,3,opt,name=memory_size,json=memorySize,proto3" json:"memory_size,omitempty"`
+	CpuCoreCount       int32   `protobuf:"varint,4,opt,name=cpu_core_count,json=cpuCoreCount,proto3" json:"cpu_core_count,omitempty"`
+	GpuSec             string  `protobuf:"bytes,5,opt,name=gpu_sec,json=gpuSec,proto3" json:"gpu_sec,omitempty"`
+}
+
+func (x *ListInstanceTypeResponse_InstanceType) Reset() {
+	*x = ListInstanceTypeResponse_InstanceType{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_instance_v1_instance_proto_msgTypes[22]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListInstanceTypeResponse_InstanceType) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListInstanceTypeResponse_InstanceType) ProtoMessage() {}
+
+func (x *ListInstanceTypeResponse_InstanceType) ProtoReflect() protoreflect.Message {
+	mi := &file_api_instance_v1_instance_proto_msgTypes[22]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListInstanceTypeResponse_InstanceType.ProtoReflect.Descriptor instead.
+func (*ListInstanceTypeResponse_InstanceType) Descriptor() ([]byte, []int) {
+	return file_api_instance_v1_instance_proto_rawDescGZIP(), []int{9, 0}
+}
+
+func (x *ListInstanceTypeResponse_InstanceType) GetInstanceTypeId() string {
+	if x != nil {
+		return x.InstanceTypeId
+	}
+	return ""
+}
+
+func (x *ListInstanceTypeResponse_InstanceType) GetInstanceTypeFamily() string {
+	if x != nil {
+		return x.InstanceTypeFamily
+	}
+	return ""
+}
+
+func (x *ListInstanceTypeResponse_InstanceType) GetMemorySize() float32 {
+	if x != nil {
+		return x.MemorySize
+	}
+	return 0
+}
+
+func (x *ListInstanceTypeResponse_InstanceType) GetCpuCoreCount() int32 {
+	if x != nil {
+		return x.CpuCoreCount
+	}
+	return 0
+}
+
+func (x *ListInstanceTypeResponse_InstanceType) GetGpuSec() string {
+	if x != nil {
+		return x.GpuSec
+	}
+	return ""
+}
+
 var File_api_instance_v1_instance_proto protoreflect.FileDescriptor
 
 var file_api_instance_v1_instance_proto_rawDesc = []byte{
@@ -1781,7 +1828,7 @@ var file_api_instance_v1_instance_proto_rawDesc = []byte{
 	0x6e, 0x63, 0x65, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c,
 	0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x12, 0x28, 0x0a, 0x10,
 	0x73, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x5f, 0x64, 0x69, 0x73, 0x6b, 0x5f, 0x73, 0x69, 0x7a, 0x65,
-	0x18, 0x07, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0e, 0x73, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x44, 0x69,
+	0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x73, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x44, 0x69,
 	0x73, 0x6b, 0x53, 0x69, 0x7a, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x75, 0x6e, 0x69, 0x71, 0x75, 0x65,
 	0x5f, 0x73, 0x75, 0x66, 0x66, 0x69, 0x78, 0x18, 0x08, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0c, 0x75,
 	0x6e, 0x69, 0x71, 0x75, 0x65, 0x53, 0x75, 0x66, 0x66, 0x69, 0x78, 0x12, 0x16, 0x0a, 0x06, 0x61,
@@ -1962,16 +2009,23 @@ var file_api_instance_v1_instance_proto_rawDesc = []byte{
 	0x09, 0x52, 0x0b, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x4b, 0x65, 0x79, 0x49, 0x64, 0x12, 0x2a,
 	0x0a, 0x11, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x5f, 0x6b, 0x65, 0x79, 0x5f, 0x73, 0x65, 0x63,
 	0x72, 0x65, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x61, 0x63, 0x63, 0x65, 0x73,
-	0x73, 0x4b, 0x65, 0x79, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x22, 0xd6, 0x01, 0x0a, 0x18, 0x4c,
+	0x73, 0x4b, 0x65, 0x79, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x22, 0xc6, 0x02, 0x0a, 0x18, 0x4c,
 	0x69, 0x73, 0x74, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x28, 0x0a, 0x10, 0x69, 0x6e, 0x73, 0x74, 0x61,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x0e, 0x69, 0x6e, 0x73, 0x74, 0x61,
+	0x6e, 0x63, 0x65, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x36, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x2e, 0x76,
+	0x31, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x54, 0x79,
+	0x70, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x2e, 0x49, 0x6e, 0x73, 0x74, 0x61,
+	0x6e, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x52, 0x0d, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63,
+	0x65, 0x54, 0x79, 0x70, 0x65, 0x73, 0x1a, 0xca, 0x01, 0x0a, 0x0c, 0x49, 0x6e, 0x73, 0x74, 0x61,
+	0x6e, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x12, 0x28, 0x0a, 0x10, 0x69, 0x6e, 0x73, 0x74, 0x61,
 	0x6e, 0x63, 0x65, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x09, 0x52, 0x0e, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x49,
 	0x64, 0x12, 0x30, 0x0a, 0x14, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x5f, 0x74, 0x79,
 	0x70, 0x65, 0x5f, 0x66, 0x61, 0x6d, 0x69, 0x6c, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
 	0x12, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x46, 0x61, 0x6d,
 	0x69, 0x6c, 0x79, 0x12, 0x1f, 0x0a, 0x0b, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x5f, 0x73, 0x69,
-	0x7a, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0a, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79,
+	0x7a, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x02, 0x52, 0x0a, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79,
 	0x53, 0x69, 0x7a, 0x65, 0x12, 0x24, 0x0a, 0x0e, 0x63, 0x70, 0x75, 0x5f, 0x63, 0x6f, 0x72, 0x65,
 	0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0c, 0x63, 0x70,
 	0x75, 0x43, 0x6f, 0x72, 0x65, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x67, 0x70,
@@ -2107,7 +2161,7 @@ func file_api_instance_v1_instance_proto_rawDescGZIP() []byte {
 	return file_api_instance_v1_instance_proto_rawDescData
 }
 
-var file_api_instance_v1_instance_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_api_instance_v1_instance_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
 var file_api_instance_v1_instance_proto_goTypes = []interface{}{
 	(*CreateInstanceRequest)(nil),                    // 0: api.instance.v1.CreateInstanceRequest
 	(*CreateInstanceResponse)(nil),                   // 1: api.instance.v1.CreateInstanceResponse
@@ -2131,35 +2185,37 @@ var file_api_instance_v1_instance_proto_goTypes = []interface{}{
 	(*ListInstanceResponse_Instance_EipAddress)(nil), // 19: api.instance.v1.ListInstanceResponse.Instance.EipAddress
 	(*ListRegionResponse_Region)(nil),                // 20: api.instance.v1.ListRegionResponse.Region
 	(*ListImageResponse_Image)(nil),                  // 21: api.instance.v1.ListImageResponse.Image
+	(*ListInstanceTypeResponse_InstanceType)(nil),    // 22: api.instance.v1.ListInstanceTypeResponse.InstanceType
 }
 var file_api_instance_v1_instance_proto_depIdxs = []int32{
 	18, // 0: api.instance.v1.ListInstanceResponse.instances:type_name -> api.instance.v1.ListInstanceResponse.Instance
 	20, // 1: api.instance.v1.ListRegionResponse.regions:type_name -> api.instance.v1.ListRegionResponse.Region
 	21, // 2: api.instance.v1.ListImageResponse.images:type_name -> api.instance.v1.ListImageResponse.Image
-	19, // 3: api.instance.v1.ListInstanceResponse.Instance.eip_address:type_name -> api.instance.v1.ListInstanceResponse.Instance.EipAddress
-	4,  // 4: api.instance.v1.Instance.ListRegion:input_type -> api.instance.v1.ListRegionRequest
-	6,  // 5: api.instance.v1.Instance.ListImage:input_type -> api.instance.v1.ListImageRequest
-	8,  // 6: api.instance.v1.Instance.ListInstanceType:input_type -> api.instance.v1.ListInstanceTypeRequest
-	0,  // 7: api.instance.v1.Instance.CreateInstance:input_type -> api.instance.v1.CreateInstanceRequest
-	2,  // 8: api.instance.v1.Instance.ListInstance:input_type -> api.instance.v1.ListInstanceRequest
-	10, // 9: api.instance.v1.Instance.StartInstance:input_type -> api.instance.v1.StartInstanceRequest
-	12, // 10: api.instance.v1.Instance.StopInstance:input_type -> api.instance.v1.StopInstanceRequest
-	14, // 11: api.instance.v1.Instance.RebootInstance:input_type -> api.instance.v1.RebootInstanceRequest
-	16, // 12: api.instance.v1.Instance.DeleteInstance:input_type -> api.instance.v1.DeleteInstanceRequest
-	5,  // 13: api.instance.v1.Instance.ListRegion:output_type -> api.instance.v1.ListRegionResponse
-	7,  // 14: api.instance.v1.Instance.ListImage:output_type -> api.instance.v1.ListImageResponse
-	9,  // 15: api.instance.v1.Instance.ListInstanceType:output_type -> api.instance.v1.ListInstanceTypeResponse
-	1,  // 16: api.instance.v1.Instance.CreateInstance:output_type -> api.instance.v1.CreateInstanceResponse
-	3,  // 17: api.instance.v1.Instance.ListInstance:output_type -> api.instance.v1.ListInstanceResponse
-	11, // 18: api.instance.v1.Instance.StartInstance:output_type -> api.instance.v1.StartInstanceResponse
-	13, // 19: api.instance.v1.Instance.StopInstance:output_type -> api.instance.v1.StopInstanceResponse
-	15, // 20: api.instance.v1.Instance.RebootInstance:output_type -> api.instance.v1.RebootInstanceResponse
-	17, // 21: api.instance.v1.Instance.DeleteInstance:output_type -> api.instance.v1.DeleteInstanceResponse
-	13, // [13:22] is the sub-list for method output_type
-	4,  // [4:13] is the sub-list for method input_type
-	4,  // [4:4] is the sub-list for extension type_name
-	4,  // [4:4] is the sub-list for extension extendee
-	0,  // [0:4] is the sub-list for field type_name
+	22, // 3: api.instance.v1.ListInstanceTypeResponse.instance_types:type_name -> api.instance.v1.ListInstanceTypeResponse.InstanceType
+	19, // 4: api.instance.v1.ListInstanceResponse.Instance.eip_address:type_name -> api.instance.v1.ListInstanceResponse.Instance.EipAddress
+	4,  // 5: api.instance.v1.Instance.ListRegion:input_type -> api.instance.v1.ListRegionRequest
+	6,  // 6: api.instance.v1.Instance.ListImage:input_type -> api.instance.v1.ListImageRequest
+	8,  // 7: api.instance.v1.Instance.ListInstanceType:input_type -> api.instance.v1.ListInstanceTypeRequest
+	0,  // 8: api.instance.v1.Instance.CreateInstance:input_type -> api.instance.v1.CreateInstanceRequest
+	2,  // 9: api.instance.v1.Instance.ListInstance:input_type -> api.instance.v1.ListInstanceRequest
+	10, // 10: api.instance.v1.Instance.StartInstance:input_type -> api.instance.v1.StartInstanceRequest
+	12, // 11: api.instance.v1.Instance.StopInstance:input_type -> api.instance.v1.StopInstanceRequest
+	14, // 12: api.instance.v1.Instance.RebootInstance:input_type -> api.instance.v1.RebootInstanceRequest
+	16, // 13: api.instance.v1.Instance.DeleteInstance:input_type -> api.instance.v1.DeleteInstanceRequest
+	5,  // 14: api.instance.v1.Instance.ListRegion:output_type -> api.instance.v1.ListRegionResponse
+	7,  // 15: api.instance.v1.Instance.ListImage:output_type -> api.instance.v1.ListImageResponse
+	9,  // 16: api.instance.v1.Instance.ListInstanceType:output_type -> api.instance.v1.ListInstanceTypeResponse
+	1,  // 17: api.instance.v1.Instance.CreateInstance:output_type -> api.instance.v1.CreateInstanceResponse
+	3,  // 18: api.instance.v1.Instance.ListInstance:output_type -> api.instance.v1.ListInstanceResponse
+	11, // 19: api.instance.v1.Instance.StartInstance:output_type -> api.instance.v1.StartInstanceResponse
+	13, // 20: api.instance.v1.Instance.StopInstance:output_type -> api.instance.v1.StopInstanceResponse
+	15, // 21: api.instance.v1.Instance.RebootInstance:output_type -> api.instance.v1.RebootInstanceResponse
+	17, // 22: api.instance.v1.Instance.DeleteInstance:output_type -> api.instance.v1.DeleteInstanceResponse
+	14, // [14:23] is the sub-list for method output_type
+	5,  // [5:14] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_api_instance_v1_instance_proto_init() }
@@ -2432,6 +2488,18 @@ func file_api_instance_v1_instance_proto_init() {
 				return nil
 			}
 		}
+		file_api_instance_v1_instance_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListInstanceTypeResponse_InstanceType); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2439,7 +2507,7 @@ func file_api_instance_v1_instance_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_instance_v1_instance_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   23,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -39,7 +39,7 @@ message CreateInstanceRequest {
   // 实例规格
   string instance_type = 6;
   // 系统盘大小
-  uint32 system_disk_size = 7;
+  string system_disk_size = 7;
   // 是否为instance_name自动添加有序后缀（默认false）
   bool unique_suffix = 8;
   // 创建数量(1-100，默认1)
@@ -192,11 +192,14 @@ message ListInstanceTypeRequest {
 }
 
 message ListInstanceTypeResponse {
-  string instance_type_id = 1;
-  string instance_type_family = 2;
-  int32 memory_size = 3;
-  int32 cpu_core_count = 4;
-  string gpu_sec = 5;
+  message InstanceType {
+    string instance_type_id = 1;
+    string instance_type_family = 2;
+    float memory_size = 3;
+    int32 cpu_core_count = 4;
+    string gpu_sec = 5;
+  }
+  repeated InstanceType instance_types = 1;
 }
 
 message StartInstanceRequest {
