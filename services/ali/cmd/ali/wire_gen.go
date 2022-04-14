@@ -6,11 +6,11 @@
 package main
 
 import (
-	"Responseali/internal/biz"
-	"Responseali/internal/conf"
-	"Responseali/internal/data"
-	"Responseali/internal/server"
-	"Responseali/internal/service"
+	"ali/internal/biz"
+	"ali/internal/conf"
+	"ali/internal/data"
+	"ali/internal/server"
+	"ali/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -18,17 +18,21 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(confServer *conf.Server, registry *conf.Registry, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
 	dataData, cleanup, err := data.NewData(confData, logger)
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterRepo := data.NewGreeterRepo(dataData, logger)
-	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
-	greeterService := service.NewGreeterService(greeterUsecase)
-	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
+	instanceRepo := data.NewInstanceRepo(dataData, logger)
+	instanceUsecase := biz.NewInstanceUseCase(instanceRepo, logger)
+	regionRepo := data.NewRegionRepo(dataData, logger)
+	regionUsecase := biz.NewRegionUseCase(regionRepo, logger)
+	imageRepo := data.NewImageRepo(dataData, logger)
+	imageUsecase := biz.NewImageUseCase(imageRepo, logger)
+	greeterService := service.NewInstanceService(instanceUsecase, regionUsecase, imageUsecase)
 	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
-	app := newApp(logger, httpServer, grpcServer)
+	registrar := server.NewRegistrar(registry)
+	app := newApp(logger, grpcServer, registrar)
 	return app, func() {
 		cleanup()
 	}, nil

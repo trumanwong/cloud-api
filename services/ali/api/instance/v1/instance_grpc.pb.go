@@ -52,7 +52,7 @@ func NewInstanceClient(cc grpc.ClientConnInterface) InstanceClient {
 
 func (c *instanceClient) ListRegion(ctx context.Context, in *ListRegionRequest, opts ...grpc.CallOption) (*ListRegionResponse, error) {
 	out := new(ListRegionResponse)
-	err := c.cc.Invoke(ctx, "/api.region.v1.Instance/ListRegion", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListRegion", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (c *instanceClient) ListRegion(ctx context.Context, in *ListRegionRequest, 
 
 func (c *instanceClient) ListImage(ctx context.Context, in *ListImageRequest, opts ...grpc.CallOption) (*ListImageResponse, error) {
 	out := new(ListImageResponse)
-	err := c.cc.Invoke(ctx, "/api.region.v1.Instance/ListImage", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListImage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func (c *instanceClient) ListImage(ctx context.Context, in *ListImageRequest, op
 
 func (c *instanceClient) ListInstanceType(ctx context.Context, in *ListInstanceTypeRequest, opts ...grpc.CallOption) (*ListInstanceTypeResponse, error) {
 	out := new(ListInstanceTypeResponse)
-	err := c.cc.Invoke(ctx, "/api.region.v1.Instance/ListInstanceType", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListInstanceType", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func (c *instanceClient) ListInstanceType(ctx context.Context, in *ListInstanceT
 
 func (c *instanceClient) CreateInstance(ctx context.Context, in *CreateInstanceRequest, opts ...grpc.CallOption) (*CreateInstanceResponse, error) {
 	out := new(CreateInstanceResponse)
-	err := c.cc.Invoke(ctx, "/api.region.v1.Instance/CreateInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/CreateInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (c *instanceClient) CreateInstance(ctx context.Context, in *CreateInstanceR
 
 func (c *instanceClient) ListInstance(ctx context.Context, in *ListInstanceRequest, opts ...grpc.CallOption) (*ListInstanceResponse, error) {
 	out := new(ListInstanceResponse)
-	err := c.cc.Invoke(ctx, "/api.region.v1.Instance/ListInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +97,7 @@ func (c *instanceClient) ListInstance(ctx context.Context, in *ListInstanceReque
 
 func (c *instanceClient) StartInstance(ctx context.Context, in *StartInstanceRequest, opts ...grpc.CallOption) (*StartInstanceResponse, error) {
 	out := new(StartInstanceResponse)
-	err := c.cc.Invoke(ctx, "/api.region.v1.Instance/StartInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/StartInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +106,7 @@ func (c *instanceClient) StartInstance(ctx context.Context, in *StartInstanceReq
 
 func (c *instanceClient) StopInstance(ctx context.Context, in *StopInstanceRequest, opts ...grpc.CallOption) (*StopInstanceResponse, error) {
 	out := new(StopInstanceResponse)
-	err := c.cc.Invoke(ctx, "/api.region.v1.Instance/StopInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/StopInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ func (c *instanceClient) StopInstance(ctx context.Context, in *StopInstanceReque
 
 func (c *instanceClient) RebootInstance(ctx context.Context, in *RebootInstanceRequest, opts ...grpc.CallOption) (*RebootInstanceResponse, error) {
 	out := new(RebootInstanceResponse)
-	err := c.cc.Invoke(ctx, "/api.region.v1.Instance/RebootInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/RebootInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +124,7 @@ func (c *instanceClient) RebootInstance(ctx context.Context, in *RebootInstanceR
 
 func (c *instanceClient) DeleteInstance(ctx context.Context, in *DeleteInstanceRequest, opts ...grpc.CallOption) (*DeleteInstanceResponse, error) {
 	out := new(DeleteInstanceResponse)
-	err := c.cc.Invoke(ctx, "/api.region.v1.Instance/DeleteInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/DeleteInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -210,7 +210,7 @@ func _Instance_ListRegion_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.region.v1.Instance/ListRegion",
+		FullMethod: "/api.instance.v1.Instance/ListRegion",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstanceServer).ListRegion(ctx, req.(*ListRegionRequest))
@@ -228,7 +228,7 @@ func _Instance_ListImage_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.region.v1.Instance/ListImage",
+		FullMethod: "/api.instance.v1.Instance/ListImage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstanceServer).ListImage(ctx, req.(*ListImageRequest))
@@ -246,7 +246,7 @@ func _Instance_ListInstanceType_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.region.v1.Instance/ListInstanceType",
+		FullMethod: "/api.instance.v1.Instance/ListInstanceType",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstanceServer).ListInstanceType(ctx, req.(*ListInstanceTypeRequest))
@@ -264,7 +264,7 @@ func _Instance_CreateInstance_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.region.v1.Instance/CreateInstance",
+		FullMethod: "/api.instance.v1.Instance/CreateInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstanceServer).CreateInstance(ctx, req.(*CreateInstanceRequest))
@@ -282,7 +282,7 @@ func _Instance_ListInstance_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.region.v1.Instance/ListInstance",
+		FullMethod: "/api.instance.v1.Instance/ListInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstanceServer).ListInstance(ctx, req.(*ListInstanceRequest))
@@ -300,7 +300,7 @@ func _Instance_StartInstance_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.region.v1.Instance/StartInstance",
+		FullMethod: "/api.instance.v1.Instance/StartInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstanceServer).StartInstance(ctx, req.(*StartInstanceRequest))
@@ -318,7 +318,7 @@ func _Instance_StopInstance_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.region.v1.Instance/StopInstance",
+		FullMethod: "/api.instance.v1.Instance/StopInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstanceServer).StopInstance(ctx, req.(*StopInstanceRequest))
@@ -336,7 +336,7 @@ func _Instance_RebootInstance_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.region.v1.Instance/RebootInstance",
+		FullMethod: "/api.instance.v1.Instance/RebootInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstanceServer).RebootInstance(ctx, req.(*RebootInstanceRequest))
@@ -354,7 +354,7 @@ func _Instance_DeleteInstance_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.region.v1.Instance/DeleteInstance",
+		FullMethod: "/api.instance.v1.Instance/DeleteInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstanceServer).DeleteInstance(ctx, req.(*DeleteInstanceRequest))
@@ -366,7 +366,7 @@ func _Instance_DeleteInstance_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Instance_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.region.v1.Instance",
+	ServiceName: "api.instance.v1.Instance",
 	HandlerType: (*InstanceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

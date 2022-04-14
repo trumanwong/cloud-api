@@ -78,6 +78,8 @@ type EipAddress struct {
 }
 
 type CreateInstanceRequest struct {
+	AccessKeyId     string
+	AccessKeySecret string
 	// 区域id
 	RegionId string
 	// 镜像id
@@ -107,10 +109,10 @@ type CreateInstanceResponse struct {
 	InstanceIdSets []string
 }
 
-// InstanceResponse is a Greater repo.
+// InstanceResponse is a Instance repo.
 type InstanceResponse interface {
 	Create(context.Context, *CreateInstanceRequest) (*CreateInstanceResponse, error)
-	ListAll(context.Context) ([]*Instance, error)
+	ListAll(context.Context, *Instance) ([]*Instance, error)
 }
 
 // InstanceUseCase is a Instance UseCase.

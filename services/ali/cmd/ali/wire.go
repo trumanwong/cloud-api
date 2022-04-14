@@ -6,17 +6,17 @@
 package main
 
 import (
-	"Responseali/internal/biz"
-	"Responseali/internal/conf"
-	"Responseali/internal/data"
-	"Responseali/internal/server"
-	"Responseali/internal/service"
+	"ali/internal/biz"
+	"ali/internal/conf"
+	"ali/internal/data"
+	"ali/internal/server"
+	"ali/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 )
 
 // wireApp init kratos application.
-func wireApp(*conf.Server, *conf.Data, log.Logger) (*kratos.App, func(), error) {
+func wireApp(*conf.Server, *conf.Data, *conf.Registry, log.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(server.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
 }

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.region.v1;
+package api.instance.v1;
 
 option go_package = "/api/instance/v1;v1";
 option java_multiple_files = true;
@@ -28,22 +28,24 @@ service Instance {
 }
 
 message CreateInstanceRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
   // 区域id
-  string region_id = 1;
+  string region_id = 3;
   // 镜像id
-  string image_id = 2;
+  string image_id = 4;
   // 实例名称
-  string name = 3;
+  string name = 5;
   // 实例规格
-  string instance_type = 4;
+  string instance_type = 6;
   // 系统盘大小
-  uint32 system_disk_size = 5;
+  uint32 system_disk_size = 7;
   // 是否为instance_name自动添加有序后缀（默认false）
-  bool unique_suffix = 6;
+  bool unique_suffix = 8;
   // 创建数量(1-100，默认1)
-  uint32 amount = 7;
+  uint32 amount = 9;
   // 实例密码
-  string password = 8;
+  string password = 10;
 }
 
 message CreateInstanceResponse {
@@ -116,7 +118,7 @@ message ListInstanceResponse {
     // 实例最近一次的启动时间
     string start_time = 17;
     // 实例公网IP地址
-    repeated string public_ip_address= 18;
+    repeated string public_ip_address = 18;
     // 经典网络类型实例的内网IP地址
     repeated string inner_ip_address = 19;
     // HPC实例的Rdma网络IP
@@ -158,14 +160,13 @@ message ListRegionRequest {
   string accept_language = 5;
 }
 
-message RegionResponse {
-  string region_end_point = 1;
-  string local_name = 2;
-  string region_id = 3;
-}
-
 message ListRegionResponse {
-  repeated RegionResponse regions = 1;
+  message Region {
+    string region_end_point = 1;
+    string local_name = 2;
+    string region_id = 3;
+  }
+  repeated Region regions = 1;
 }
 
 message ListImageRequest {
@@ -174,16 +175,15 @@ message ListImageRequest {
   string region_id = 3;
 }
 
-message ImageResponse {
-  string image_name = 1;
-  string os_name = 2;
-  string os_name_en = 3;
-  string architecture = 4;
-  string os_type = 5;
-}
-
 message ListImageResponse {
-  repeated ImageResponse image_responses = 1;
+  message Image {
+    string image_name = 1;
+    string os_name = 2;
+    string os_name_en = 3;
+    string architecture = 4;
+    string os_type = 5;
+  }
+  repeated Image images = 1;
 }
 
 message ListInstanceTypeRequest {

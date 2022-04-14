@@ -1,27 +1,14 @@
 package service
 
 import (
-	"context"
-
 	v1 "ali/api/instance/v1"
 	"ali/internal/biz"
+	"context"
 )
 
-// InstanceService is a instance service.
-type InstanceService struct {
-	v1.UnimplementedInstanceServer
-
-	uc *biz.InstanceUseCase
-}
-
-// NewInstanceService new a Instance service.
-func NewInstanceService(uc *biz.InstanceUseCase) *InstanceService {
-	return &InstanceService{uc: uc}
-}
-
-// Create Instance
-func (s *InstanceService) Create(ctx context.Context, in *v1.CreateInstanceRequest) (*v1.CreateInstanceResponse, error) {
-	g, err := s.uc.CreateInstance(ctx, &biz.CreateInstanceRequest{
+// CreateInstance Create Instance
+func (service *InstanceService) CreateInstance(ctx context.Context, in *v1.CreateInstanceRequest) (*v1.CreateInstanceResponse, error) {
+	g, err := service.uc.CreateInstance(ctx, &biz.CreateInstanceRequest{
 		RegionId:       in.RegionId,
 		ImageId:        in.ImageId,
 		Name:           in.Name,
