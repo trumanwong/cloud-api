@@ -4,7 +4,6 @@ import (
 	"ali/internal/biz"
 	"context"
 	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v4/client"
-	"github.com/alibabacloud-go/tea/tea"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -21,10 +20,11 @@ func NewInstanceTypeRepo(data *Data, logger log.Logger) biz.InstanceTypeResponse
 	}
 }
 
-func (r *instanceTypeResponse) ListAll(ctx context.Context, AccessKeyId, AccessKeySecret string) ([]*ecs20140526.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error) {
+func (r *instanceTypeResponse) ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string) ([]*ecs20140526.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error) {
 	client, err := createClient(
-		tea.String(AccessKeyId),
-		tea.String(AccessKeySecret),
+		accessKeyId,
+		accessKeySecret,
+		endpoint,
 	)
 	if err != nil {
 		return nil, err

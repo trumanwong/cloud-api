@@ -9,7 +9,7 @@ import (
 
 // CreateInstance Create Instance
 func (service *InstanceService) CreateInstance(ctx context.Context, request *v1.CreateInstanceRequest) (*v1.CreateInstanceResponse, error) {
-	result, err := service.uc.CreateInstance(ctx, request.AccessKeyId, request.AccessKeySecret, &ecs20140526.RunInstancesRequest{
+	result, err := service.uc.CreateInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.RunInstancesRequest{
 		RegionId:     tea.String(request.RegionId),
 		ImageId:      tea.String(request.ImageId),
 		InstanceName: tea.String(request.Name),
@@ -37,7 +37,7 @@ func (service *InstanceService) CreateInstance(ctx context.Context, request *v1.
 }
 
 func (service *InstanceService) ListInstance(ctx context.Context, request *v1.ListInstanceRequest) (*v1.ListInstanceResponse, error) {
-	result, err := service.uc.ListInstance(ctx, request.AccessKeyId, request.AccessKeySecret, &ecs20140526.DescribeInstancesRequest{
+	result, err := service.uc.ListInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.DescribeInstancesRequest{
 		RegionId:   tea.String(request.RegionId),
 		PageNumber: tea.Int32(int32(request.PageNumber)),
 		PageSize:   tea.Int32(int32(request.PageSize)),
@@ -49,7 +49,7 @@ func (service *InstanceService) ListInstance(ctx context.Context, request *v1.Li
 
 	instances := make([]v1.ListInstanceResponse_Instance, len(result.Instances.Instance))
 	for i, v := range result.Instances.Instance {
-		publicIpAddress, innerIpAddress, rdmaIpAddress := make([]string, 0), make([]string, 0), make([]string, 0)
+		publicIpAddress, innerIpAddress, rdmaIpAddress, securityGroupIds := make([]string, 0), make([]string, 0), make([]string, 0), make([]string, 0)
 		if v.PublicIpAddress != nil {
 			for _, v := range v.PublicIpAddress.IpAddress {
 				publicIpAddress = append(publicIpAddress, *v)
@@ -63,6 +63,21 @@ func (service *InstanceService) ListInstance(ctx context.Context, request *v1.Li
 		if v.RdmaIpAddress != nil {
 			for _, v := range v.RdmaIpAddress.IpAddress {
 				rdmaIpAddress = append(rdmaIpAddress, *v)
+			}
+		}
+		if v.SecurityGroupIds != nil {
+			for _, v := range v.SecurityGroupIds.SecurityGroupId {
+				securityGroupIds = append(securityGroupIds, *v)
+			}
+		}
+		var eIpAddress *v1.ListInstanceResponse_Instance_EipAddress
+		if v.EipAddress != nil {
+			eIpAddress = &v1.ListInstanceResponse_Instance_EipAddress{
+				AllocationId:         *v.EipAddress.AllocationId,
+				IsSupportUnAssociate: *v.EipAddress.IsSupportUnassociate,
+				InternalChargeType:   *v.EipAddress.InternetChargeType,
+				IpAddress:            *v.EipAddress.IpAddress,
+				Bandwidth:            uint32(*v.EipAddress.Bandwidth),
 			}
 		}
 		instances[i] = v1.ListInstanceResponse_Instance{
@@ -86,8 +101,8 @@ func (service *InstanceService) ListInstance(ctx context.Context, request *v1.Li
 			PublicIpAddress:      publicIpAddress,
 			InnerIpAddress:       innerIpAddress,
 			RdmaIpAddress:        rdmaIpAddress,
-			SecurityGroupIds:     *v.SecurityGroupIds,
-			EipAddress:           nil,
+			SecurityGroupIds:     securityGroupIds,
+			EipAddress:           eIpAddress,
 			DeviceAvailable:      *v.DeviceAvailable,
 			LocalStorageCapacity: uint64(*v.LocalStorageCapacity),
 			LocalStorageAmount:   uint32(*v.LocalStorageAmount),
@@ -107,7 +122,7 @@ func (service *InstanceService) ListInstance(ctx context.Context, request *v1.Li
 }
 
 func (service *InstanceService) StartInstance(ctx context.Context, request *v1.StartInstanceRequest) (*v1.StartInstanceResponse, error) {
-	result, err := service.uc.StartInstance(ctx, request.AccessKeyId, request.AccessKeySecret, &ecs20140526.StartInstanceRequest{
+	result, err := service.uc.StartInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.StartInstanceRequest{
 		InstanceId: tea.String(request.InstanceId),
 	})
 	if err != nil {
@@ -119,7 +134,7 @@ func (service *InstanceService) StartInstance(ctx context.Context, request *v1.S
 }
 
 func (service *InstanceService) StopInstance(ctx context.Context, request *v1.StopInstanceRequest) (*v1.StopInstanceResponse, error) {
-	result, err := service.uc.StopInstance(ctx, request.AccessKeyId, request.AccessKeySecret, &ecs20140526.StopInstanceRequest{
+	result, err := service.uc.StopInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.StopInstanceRequest{
 		InstanceId: tea.String(request.InstanceId),
 	})
 	if err != nil {
@@ -131,7 +146,7 @@ func (service *InstanceService) StopInstance(ctx context.Context, request *v1.St
 }
 
 func (service *InstanceService) RebootInstance(ctx context.Context, request *v1.RebootInstanceRequest) (*v1.RebootInstanceResponse, error) {
-	result, err := service.uc.RebootInstance(ctx, request.AccessKeyId, request.AccessKeySecret, &ecs20140526.RebootInstanceRequest{
+	result, err := service.uc.RebootInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.RebootInstanceRequest{
 		InstanceId: tea.String(request.InstanceId),
 	})
 	if err != nil {
@@ -143,7 +158,7 @@ func (service *InstanceService) RebootInstance(ctx context.Context, request *v1.
 }
 
 func (service *InstanceService) DeleteInstance(ctx context.Context, request *v1.DeleteInstanceRequest) (*v1.DeleteInstanceResponse, error) {
-	result, err := service.uc.DeleteInstance(ctx, request.AccessKeyId, request.AccessKeySecret, &ecs20140526.DeleteInstanceRequest{
+	result, err := service.uc.DeleteInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.DeleteInstanceRequest{
 		InstanceId: tea.String(request.InstanceId),
 	})
 	if err != nil {

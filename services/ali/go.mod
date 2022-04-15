@@ -8,9 +8,9 @@ require (
 	github.com/alibabacloud-go/tea v1.1.17
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20220410081856-3990d91b9bd3
 	github.com/go-kratos/kratos/v2 v2.2.1
-	github.com/go-playground/assert/v2 v2.0.1
 	github.com/google/wire v0.5.0
 	github.com/hashicorp/consul/api v1.12.0
+	github.com/stretchr/testify v1.7.1
 	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.27.1
 )
@@ -25,6 +25,7 @@ require (
 	github.com/aliyun/credentials-go v1.1.2 // indirect
 	github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da // indirect
 	github.com/clbanning/mxj/v2 v2.5.5 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/go-logr/logr v1.2.1 // indirect
@@ -47,7 +48,7 @@ require (
 	github.com/mitchellh/mapstructure v1.1.2 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
-	github.com/stretchr/testify v1.7.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/tjfoc/gmsm v1.3.2 // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect
 	go.opentelemetry.io/otel/trace v1.3.0 // indirect

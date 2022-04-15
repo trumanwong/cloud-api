@@ -30,22 +30,23 @@ service Instance {
 message CreateInstanceRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
+  string endpoint = 3;
   // 区域id
-  string region_id = 3;
+  string region_id = 4;
   // 镜像id
-  string image_id = 4;
+  string image_id = 5;
   // 实例名称
-  string name = 5;
+  string name = 6;
   // 实例规格
-  string instance_type = 6;
+  string instance_type = 7;
   // 系统盘大小
-  string system_disk_size = 7;
+  string system_disk_size = 8;
   // 是否为instance_name自动添加有序后缀（默认false）
-  bool unique_suffix = 8;
+  bool unique_suffix = 9;
   // 创建数量(1-100，默认1)
-  uint32 amount = 9;
+  uint32 amount = 10;
   // 实例密码
-  string password = 10;
+  string password = 11;
 }
 
 message CreateInstanceResponse {
@@ -62,14 +63,15 @@ message CreateInstanceResponse {
 message ListInstanceRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
+  string endpoint = 3;
   // 实例所属的地域ID
-  string region_id = 3;
+  string region_id = 4;
   // 实例状态列表的页码，起始值1，默认值1
-  uint32 page_number = 4;
+  uint32 page_number = 5;
   // 分页查询时设置的每页行数
-  uint32 page_size = 5;
+  uint32 page_size = 6;
   // 查询凭证（Token），取值为上一次API调用返回的NextToken参数值
-  string next_token = 6;
+  string next_token = 7;
 }
 
 message ListInstanceResponse {
@@ -155,9 +157,10 @@ message ListInstanceResponse {
 message ListRegionRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
-  string instance_charge_type = 3;
-  string resource_type = 4;
-  string accept_language = 5;
+  string endpoint = 3;
+  string instance_charge_type = 4;
+  string resource_type = 5;
+  string accept_language = 6;
 }
 
 message ListRegionResponse {
@@ -172,16 +175,19 @@ message ListRegionResponse {
 message ListImageRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
-  string region_id = 3;
+  string endpoint = 3;
+  string region_id = 4;
 }
 
 message ListImageResponse {
   message Image {
-    string image_name = 1;
-    string os_name = 2;
-    string os_name_en = 3;
-    string architecture = 4;
-    string os_type = 5;
+    string image_id = 1;
+    string image_name = 2;
+    string image_description = 3;
+    string os_name = 4;
+    string os_name_en = 5;
+    string architecture = 6;
+    string os_type = 7;
   }
   repeated Image images = 1;
 }
@@ -189,6 +195,7 @@ message ListImageResponse {
 message ListInstanceTypeRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
+  string endpoint = 3;
 }
 
 message ListInstanceTypeResponse {
@@ -205,7 +212,8 @@ message ListInstanceTypeResponse {
 message StartInstanceRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
-  string instance_id = 3;
+  string endpoint = 3;
+  string instance_id = 4;
 }
 
 message StartInstanceResponse {
@@ -226,7 +234,8 @@ message StartInstanceResponse {
 message StopInstanceRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
-  string instance_id = 3;
+  string endpoint = 3;
+  string instance_id = 4;
 }
 
 message StopInstanceResponse {
@@ -236,7 +245,8 @@ message StopInstanceResponse {
 message RebootInstanceRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
-  string instance_id = 3;
+  string endpoint = 3;
+  string instance_id = 4;
 }
 
 message RebootInstanceResponse {
@@ -246,7 +256,8 @@ message RebootInstanceResponse {
 message DeleteInstanceRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
-  string instance_id = 3;
+  string endpoint = 3;
+  string instance_id = 4;
 }
 
 message DeleteInstanceResponse {

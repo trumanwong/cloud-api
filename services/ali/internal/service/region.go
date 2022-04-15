@@ -8,7 +8,7 @@ import (
 )
 
 func (service *InstanceService) ListRegion(ctx context.Context, request *v1.ListRegionRequest) (*v1.ListRegionResponse, error) {
-	regions, err := service.rc.ListAll(ctx, request.AccessKeyId, request.AccessKeySecret, &ecs20140526.DescribeRegionsRequest{
+	regions, err := service.rc.ListAll(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.DescribeRegionsRequest{
 		InstanceChargeType: tea.String(request.InstanceChargeType),
 		ResourceType:       tea.String(request.ResourceType),
 		AcceptLanguage:     tea.String(request.AcceptLanguage),

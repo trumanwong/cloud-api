@@ -4,7 +4,6 @@ import (
 	"ali/internal/biz"
 	"context"
 	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v4/client"
-	"github.com/alibabacloud-go/tea/tea"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -21,10 +20,11 @@ func NewInstanceRepo(data *Data, logger log.Logger) biz.InstanceResponse {
 	}
 }
 
-func (r *instanceResponse) Create(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error) {
+func (r *instanceResponse) Create(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error) {
 	client, err := createClient(
-		tea.String(accessKeyId),
-		tea.String(accessKeySecret),
+		accessKeyId,
+		accessKeySecret,
+		endpoint,
 	)
 	if err != nil {
 		return nil, err
@@ -37,10 +37,11 @@ func (r *instanceResponse) Create(ctx context.Context, accessKeyId, accessKeySec
 	return result.Body, nil
 }
 
-func (r *instanceResponse) ListInstance(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error) {
+func (r *instanceResponse) ListInstance(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error) {
 	client, err := createClient(
-		tea.String(accessKeyId),
-		tea.String(accessKeySecret),
+		accessKeyId,
+		accessKeySecret,
+		endpoint,
 	)
 	if err != nil {
 		return nil, err
@@ -52,10 +53,11 @@ func (r *instanceResponse) ListInstance(ctx context.Context, accessKeyId, access
 	return result.Body, nil
 }
 
-func (r *instanceResponse) StartInstance(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.StartInstanceRequest) (*string, error) {
+func (r *instanceResponse) StartInstance(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstanceRequest) (*string, error) {
 	client, err := createClient(
-		tea.String(accessKeyId),
-		tea.String(accessKeySecret),
+		accessKeyId,
+		accessKeySecret,
+		endpoint,
 	)
 	if err != nil {
 		return nil, err
@@ -67,10 +69,11 @@ func (r *instanceResponse) StartInstance(ctx context.Context, accessKeyId, acces
 	return result.Body.RequestId, nil
 }
 
-func (r *instanceResponse) StopInstance(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.StopInstanceRequest) (*string, error) {
+func (r *instanceResponse) StopInstance(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstanceRequest) (*string, error) {
 	client, err := createClient(
-		tea.String(accessKeyId),
-		tea.String(accessKeySecret),
+		accessKeyId,
+		accessKeySecret,
+		endpoint,
 	)
 	if err != nil {
 		return nil, err
@@ -82,10 +85,11 @@ func (r *instanceResponse) StopInstance(ctx context.Context, accessKeyId, access
 	return result.Body.RequestId, nil
 }
 
-func (r *instanceResponse) RebootInstance(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.RebootInstanceRequest) (*string, error) {
+func (r *instanceResponse) RebootInstance(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstanceRequest) (*string, error) {
 	client, err := createClient(
-		tea.String(accessKeyId),
-		tea.String(accessKeySecret),
+		accessKeyId,
+		accessKeySecret,
+		endpoint,
 	)
 	if err != nil {
 		return nil, err
@@ -97,10 +101,11 @@ func (r *instanceResponse) RebootInstance(ctx context.Context, accessKeyId, acce
 	return result.Body.RequestId, nil
 }
 
-func (r *instanceResponse) DeleteInstance(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.DeleteInstanceRequest) (*string, error) {
+func (r *instanceResponse) DeleteInstance(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstanceRequest) (*string, error) {
 	client, err := createClient(
-		tea.String(accessKeyId),
-		tea.String(accessKeySecret),
+		accessKeyId,
+		accessKeySecret,
+		endpoint,
 	)
 	if err != nil {
 		return nil, err

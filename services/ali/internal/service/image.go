@@ -6,7 +6,7 @@ import (
 )
 
 func (service *InstanceService) ListImage(ctx context.Context, request *v1.ListImageRequest) (*v1.ListImageResponse, error) {
-	images, err := service.ic.ListImage(ctx, request.AccessKeyId, request.AccessKeySecret, request.RegionId)
+	images, err := service.ic.ListImage(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, request.RegionId)
 	if err != nil {
 		return nil, err
 	}
@@ -16,11 +16,13 @@ func (service *InstanceService) ListImage(ctx context.Context, request *v1.ListI
 	}
 	for i, image := range images {
 		listImageResponse.Images[i] = &v1.ListImageResponse_Image{
-			ImageName:    *image.ImageName,
-			OsName:       *image.OSName,
-			OsNameEn:     *image.OSNameEn,
-			Architecture: *image.Architecture,
-			OsType:       *image.OSType,
+			ImageId:          *image.ImageId,
+			ImageName:        *image.ImageName,
+			ImageDescription: *image.Description,
+			OsName:           *image.OSName,
+			OsNameEn:         *image.OSNameEn,
+			Architecture:     *image.Architecture,
+			OsType:           *image.OSType,
 		}
 	}
 	return listImageResponse, nil

@@ -25,15 +25,18 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	return &Data{}, cleanup, nil
 }
 
-func createClient(accessKeyId *string, accessKeySecret *string) (result *ecs20140526.Client, _err error) {
+func createClient(accessKeyId string, accessKeySecret, endpoint string) (result *ecs20140526.Client, _err error) {
 	config := &openapi.Config{
 		// 您的AccessKey ID
-		AccessKeyId: accessKeyId,
+		AccessKeyId: tea.String(accessKeyId),
 		// 您的AccessKey Secret
-		AccessKeySecret: accessKeySecret,
+		AccessKeySecret: tea.String(accessKeySecret),
+	}
+	if endpoint == "" {
+		endpoint = "ecs.cn-shenzhen.aliyuncs.com"
 	}
 	// 访问的域名
-	config.Endpoint = tea.String("ecs.cn-shenzhen.aliyuncs.com")
+	config.Endpoint = tea.String(endpoint)
 	result = &ecs20140526.Client{}
 	result, _err = ecs20140526.NewClient(config)
 	return result, _err

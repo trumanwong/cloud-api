@@ -7,7 +7,7 @@ import (
 )
 
 type RegionResponse interface {
-	ListAll(ctx context.Context, accessKeyId, accessKeySecret string, request *ecs20140526.DescribeRegionsRequest) ([]*ecs20140526.DescribeRegionsResponseBodyRegionsRegion, error)
+	ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeRegionsRequest) ([]*ecs20140526.DescribeRegionsResponseBodyRegionsRegion, error)
 }
 
 // RegionUseCase is a Region UseCase.
@@ -22,6 +22,6 @@ func NewRegionUseCase(repo RegionResponse, logger log.Logger) *RegionUseCase {
 }
 
 // ListAll List All Regions
-func (uc *RegionUseCase) ListAll(ctx context.Context, accessKeyId, accessKeySecret string, g *ecs20140526.DescribeRegionsRequest) ([]*ecs20140526.DescribeRegionsResponseBodyRegionsRegion, error) {
-	return uc.repo.ListAll(ctx, accessKeyId, accessKeySecret, g)
+func (uc *RegionUseCase) ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, g *ecs20140526.DescribeRegionsRequest) ([]*ecs20140526.DescribeRegionsResponseBodyRegionsRegion, error) {
+	return uc.repo.ListAll(ctx, accessKeyId, accessKeySecret, endpoint, g)
 }

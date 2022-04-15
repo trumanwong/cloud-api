@@ -7,7 +7,7 @@ import (
 )
 
 type InstanceTypeResponse interface {
-	ListAll(ctx context.Context, accessKeyId, accessKeySecret string) ([]*client.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error)
+	ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string) ([]*client.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error)
 }
 
 // InstanceTypeUseCase is a InstanceType UseCase.
@@ -22,6 +22,6 @@ func NewInstanceTypeUseCase(repo InstanceTypeResponse, logger log.Logger) *Insta
 }
 
 // ListAll List All Regions
-func (uc *InstanceTypeUseCase) ListAll(ctx context.Context, accessKeyId, accessKeySecret string) ([]*client.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error) {
-	return uc.repo.ListAll(ctx, accessKeyId, accessKeySecret)
+func (uc *InstanceTypeUseCase) ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string) ([]*client.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error) {
+	return uc.repo.ListAll(ctx, accessKeyId, accessKeySecret, endpoint)
 }

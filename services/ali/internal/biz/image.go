@@ -8,7 +8,7 @@ import (
 
 // ImageResponse is a Greater repo.
 type ImageResponse interface {
-	ListImage(context context.Context, accessKeyId, accessKeySecret, regionId string) ([]*client.DescribeImagesResponseBodyImagesImage, error)
+	ListImage(context context.Context, accessKeyId, accessKeySecret, endpoint, regionId string) ([]*client.DescribeImagesResponseBodyImagesImage, error)
 }
 
 // ImageUseCase is a Image UseCase.
@@ -23,6 +23,6 @@ func NewImageUseCase(repo ImageResponse, logger log.Logger) *ImageUseCase {
 }
 
 // ListImage List Image
-func (uc *ImageUseCase) ListImage(ctx context.Context, accessKeyId, accessKeySecret, regionId string) ([]*client.DescribeImagesResponseBodyImagesImage, error) {
-	return uc.repo.ListImage(ctx, accessKeyId, accessKeySecret, regionId)
+func (uc *ImageUseCase) ListImage(ctx context.Context, accessKeyId, accessKeySecret, endpoint, regionId string) ([]*client.DescribeImagesResponseBodyImagesImage, error) {
+	return uc.repo.ListImage(ctx, accessKeyId, accessKeySecret, endpoint, regionId)
 }
