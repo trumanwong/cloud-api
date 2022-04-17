@@ -18,17 +18,23 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(confServer *conf.Server, registry *conf.Registry, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
 	dataData, cleanup, err := data.NewData(confData, logger)
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterRepo := data.NewGreeterRepo(dataData, logger)
-	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
-	greeterService := service.NewGreeterService(greeterUsecase)
-	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
+	instanceRepo := data.NewInstanceRepo(dataData, logger)
+	instanceUsecase := biz.NewInstanceUseCase(instanceRepo, logger)
+	regionRepo := data.NewRegionRepo(dataData, logger)
+	regionUsecase := biz.NewRegionUseCase(regionRepo, logger)
+	imageRepo := data.NewImageRepo(dataData, logger)
+	imageUsecase := biz.NewImageUseCase(imageRepo, logger)
+	instanceTypeRepo := data.NewInstanceTypeRepo(dataData, logger)
+	instanceTypeUsecase := biz.NewInstanceTypeUseCase(instanceTypeRepo, logger)
+	greeterService := service.NewInstanceService(instanceUsecase, regionUsecase, imageUsecase, instanceTypeUsecase)
 	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
-	app := newApp(logger, httpServer, grpcServer)
+	registrar := server.NewRegistrar(registry)
+	app := newApp(logger, grpcServer, registrar)
 	return app, func() {
 		cleanup()
 	}, nil

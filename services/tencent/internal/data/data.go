@@ -1,9 +1,12 @@
 package data
 
 import (
-	"tencent/internal/conf"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
+	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
+	"tencent/internal/conf"
 )
 
 // ProviderSet is data providers.
@@ -20,4 +23,16 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 		log.NewHelper(logger).Info("closing the data resources")
 	}
 	return &Data{}, cleanup, nil
+}
+
+func NewCvmClient(secretId, secretKey, region string) (*cvm.Client, error) {
+	credential := common.NewCredential(secretId, secretKey)
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.Endpoint = "cvm.tencentcloudapi.com"
+	client, err := cvm.NewClient(credential, region, cpf)
+	if err != nil {
+		return nil, err
+	}
+	return client, err
+
 }

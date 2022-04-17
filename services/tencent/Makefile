@@ -42,7 +42,8 @@ generate:
 	go mod tidy
 	go get github.com/google/wire/cmd/wire@latest
 	go generate ./...
-
+wire:
+	cd cmd/tencent/ && wire
 .PHONY: all
 # generate all
 all:

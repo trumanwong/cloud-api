@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.20.0
-// source: services/tencent/api/instance/v1/instance.proto
+// source: services/aws/api/instance/v1/instance.proto
 
 package v1
 
@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InstanceClient interface {
-	// 可使用的地域
+	// 可使用的阿里云地域
 	ListRegion(ctx context.Context, in *ListRegionRequest, opts ...grpc.CallOption) (*ListRegionResponse, error)
 	// 选择镜像
 	ListImage(ctx context.Context, in *ListImageRequest, opts ...grpc.CallOption) (*ListImageResponse, error)
@@ -135,7 +135,7 @@ func (c *instanceClient) DeleteInstance(ctx context.Context, in *DeleteInstanceR
 // All implementations must embed UnimplementedInstanceServer
 // for forward compatibility
 type InstanceServer interface {
-	// 可使用的地域
+	// 可使用的阿里云地域
 	ListRegion(context.Context, *ListRegionRequest) (*ListRegionResponse, error)
 	// 选择镜像
 	ListImage(context.Context, *ListImageRequest) (*ListImageResponse, error)
@@ -407,5 +407,5 @@ var Instance_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "services/tencent/api/instance/v1/instance.proto",
+	Metadata: "services/aws/api/instance/v1/instance.proto",
 }

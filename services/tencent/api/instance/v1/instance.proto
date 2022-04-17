@@ -31,33 +31,31 @@ message CreateInstanceRequest {
   string secret_id = 1;
   string secret_key = 2;
   string region = 3;
-  // 区域id
-  string region_id = 4;
   // 镜像id
   string image_id = 5;
-  // 实例名称
+  // 实例名称, 不指定实例显示名称则默认显示‘未命名’。
+  // 购买多台实例，如果指定模式串{R:x}，表示生成数字[x, x+n-1]，其中n表示购买实例的数量，例如server_{R:3}，购买1台时，实例显示名称为server_3；购买2台时，实例显示名称分别为server_3，server_4。支持指定多个模式串{R:x}。
+  // 购买多台实例，如果不指定模式串，则在实例显示名称添加后缀1、2...n，其中n表示购买实例的数量，例如server_，购买2台时，实例显示名称分别为server_1，server_2。
+  // 最多支持60个字符（包含模式串）。
   string name = 6;
   // 实例规格
   string instance_type = 7;
   // 系统盘大小，单位GB
-  string system_disk_size = 8;
-  // 是否为instance_name自动添加有序后缀（默认false）
-  bool unique_suffix = 9;
+  int64 system_disk_size = 8;
   // 创建数量(1-100，默认1)
-  uint32 amount = 10;
-  // 实例密码
-  string password = 11;
+  int64 amount = 9;
+  // 实例密码, Linux实例密码必须8到30位，至少包括两项[a-z]，[A-Z]、[0-9] 和 [( ) ` ~ ! @ # $ % ^ & * - + = | { } [ ] : ; ' , . ? / ]中的特殊符号。
+  //Windows实例密码必须12到30位，至少包括三项[a-z]，[A-Z]，[0-9] 和 [( ) ` ~ ! @ # $ % ^ & * - + = | { } [ ] : ; ' , . ? /]中的特殊符号。
+  //
+  //若不指定该参数，则由系统随机生成密码，并通过站内信方式通知到用户。
+  string password = 10;
 }
 
 message CreateInstanceResponse {
   // 请求id
   string request_id = 1;
-  // 订单id，该参数只有创建包年包月ECS实例（请求参数InstanceChargeType=PrePaid）时有返回值
-  string order_id = 2;
-  // 订单成交价
-  float trade_price = 3;
   // 实例id列表
-  repeated string instance_id_sets = 4;
+  repeated string instance_id_sets = 2;
 }
 
 message ListInstanceRequest {
@@ -65,15 +63,15 @@ message ListInstanceRequest {
   string secret_key = 2;
   string region = 3;
   // 实例状态列表的页码，起始值1，默认值1
-  uint32 page_number = 5;
+  int64 page_number = 5;
   // 分页查询时设置的每页行数
-  uint32 page_size = 6;
+  int64 page_size = 6;
 }
 
 message ListInstanceResponse {
   string request_id = 1;
   // 查询到的实例总数
-  uint32 total_count = 2;
+  int64 total_count = 2;
   message Instance {
     // 实例ID
     string instance_id = 1;
@@ -84,7 +82,7 @@ message ListInstanceResponse {
     // 实例的计费方式
     string instance_charge_type = 4;
     // vCPU数
-    uint32 cpu = 5;
+    int64 cpu = 5;
     // 实例操作系统的英文名称
     string os_name = 6;
     // 实例状态
@@ -92,7 +90,7 @@ message ListInstanceResponse {
     // 实例创建时间，UTC+0时间
     string created_time = 8;
     // 内存大小，单位为MiB
-    uint32 memory = 9;
+    int64 memory = 9;
     // 实例GPU信息
     message GpuInfo {
       float gpu_count = 1;
@@ -109,7 +107,7 @@ message ListInstanceResponse {
       // 系统盘ID
       string disk_id = 2;
       // 系统盘大小，单位：GB
-      uint32 disk_size = 3;
+      int64 disk_size = 3;
       // 所属的独享集群ID
       string cd_cid = 4;
     }
@@ -117,7 +115,7 @@ message ListInstanceResponse {
     // 数据盘信息
     message DataDisk {
       // 	数据盘大小，单位：GB
-      uint32 disk_size = 1;
+      int64 disk_size = 1;
       // 数据盘类型
       string disk_type = 2;
       // 数据盘ID
@@ -125,7 +123,7 @@ message ListInstanceResponse {
       // 所属的独享集群ID
       string cd_cid = 4;
     }
-    repeated DataDisk data_disk = 13;
+    repeated DataDisk data_disks = 13;
     // 实例主网卡的内网IP列表
     repeated string private_ip_addresses = 14;
     // 实例主网卡的公网IP列表
@@ -135,7 +133,7 @@ message ListInstanceResponse {
       // 网络计费类型
       string internet_charge_type = 1;
       // 公网出带宽上限
-      uint32 internet_max_bandwidth_out = 2;
+      int64 internet_max_bandwidth_out = 2;
       // 是否分配公网IP
       bool public_ip_assigned = 3;
       // 带宽包ID
@@ -153,7 +151,7 @@ message ListInstanceResponse {
       // 私有网络子网 IP 数组
       repeated string private_ip_addresses = 4;
       // 为弹性网卡指定随机生成的 IPv6 地址数量
-      uint32 ipv6_address_count = 5;
+      uint64 ipv6_address_count = 5;
     }
     VirtualPrivateCloud virtualPrivateCloud = 17;
     // 实例运行的镜像ID
@@ -182,9 +180,9 @@ message ListImageRequest {
   string secret_key = 2;
   string region = 3;
   // 实例状态列表的页码，起始值1，默认值1
-  uint32 page_number = 4;
+  int64 page_number = 4;
   // 分页查询时设置的每页行数
-  uint32 page_size = 5;
+  int64 page_size = 5;
 }
 
 message ListImageResponse {
@@ -197,7 +195,7 @@ message ListImageResponse {
     string platform = 6;
   }
   repeated Image images = 1;
-  int32 total_count = 2;
+  int64 total_count = 2;
   string request_id = 3;
 }
 
@@ -211,9 +209,9 @@ message ListInstanceTypeResponse {
   message InstanceType {
     string instance_type_id = 1;
     string instance_type_family = 2;
-    float memory_size = 3;
-    int32 cpu_core_count = 4;
-    string gpu_sec = 5;
+    int64 memory_size = 3;
+    int64 cpu_core_count = 4;
+    int64 gpu_sec = 5;
   }
   repeated InstanceType instance_types = 1;
 }
@@ -245,7 +243,7 @@ message RebootInstanceRequest {
   string secret_id = 1;
   string secret_key = 2;
   string region = 3;
-  repeated string instance_id = 4;
+  repeated string instance_ids = 4;
 }
 
 message RebootInstanceResponse {
@@ -256,7 +254,7 @@ message DeleteInstanceRequest {
   string secret_id = 1;
   string secret_key = 2;
   string region = 3;
-  repeated string instance_id = 4;
+  repeated string instance_ids = 4;
 }
 
 message DeleteInstanceResponse {
