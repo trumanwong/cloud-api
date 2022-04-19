@@ -26,12 +26,12 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	return &Data{}, cleanup, nil
 }
 
-func newClient(accessKeyId, secretAccessKey, token, region string) (*ec2.Client, error) {
+func newClient(accessKeyId, secretAccessKey, region string) (*ec2.Client, error) {
 	if len(region) == 0 {
 		region = "us-east-1"
 	}
 	cfg, err := config.LoadDefaultConfig(context.TODO(),
-		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(accessKeyId, secretAccessKey, token)),
+		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(accessKeyId, secretAccessKey, "")),
 		config.WithRegion(region),
 	)
 	if err != nil {

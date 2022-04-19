@@ -14,20 +14,20 @@ service Instance {
   // 选择实例规格
   rpc ListInstanceType(ListInstanceTypeRequest) returns (ListInstanceTypeResponse);
   // 创建实例
-  rpc CreateInstance (CreateInstanceRequest) returns (CreateInstanceResponse);
+  rpc CreateInstances (CreateInstancesRequest) returns (CreateInstancesResponse);
   // 实例列表
-  rpc ListInstance (ListInstanceRequest) returns (ListInstanceResponse);
+  rpc ListInstances (ListInstancesRequest) returns (ListInstancesResponse);
   // 开机
-  rpc StartInstance(StartInstanceRequest) returns (StartInstanceResponse);
+  rpc StartInstances(StartInstancesRequest) returns (StartInstancesResponse);
   // 关机
-  rpc StopInstance(StopInstanceRequest) returns (StopInstanceResponse);
+  rpc StopInstances(StopInstancesRequest) returns (StopInstancesResponse);
   // 重启
-  rpc RebootInstance(RebootInstanceRequest) returns (RebootInstanceResponse);
+  rpc RebootInstances(RebootInstancesRequest) returns (RebootInstancesResponse);
   // 删除实例
-  rpc DeleteInstance(DeleteInstanceRequest) returns (DeleteInstanceResponse);
+  rpc DeleteInstances(DeleteInstancesRequest) returns (DeleteInstancesResponse);
 }
 
-message CreateInstanceRequest {
+message CreateInstancesRequest {
   string secret_id = 1;
   string secret_key = 2;
   string region = 3;
@@ -49,16 +49,22 @@ message CreateInstanceRequest {
   //
   //若不指定该参数，则由系统随机生成密码，并通过站内信方式通知到用户。
   string password = 10;
+  // 是否只预检此次请求。
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数，请求格式，业务限制和云服务器库存。
+  // 如果检查不通过，则返回对应错误码；
+  // 如果检查通过，则返回RequestId.
+  // false（默认）：发送正常请求，通过检查后直接创建实例
+  bool dry_run = 11;
 }
 
-message CreateInstanceResponse {
+message CreateInstancesResponse {
   // 请求id
   string request_id = 1;
   // 实例id列表
   repeated string instance_id_sets = 2;
 }
 
-message ListInstanceRequest {
+message ListInstancesRequest {
   string secret_id = 1;
   string secret_key = 2;
   string region = 3;
@@ -68,7 +74,7 @@ message ListInstanceRequest {
   int64 page_size = 6;
 }
 
-message ListInstanceResponse {
+message ListInstancesResponse {
   string request_id = 1;
   // 查询到的实例总数
   int64 total_count = 2;
@@ -216,47 +222,71 @@ message ListInstanceTypeResponse {
   repeated InstanceType instance_types = 1;
 }
 
-message StartInstanceRequest {
+message StartInstancesRequest {
   string secret_id = 1;
   string secret_key = 2;
   string region = 3;
   repeated string instance_ids = 4;
+  // 是否只预检此次请求。
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数，请求格式，业务限制和云服务器库存。
+  // 如果检查不通过，则返回对应错误码；
+  // 如果检查通过，则返回RequestId.
+  // false（默认）：发送正常请求，通过检查后直接创建实例
+  bool dry_run = 5;
 }
 
-message StartInstanceResponse {
+message StartInstancesResponse {
   // 请求ID
   string request_id = 1;
 }
 
-message StopInstanceRequest {
+message StopInstancesRequest {
   string secret_id = 1;
   string secret_key = 2;
   string region = 3;
   repeated string instance_ids = 4;
+  // 是否只预检此次请求。
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数，请求格式，业务限制和云服务器库存。
+  // 如果检查不通过，则返回对应错误码；
+  // 如果检查通过，则返回RequestId.
+  // false（默认）：发送正常请求，通过检查后直接创建实例
+  bool dry_run = 5;
 }
 
-message StopInstanceResponse {
+message StopInstancesResponse {
   string request_id = 1;
 }
 
-message RebootInstanceRequest {
+message RebootInstancesRequest {
   string secret_id = 1;
   string secret_key = 2;
   string region = 3;
   repeated string instance_ids = 4;
+  // 是否只预检此次请求。
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数，请求格式，业务限制和云服务器库存。
+  // 如果检查不通过，则返回对应错误码；
+  // 如果检查通过，则返回RequestId.
+  // false（默认）：发送正常请求，通过检查后直接创建实例
+  bool dry_run = 5;
 }
 
-message RebootInstanceResponse {
+message RebootInstancesResponse {
   string request_id = 1;
 }
 
-message DeleteInstanceRequest {
+message DeleteInstancesRequest {
   string secret_id = 1;
   string secret_key = 2;
   string region = 3;
   repeated string instance_ids = 4;
+  // 是否只预检此次请求。
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数，请求格式，业务限制和云服务器库存。
+  // 如果检查不通过，则返回对应错误码；
+  // 如果检查通过，则返回RequestId.
+  // false（默认）：发送正常请求，通过检查后直接创建实例
+  bool dry_run = 5;
 }
 
-message DeleteInstanceResponse {
+message DeleteInstancesResponse {
   string request_id = 1;
 }

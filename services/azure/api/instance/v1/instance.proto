@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package services.azure.api.instance.v1;
+
+option go_package = "cloud-api/services/azure/api/instance/v1;v1";
+option java_multiple_files = true;
+option java_package = "services.azure.api.instance.v1";
+
+service Instance {
+	rpc CreateInstance (CreateInstanceRequest) returns (CreateInstanceReply);
+	rpc UpdateInstance (UpdateInstanceRequest) returns (UpdateInstanceReply);
+	rpc DeleteInstance (DeleteInstanceRequest) returns (DeleteInstanceReply);
+	rpc GetInstance (GetInstanceRequest) returns (GetInstanceReply);
+	rpc ListInstance (ListInstanceRequest) returns (ListInstanceReply);
+}
+
+message CreateInstanceRequest {}
+message CreateInstanceReply {}
+
+message UpdateInstanceRequest {}
+message UpdateInstanceReply {}
+
+message DeleteInstanceRequest {}
+message DeleteInstanceReply {}
+
+message GetInstanceRequest {}
+message GetInstanceReply {}
+
+message ListInstanceRequest {}
+message ListInstanceReply {}

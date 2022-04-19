@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.20.0
-// source: instance.proto
+// source: services/ali/api/instance/v1/instance.proto
 
 package v1
 
@@ -29,17 +29,17 @@ type InstanceClient interface {
 	// 选择实例规格
 	ListInstanceType(ctx context.Context, in *ListInstanceTypeRequest, opts ...grpc.CallOption) (*ListInstanceTypeResponse, error)
 	// 创建实例
-	CreateInstance(ctx context.Context, in *CreateInstanceRequest, opts ...grpc.CallOption) (*CreateInstanceResponse, error)
+	CreateInstance(ctx context.Context, in *CreateInstancesRequest, opts ...grpc.CallOption) (*CreateInstancesResponse, error)
 	// 实例列表
-	ListInstance(ctx context.Context, in *ListInstanceRequest, opts ...grpc.CallOption) (*ListInstanceResponse, error)
+	ListInstance(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error)
 	// 开机
-	StartInstance(ctx context.Context, in *StartInstanceRequest, opts ...grpc.CallOption) (*StartInstanceResponse, error)
+	StartInstance(ctx context.Context, in *StartInstancesRequest, opts ...grpc.CallOption) (*StartInstancesResponse, error)
 	// 关机
-	StopInstance(ctx context.Context, in *StopInstanceRequest, opts ...grpc.CallOption) (*StopInstanceResponse, error)
+	StopInstance(ctx context.Context, in *StopInstancesRequest, opts ...grpc.CallOption) (*StopInstancesResponse, error)
 	// 重启
-	RebootInstance(ctx context.Context, in *RebootInstanceRequest, opts ...grpc.CallOption) (*RebootInstanceResponse, error)
+	RebootInstance(ctx context.Context, in *RebootInstancesRequest, opts ...grpc.CallOption) (*RebootInstancesResponse, error)
 	// 删除实例
-	DeleteInstance(ctx context.Context, in *DeleteInstanceRequest, opts ...grpc.CallOption) (*DeleteInstanceResponse, error)
+	DeleteInstance(ctx context.Context, in *DeleteInstancesRequest, opts ...grpc.CallOption) (*DeleteInstancesResponse, error)
 }
 
 type instanceClient struct {
@@ -77,8 +77,8 @@ func (c *instanceClient) ListInstanceType(ctx context.Context, in *ListInstanceT
 	return out, nil
 }
 
-func (c *instanceClient) CreateInstance(ctx context.Context, in *CreateInstanceRequest, opts ...grpc.CallOption) (*CreateInstanceResponse, error) {
-	out := new(CreateInstanceResponse)
+func (c *instanceClient) CreateInstance(ctx context.Context, in *CreateInstancesRequest, opts ...grpc.CallOption) (*CreateInstancesResponse, error) {
+	out := new(CreateInstancesResponse)
 	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/CreateInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -86,8 +86,8 @@ func (c *instanceClient) CreateInstance(ctx context.Context, in *CreateInstanceR
 	return out, nil
 }
 
-func (c *instanceClient) ListInstance(ctx context.Context, in *ListInstanceRequest, opts ...grpc.CallOption) (*ListInstanceResponse, error) {
-	out := new(ListInstanceResponse)
+func (c *instanceClient) ListInstance(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error) {
+	out := new(ListInstancesResponse)
 	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -95,8 +95,8 @@ func (c *instanceClient) ListInstance(ctx context.Context, in *ListInstanceReque
 	return out, nil
 }
 
-func (c *instanceClient) StartInstance(ctx context.Context, in *StartInstanceRequest, opts ...grpc.CallOption) (*StartInstanceResponse, error) {
-	out := new(StartInstanceResponse)
+func (c *instanceClient) StartInstance(ctx context.Context, in *StartInstancesRequest, opts ...grpc.CallOption) (*StartInstancesResponse, error) {
+	out := new(StartInstancesResponse)
 	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/StartInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -104,8 +104,8 @@ func (c *instanceClient) StartInstance(ctx context.Context, in *StartInstanceReq
 	return out, nil
 }
 
-func (c *instanceClient) StopInstance(ctx context.Context, in *StopInstanceRequest, opts ...grpc.CallOption) (*StopInstanceResponse, error) {
-	out := new(StopInstanceResponse)
+func (c *instanceClient) StopInstance(ctx context.Context, in *StopInstancesRequest, opts ...grpc.CallOption) (*StopInstancesResponse, error) {
+	out := new(StopInstancesResponse)
 	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/StopInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -113,8 +113,8 @@ func (c *instanceClient) StopInstance(ctx context.Context, in *StopInstanceReque
 	return out, nil
 }
 
-func (c *instanceClient) RebootInstance(ctx context.Context, in *RebootInstanceRequest, opts ...grpc.CallOption) (*RebootInstanceResponse, error) {
-	out := new(RebootInstanceResponse)
+func (c *instanceClient) RebootInstance(ctx context.Context, in *RebootInstancesRequest, opts ...grpc.CallOption) (*RebootInstancesResponse, error) {
+	out := new(RebootInstancesResponse)
 	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/RebootInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -122,8 +122,8 @@ func (c *instanceClient) RebootInstance(ctx context.Context, in *RebootInstanceR
 	return out, nil
 }
 
-func (c *instanceClient) DeleteInstance(ctx context.Context, in *DeleteInstanceRequest, opts ...grpc.CallOption) (*DeleteInstanceResponse, error) {
-	out := new(DeleteInstanceResponse)
+func (c *instanceClient) DeleteInstance(ctx context.Context, in *DeleteInstancesRequest, opts ...grpc.CallOption) (*DeleteInstancesResponse, error) {
+	out := new(DeleteInstancesResponse)
 	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/DeleteInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -142,17 +142,17 @@ type InstanceServer interface {
 	// 选择实例规格
 	ListInstanceType(context.Context, *ListInstanceTypeRequest) (*ListInstanceTypeResponse, error)
 	// 创建实例
-	CreateInstance(context.Context, *CreateInstanceRequest) (*CreateInstanceResponse, error)
+	CreateInstance(context.Context, *CreateInstancesRequest) (*CreateInstancesResponse, error)
 	// 实例列表
-	ListInstance(context.Context, *ListInstanceRequest) (*ListInstanceResponse, error)
+	ListInstance(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error)
 	// 开机
-	StartInstance(context.Context, *StartInstanceRequest) (*StartInstanceResponse, error)
+	StartInstance(context.Context, *StartInstancesRequest) (*StartInstancesResponse, error)
 	// 关机
-	StopInstance(context.Context, *StopInstanceRequest) (*StopInstanceResponse, error)
+	StopInstance(context.Context, *StopInstancesRequest) (*StopInstancesResponse, error)
 	// 重启
-	RebootInstance(context.Context, *RebootInstanceRequest) (*RebootInstanceResponse, error)
+	RebootInstance(context.Context, *RebootInstancesRequest) (*RebootInstancesResponse, error)
 	// 删除实例
-	DeleteInstance(context.Context, *DeleteInstanceRequest) (*DeleteInstanceResponse, error)
+	DeleteInstance(context.Context, *DeleteInstancesRequest) (*DeleteInstancesResponse, error)
 	mustEmbedUnimplementedInstanceServer()
 }
 
@@ -169,22 +169,22 @@ func (UnimplementedInstanceServer) ListImage(context.Context, *ListImageRequest)
 func (UnimplementedInstanceServer) ListInstanceType(context.Context, *ListInstanceTypeRequest) (*ListInstanceTypeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListInstanceType not implemented")
 }
-func (UnimplementedInstanceServer) CreateInstance(context.Context, *CreateInstanceRequest) (*CreateInstanceResponse, error) {
+func (UnimplementedInstanceServer) CreateInstance(context.Context, *CreateInstancesRequest) (*CreateInstancesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateInstance not implemented")
 }
-func (UnimplementedInstanceServer) ListInstance(context.Context, *ListInstanceRequest) (*ListInstanceResponse, error) {
+func (UnimplementedInstanceServer) ListInstance(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListInstance not implemented")
 }
-func (UnimplementedInstanceServer) StartInstance(context.Context, *StartInstanceRequest) (*StartInstanceResponse, error) {
+func (UnimplementedInstanceServer) StartInstance(context.Context, *StartInstancesRequest) (*StartInstancesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartInstance not implemented")
 }
-func (UnimplementedInstanceServer) StopInstance(context.Context, *StopInstanceRequest) (*StopInstanceResponse, error) {
+func (UnimplementedInstanceServer) StopInstance(context.Context, *StopInstancesRequest) (*StopInstancesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StopInstance not implemented")
 }
-func (UnimplementedInstanceServer) RebootInstance(context.Context, *RebootInstanceRequest) (*RebootInstanceResponse, error) {
+func (UnimplementedInstanceServer) RebootInstance(context.Context, *RebootInstancesRequest) (*RebootInstancesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RebootInstance not implemented")
 }
-func (UnimplementedInstanceServer) DeleteInstance(context.Context, *DeleteInstanceRequest) (*DeleteInstanceResponse, error) {
+func (UnimplementedInstanceServer) DeleteInstance(context.Context, *DeleteInstancesRequest) (*DeleteInstancesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteInstance not implemented")
 }
 func (UnimplementedInstanceServer) mustEmbedUnimplementedInstanceServer() {}
@@ -255,7 +255,7 @@ func _Instance_ListInstanceType_Handler(srv interface{}, ctx context.Context, de
 }
 
 func _Instance_CreateInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateInstanceRequest)
+	in := new(CreateInstancesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -267,13 +267,13 @@ func _Instance_CreateInstance_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: "/api.instance.v1.Instance/CreateInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstanceServer).CreateInstance(ctx, req.(*CreateInstanceRequest))
+		return srv.(InstanceServer).CreateInstance(ctx, req.(*CreateInstancesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Instance_ListInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListInstanceRequest)
+	in := new(ListInstancesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -285,13 +285,13 @@ func _Instance_ListInstance_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/api.instance.v1.Instance/ListInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstanceServer).ListInstance(ctx, req.(*ListInstanceRequest))
+		return srv.(InstanceServer).ListInstance(ctx, req.(*ListInstancesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Instance_StartInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StartInstanceRequest)
+	in := new(StartInstancesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -303,13 +303,13 @@ func _Instance_StartInstance_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/api.instance.v1.Instance/StartInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstanceServer).StartInstance(ctx, req.(*StartInstanceRequest))
+		return srv.(InstanceServer).StartInstance(ctx, req.(*StartInstancesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Instance_StopInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StopInstanceRequest)
+	in := new(StopInstancesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -321,13 +321,13 @@ func _Instance_StopInstance_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/api.instance.v1.Instance/StopInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstanceServer).StopInstance(ctx, req.(*StopInstanceRequest))
+		return srv.(InstanceServer).StopInstance(ctx, req.(*StopInstancesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Instance_RebootInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RebootInstanceRequest)
+	in := new(RebootInstancesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -339,13 +339,13 @@ func _Instance_RebootInstance_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: "/api.instance.v1.Instance/RebootInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstanceServer).RebootInstance(ctx, req.(*RebootInstanceRequest))
+		return srv.(InstanceServer).RebootInstance(ctx, req.(*RebootInstancesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Instance_DeleteInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteInstanceRequest)
+	in := new(DeleteInstancesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -357,7 +357,7 @@ func _Instance_DeleteInstance_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: "/api.instance.v1.Instance/DeleteInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstanceServer).DeleteInstance(ctx, req.(*DeleteInstanceRequest))
+		return srv.(InstanceServer).DeleteInstance(ctx, req.(*DeleteInstancesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -407,5 +407,5 @@ var Instance_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "instance.proto",
+	Metadata: "services/ali/api/instance/v1/instance.proto",
 }

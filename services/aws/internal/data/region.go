@@ -21,8 +21,8 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	}
 }
 
-func (r *regionResponse) ListAll(ctx context.Context, accessKeyId, secretAccessKey, token string, request *ec2.DescribeRegionsInput) ([]types.Region, error) {
-	client, err := newClient(accessKeyId, secretAccessKey, token, "")
+func (r *regionResponse) ListAll(ctx context.Context, accessKeyId, secretAccessKey string, request *ec2.DescribeRegionsInput) ([]types.Region, error) {
+	client, err := newClient(accessKeyId, secretAccessKey, "")
 	if err != nil {
 		return nil, err
 	}

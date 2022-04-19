@@ -8,8 +8,8 @@ import (
 )
 
 // CreateInstance Create Instance
-func (service *InstanceService) CreateInstance(ctx context.Context, request *v1.CreateInstanceRequest) (*v1.CreateInstanceResponse, error) {
-	result, err := service.uc.CreateInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.RunInstancesRequest{
+func (service *InstanceService) CreateInstance(ctx context.Context, request *v1.CreateInstancesRequest) (*v1.CreateInstancesResponse, error) {
+	result, err := service.uc.CreateInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.RunInstancesRequest{
 		RegionId:     tea.String(request.RegionId),
 		ImageId:      tea.String(request.ImageId),
 		InstanceName: tea.String(request.Name),
@@ -20,6 +20,7 @@ func (service *InstanceService) CreateInstance(ctx context.Context, request *v1.
 		UniqueSuffix: tea.Bool(request.UniqueSuffix),
 		Amount:       tea.Int32(int32(request.Amount)),
 		Password:     tea.String(request.Password),
+		DryRun:       tea.Bool(request.DryRun),
 	})
 	if err != nil {
 		return nil, err
@@ -28,7 +29,7 @@ func (service *InstanceService) CreateInstance(ctx context.Context, request *v1.
 	for i, v := range result.InstanceIdSets.InstanceIdSet {
 		instanceIdsSets[i] = *v
 	}
-	return &v1.CreateInstanceResponse{
+	return &v1.CreateInstancesResponse{
 		RequestId:      *result.RequestId,
 		OrderId:        *result.OrderId,
 		TradePrice:     *result.TradePrice,
@@ -36,8 +37,8 @@ func (service *InstanceService) CreateInstance(ctx context.Context, request *v1.
 	}, nil
 }
 
-func (service *InstanceService) ListInstance(ctx context.Context, request *v1.ListInstanceRequest) (*v1.ListInstanceResponse, error) {
-	result, err := service.uc.ListInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.DescribeInstancesRequest{
+func (service *InstanceService) ListInstances(ctx context.Context, request *v1.ListInstancesRequest) (*v1.ListInstancesResponse, error) {
+	result, err := service.uc.ListInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.DescribeInstancesRequest{
 		RegionId:   tea.String(request.RegionId),
 		PageNumber: tea.Int32(int32(request.PageNumber)),
 		PageSize:   tea.Int32(int32(request.PageSize)),
@@ -47,7 +48,7 @@ func (service *InstanceService) ListInstance(ctx context.Context, request *v1.Li
 		return nil, err
 	}
 
-	instances := make([]v1.ListInstanceResponse_Instance, len(result.Instances.Instance))
+	instances := make([]v1.ListInstancesResponse_Instance, len(result.Instances.Instance))
 	for i, v := range result.Instances.Instance {
 		publicIpAddress, innerIpAddress, rdmaIpAddress, securityGroupIds := make([]string, 0), make([]string, 0), make([]string, 0), make([]string, 0)
 		if v.PublicIpAddress != nil {
@@ -70,9 +71,9 @@ func (service *InstanceService) ListInstance(ctx context.Context, request *v1.Li
 				securityGroupIds = append(securityGroupIds, *v)
 			}
 		}
-		var eIpAddress *v1.ListInstanceResponse_Instance_EipAddress
+		var eIpAddress *v1.ListInstancesResponse_Instance_EipAddress
 		if v.EipAddress != nil {
-			eIpAddress = &v1.ListInstanceResponse_Instance_EipAddress{
+			eIpAddress = &v1.ListInstancesResponse_Instance_EipAddress{
 				AllocationId:         *v.EipAddress.AllocationId,
 				IsSupportUnAssociate: *v.EipAddress.IsSupportUnassociate,
 				InternalChargeType:   *v.EipAddress.InternetChargeType,
@@ -80,7 +81,7 @@ func (service *InstanceService) ListInstance(ctx context.Context, request *v1.Li
 				Bandwidth:            uint32(*v.EipAddress.Bandwidth),
 			}
 		}
-		instances[i] = v1.ListInstanceResponse_Instance{
+		instances[i] = v1.ListInstancesResponse_Instance{
 			InstanceId:           *v.InstanceId,
 			InstanceName:         *v.InstanceName,
 			InstanceType:         *v.InstanceType,
@@ -109,7 +110,7 @@ func (service *InstanceService) ListInstance(ctx context.Context, request *v1.Li
 			ImageId:              *v.ImageId,
 		}
 	}
-	listInstanceResponse := &v1.ListInstanceResponse{
+	listInstancesResponse := &v1.ListInstancesResponse{
 		RequestId:  *result.RequestId,
 		PageNumber: uint32(*result.PageNumber),
 		PageSize:   uint32(*result.PageSize),
@@ -118,53 +119,73 @@ func (service *InstanceService) ListInstance(ctx context.Context, request *v1.Li
 		Instances:  nil,
 	}
 
-	return listInstanceResponse, nil
+	return listInstancesResponse, nil
 }
 
-func (service *InstanceService) StartInstance(ctx context.Context, request *v1.StartInstanceRequest) (*v1.StartInstanceResponse, error) {
-	result, err := service.uc.StartInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.StartInstanceRequest{
-		InstanceId: tea.String(request.InstanceId),
+func (service *InstanceService) StartInstances(ctx context.Context, request *v1.StartInstancesRequest) (*v1.StartInstancesResponse, error) {
+	instanceIds := make([]*string, len(request.InstanceIds))
+	for i, v := range request.InstanceIds {
+		instanceIds[i] = tea.String(v)
+	}
+	result, err := service.uc.StartInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.StartInstancesRequest{
+		InstanceId: instanceIds,
+		DryRun:     tea.Bool(request.DryRun),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.StartInstanceResponse{
+	return &v1.StartInstancesResponse{
 		RequestId: *result,
 	}, nil
 }
 
-func (service *InstanceService) StopInstance(ctx context.Context, request *v1.StopInstanceRequest) (*v1.StopInstanceResponse, error) {
-	result, err := service.uc.StopInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.StopInstanceRequest{
-		InstanceId: tea.String(request.InstanceId),
+func (service *InstanceService) StopInstances(ctx context.Context, request *v1.StopInstancesRequest) (*v1.StopInstancesResponse, error) {
+	instanceIds := make([]*string, len(request.InstanceIds))
+	for i, v := range request.InstanceIds {
+		instanceIds[i] = tea.String(v)
+	}
+	result, err := service.uc.StopInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.StopInstancesRequest{
+		InstanceId: instanceIds,
+		DryRun:     tea.Bool(request.DryRun),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.StopInstanceResponse{
+	return &v1.StopInstancesResponse{
 		RequestId: *result,
 	}, nil
 }
 
-func (service *InstanceService) RebootInstance(ctx context.Context, request *v1.RebootInstanceRequest) (*v1.RebootInstanceResponse, error) {
-	result, err := service.uc.RebootInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.RebootInstanceRequest{
-		InstanceId: tea.String(request.InstanceId),
+func (service *InstanceService) RebootInstances(ctx context.Context, request *v1.RebootInstancesRequest) (*v1.RebootInstancesResponse, error) {
+	instanceIds := make([]*string, len(request.InstanceIds))
+	for i, v := range request.InstanceIds {
+		instanceIds[i] = tea.String(v)
+	}
+	result, err := service.uc.RebootInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.RebootInstancesRequest{
+		InstanceId: instanceIds,
+		DryRun:     tea.Bool(request.DryRun),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.RebootInstanceResponse{
+	return &v1.RebootInstancesResponse{
 		RequestId: *result,
 	}, nil
 }
 
-func (service *InstanceService) DeleteInstance(ctx context.Context, request *v1.DeleteInstanceRequest) (*v1.DeleteInstanceResponse, error) {
-	result, err := service.uc.DeleteInstance(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.DeleteInstanceRequest{
-		InstanceId: tea.String(request.InstanceId),
+func (service *InstanceService) DeleteInstances(ctx context.Context, request *v1.DeleteInstancesRequest) (*v1.DeleteInstancesResponse, error) {
+	instanceIds := make([]*string, len(request.InstanceIds))
+	for i, v := range request.InstanceIds {
+		instanceIds[i] = tea.String(v)
+	}
+	result, err := service.uc.DeleteInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.DeleteInstancesRequest{
+		InstanceId: instanceIds,
+		DryRun:     tea.Bool(request.DryRun),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.DeleteInstanceResponse{
+	return &v1.DeleteInstancesResponse{
 		RequestId: *result,
 	}, nil
 }

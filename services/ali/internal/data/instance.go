@@ -20,7 +20,7 @@ func NewInstanceRepo(data *Data, logger log.Logger) biz.InstanceResponse {
 	}
 }
 
-func (r *instanceResponse) Create(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error) {
+func (r *instanceResponse) CreateInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error) {
 	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
@@ -37,7 +37,7 @@ func (r *instanceResponse) Create(ctx context.Context, accessKeyId, accessKeySec
 	return result.Body, nil
 }
 
-func (r *instanceResponse) ListInstance(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error) {
+func (r *instanceResponse) ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error) {
 	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
@@ -53,7 +53,7 @@ func (r *instanceResponse) ListInstance(ctx context.Context, accessKeyId, access
 	return result.Body, nil
 }
 
-func (r *instanceResponse) StartInstance(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstanceRequest) (*string, error) {
+func (r *instanceResponse) StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstancesRequest) (*string, error) {
 	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
@@ -62,14 +62,14 @@ func (r *instanceResponse) StartInstance(ctx context.Context, accessKeyId, acces
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.StartInstance(request)
+	result, err := client.StartInstances(request)
 	if err != nil {
 		return nil, err
 	}
 	return result.Body.RequestId, nil
 }
 
-func (r *instanceResponse) StopInstance(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstanceRequest) (*string, error) {
+func (r *instanceResponse) StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstancesRequest) (*string, error) {
 	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
@@ -78,14 +78,14 @@ func (r *instanceResponse) StopInstance(ctx context.Context, accessKeyId, access
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.StopInstance(request)
+	result, err := client.StopInstances(request)
 	if err != nil {
 		return nil, err
 	}
 	return result.Body.RequestId, nil
 }
 
-func (r *instanceResponse) RebootInstance(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstanceRequest) (*string, error) {
+func (r *instanceResponse) RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstancesRequest) (*string, error) {
 	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
@@ -94,14 +94,14 @@ func (r *instanceResponse) RebootInstance(ctx context.Context, accessKeyId, acce
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.RebootInstance(request)
+	result, err := client.RebootInstances(request)
 	if err != nil {
 		return nil, err
 	}
 	return result.Body.RequestId, nil
 }
 
-func (r *instanceResponse) DeleteInstance(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstanceRequest) (*string, error) {
+func (r *instanceResponse) DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstancesRequest) (*string, error) {
 	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
@@ -110,7 +110,7 @@ func (r *instanceResponse) DeleteInstance(ctx context.Context, accessKeyId, acce
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.DeleteInstance(request)
+	result, err := client.DeleteInstances(request)
 	if err != nil {
 		return nil, err
 	}

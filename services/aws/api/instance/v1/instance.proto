@@ -33,37 +33,31 @@ message CreateInstanceRequest {
   string region = 3;
   // 镜像id
   string image_id = 4;
-  // 实例名称
-  string name =5;
   // 实例规格
-  string instance_type = 6;
+  string instance_type = 5;
   // The number of CPU cores for the instance.
-  int32 cpu_core_count = 7;
+  int32 cpu_core_count = 6;
   // The number of threads per CPU core. To disable multithreading for the instance, specify a value of 1. Otherwise, specify the default value of 2.
-  int32 threads_per_core = 8;
+  int32 threads_per_core = 7;
   // 系统盘大小
-  string system_disk_size = 9;
+  int32 system_disk_size = 8;
   // 是否为instance_name自动添加有序后缀（默认false）
-  bool unique_suffix = 10;
+  bool unique_suffix = 9;
   // 创建数量(1-100，默认1)
-  uint32 amount = 11;
+  uint32 amount = 10;
   // 实例密码
-  string password = 12;
+  string password = 11;
 }
 
 message CreateInstanceResponse {
-  // [EC2-Classic only] The security groups.
-  repeated GroupIdentifier group_set = 1;
   // 实例id列表
-  repeated InstanceObj instance_id_sets = 2;
+  repeated string instance_id_sets = 1;
   // The ID of the AWS account that owns the reservation.
-  string owner_id = 3;
+  string owner_id = 2;
   // The ID of the requester that launched the instances on your behalf (for example, AWS Management Console or Auto Scaling).
-  string requester_id = 4;
-  // The ID of the request.
-  string request_id = 5;
+  string requester_id = 3;
   // The ID of the reservation.
-  string reservation_id = 6;
+  string reservation_id = 4;
 }
 
 message ListInstanceRequest {
@@ -97,51 +91,47 @@ message InstanceObj {
   }
   // The CPU options for the instance.
   CpuOptions cpu_options = 4;
-  // (IPv4 only) The public DNS name assigned to the instance. This name is not available until the instance enters the running state. For EC2-VPC, this name is only available if you've enabled DNS hostnames for your VPC.
-  string dns_name = 5;
   // Indicates whether the instance is optimized for Amazon EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.
-  bool ebs_optimized = 6;
+  bool ebs_optimized = 5;
   // Specifies whether enhanced networking with ENA is enabled.
-  bool ena_support = 7;
-  // The security groups for the instance.
-  repeated GroupIdentifier group_set = 8;
+  bool ena_support = 6;
   // The hypervisor type of the instance. The value xen is used for both Xen and Nitro hypervisors.
   // Valid Values: ovm | xen
-  string hypervisor = 9;
+  string hypervisor = 7;
   // The ID of the AMI used to launch the instance.
-  string image_id = 10;
+  string image_id = 8;
   // The ID of the instance.
-  string instance_id = 11;
+  string instance_id = 9;
   // Indicates whether this is a Spot Instance or a Scheduled Instance.
   // Valid Values: spot | scheduled
-  string instance_lifecycle = 12;
+  string instance_lifecycle = 10;
   // The current state of the instance.
-  InstanceState instance_state = 13;
+  InstanceState instance_state = 11;
   // The instance type.
-  string instance_type = 14;
+  string instance_type = 12;
   // The public IPv4 address, or the Carrier IP address assigned to the instance, if applicable.
-  string ipv4_address = 15;
+  string ipv4_address = 13;
   // The IPv6 address assigned to the instance.
-  string ipv6_address = 16;
+  string ipv6_address = 14;
   // The kernel associated with this instance, if applicable.
-  string kernel_id = 17;
+  string kernel_id = 15;
   // The name of the key pair, if this instance was launched with an associated key pair.
-  string key_name = 18;
+  string key_name = 16;
   // The time the instance was launched.
-  string launch_time = 19;
+  string launch_time = 17;
   // The monitoring for the instance.
   message Monitoring {
     // Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.
     string state = 1;
   }
   // The monitoring for the instance.
-  Monitoring monitoring = 20;
+  Monitoring monitoring = 18;
   // The value is Windows for Windows instances; otherwise blank.
-  string platform = 21;
+  string platform = 19;
   // The platform details value for the instance. For more information, see AMI billing information fields in the Amazon EC2 User Guide.
-  string platform_details = 22;
+  string platform_details = 20;
   // (IPv4 only) The private DNS hostname name assigned to the instance. This DNS hostname can only be used inside the Amazon EC2 network. This name is not available until the instance enters the running state.
-  string private_dns_name = 23;
+  string private_dns_name = 21;
   message PrivateDnsNameOptionsResponse {
     // Indicates whether to respond to DNS queries for instance hostnames with DNS AAAA records.
     bool enable_resource_name_dns_aaaa_record = 1;
@@ -152,23 +142,20 @@ message InstanceObj {
     string hostname_type = 3;
   }
   // The options for the instance hostname.
-  PrivateDnsNameOptionsResponse privateDnsNameOptionsResponse = 24;
+  PrivateDnsNameOptionsResponse privateDnsNameOptionsResponse = 22;
   // The private IPv4 address assigned to the instance.
-  string privateIpAddress = 25;
+  string privateIpAddress = 23;
   // The RAM disk associated with this instance, if applicable.
-  string ramdisk_id = 26;
-  // The reason for the most recent state transition. This might be an empty string.
-  string reason = 27;
+  string ramdisk_id = 24;
   // The device name of the root device volume (for example, /dev/sda1).
-  string root_device_name = 28;
+  string root_device_name = 25;
   // The root device type used by the AMI. The AMI can use an EBS volume or an instance store volume.
-  string root_device_type = 29;
+  string root_device_type = 26;
 }
 
 message ListInstanceResponse {
-  string request_id = 1;
   // The token to use to retrieve the next page of results. This value is null when there are no more results to return.
-  string next_token = 2;
+  string next_token = 1;
   message Reservation {
     // [EC2-Classic only] The security groups.
     repeated GroupIdentifier group_set = 1;
@@ -182,7 +169,7 @@ message ListInstanceResponse {
     string reservation_id = 5;
   }
   // Information about the reservations.
-  repeated Reservation reservation_set = 3;
+  repeated Reservation reservation_set = 2;
 }
 
 message ListRegionRequest {
@@ -309,7 +296,8 @@ message ListInstanceTypeResponse {
         // The name of the Inference accelerator.
         string name = 3;
       }
-      repeated InferenceAcceleratorInfo accelerators = 1;
+      // Describes the Inference accelerators for the instance type.
+      repeated InferenceDeviceInfo accelerators = 1;
     }
     // Describes the Inference accelerator settings for the instance type.
     InferenceAcceleratorInfo inferenceAcceleratorInfo = 8;
@@ -437,7 +425,7 @@ message StartInstanceRequest {
   string access_key_id = 1;
   string secret_key = 2;
   string region = 3;
-  repeated string instance_id = 4;
+  repeated string instance_ids = 4;
 }
 
 message InstanceState {
@@ -468,49 +456,39 @@ message InstanceStateChange {
 
 message StartInstanceResponse {
   // Information about the started instances.
-  repeated InstanceStateChange instances_set = 1;
-  // 请求ID
-  string request_id = 2;
+  repeated InstanceStateChange instance_state_changes = 1;
 }
 
 message StopInstanceRequest {
   string access_key_id = 1;
   string secret_key = 2;
   string region = 3;
-  repeated string instance_id = 4;
+  repeated string instance_ids = 4;
 }
 
 message StopInstanceResponse {
-  // The ID of the request.
-  string request_id = 1;
   // Information about the stopped instances.
-  repeated InstanceStateChange instances_set = 2;
+  repeated InstanceStateChange instance_state_changes = 1;
 }
 
 message RebootInstanceRequest {
   string access_key_id = 1;
   string secret_key = 2;
   string region = 3;
-  repeated string instance_id = 4;
+  repeated string instance_ids = 4;
 }
 
 message RebootInstanceResponse {
-  // The ID of the request.
-  string request_id = 1;
-  // Is true if the request succeeds, and an error otherwise.
-  bool result = 2;
 }
 
 message DeleteInstanceRequest {
   string access_key_id = 1;
   string secret_key = 2;
   string region = 3;
-  repeated string instance_id = 4;
+  repeated string instance_ids = 4;
 }
 
 message DeleteInstanceResponse {
-  // The ID of the request.
-  string request_id = 1;
   // Information about the terminated instances.
-  repeated InstanceStateChange instances_set = 2;
+  repeated InstanceStateChange instance_state_changes = 1;
 }

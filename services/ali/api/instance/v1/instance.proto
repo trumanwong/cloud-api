@@ -14,20 +14,20 @@ service Instance {
   // 选择实例规格
   rpc ListInstanceType(ListInstanceTypeRequest) returns (ListInstanceTypeResponse);
   // 创建实例
-  rpc CreateInstance (CreateInstanceRequest) returns (CreateInstanceResponse);
+  rpc CreateInstance (CreateInstancesRequest) returns (CreateInstancesResponse);
   // 实例列表
-  rpc ListInstance (ListInstanceRequest) returns (ListInstanceResponse);
+  rpc ListInstance (ListInstancesRequest) returns (ListInstancesResponse);
   // 开机
-  rpc StartInstance(StartInstanceRequest) returns (StartInstanceResponse);
+  rpc StartInstance(StartInstancesRequest) returns (StartInstancesResponse);
   // 关机
-  rpc StopInstance(StopInstanceRequest) returns (StopInstanceResponse);
+  rpc StopInstance(StopInstancesRequest) returns (StopInstancesResponse);
   // 重启
-  rpc RebootInstance(RebootInstanceRequest) returns (RebootInstanceResponse);
+  rpc RebootInstance(RebootInstancesRequest) returns (RebootInstancesResponse);
   // 删除实例
-  rpc DeleteInstance(DeleteInstanceRequest) returns (DeleteInstanceResponse);
+  rpc DeleteInstance(DeleteInstancesRequest) returns (DeleteInstancesResponse);
 }
 
-message CreateInstanceRequest {
+message CreateInstancesRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
   string endpoint = 3;
@@ -47,9 +47,13 @@ message CreateInstanceRequest {
   uint32 amount = 10;
   // 实例密码
   string password = 11;
+  // 是否只预检此次请求。取值范围：
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  // false（默认）：发送正常请求，通过检查后直接创建实例。
+  bool dry_run = 12;
 }
 
-message CreateInstanceResponse {
+message CreateInstancesResponse {
   // 阿里云请求id
   string request_id = 1;
   // 订单id，该参数只有创建包年包月ECS实例（请求参数InstanceChargeType=PrePaid）时有返回值
@@ -60,7 +64,7 @@ message CreateInstanceResponse {
   repeated string instance_id_sets = 4;
 }
 
-message ListInstanceRequest {
+message ListInstancesRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
   string endpoint = 3;
@@ -74,7 +78,7 @@ message ListInstanceRequest {
   string next_token = 7;
 }
 
-message ListInstanceResponse {
+message ListInstancesResponse {
   string request_id = 1;
   // 实例状态列表的页码，起始值1，默认值1
   uint32 page_number = 2;
@@ -209,14 +213,18 @@ message ListInstanceTypeResponse {
   repeated InstanceType instance_types = 1;
 }
 
-message StartInstanceRequest {
+message StartInstancesRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
   string endpoint = 3;
-  string instance_id = 4;
+  repeated string instance_ids = 4;
+  // 是否只预检此次请求。取值范围：
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  // false（默认）：发送正常请求，通过检查后直接创建实例。
+  bool dry_run = 5;
 }
 
-message StartInstanceResponse {
+message StartInstancesResponse {
   // 请求ID
   string request_id = 1;
   // 实例操作结果错误码。返回值200为成功
@@ -229,37 +237,53 @@ message StartInstanceResponse {
   string current_status = 5;
   // 操作前实例的状态
   string previous_status = 6;
+  // 是否只预检此次请求。取值范围：
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  // false（默认）：发送正常请求，通过检查后直接创建实例。
+  bool dry_run = 7;
 }
 
-message StopInstanceRequest {
+message StopInstancesRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
   string endpoint = 3;
-  string instance_id = 4;
+  repeated string instance_ids = 4;
+  // 是否只预检此次请求。取值范围：
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  // false（默认）：发送正常请求，通过检查后直接创建实例。
+  bool dry_run = 5;
 }
 
-message StopInstanceResponse {
+message StopInstancesResponse {
   string request_id = 1;
 }
 
-message RebootInstanceRequest {
+message RebootInstancesRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
   string endpoint = 3;
-  string instance_id = 4;
+  repeated string instance_ids = 4;
+  // 是否只预检此次请求。取值范围：
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  // false（默认）：发送正常请求，通过检查后直接创建实例。
+  bool dry_run = 5;
 }
 
-message RebootInstanceResponse {
+message RebootInstancesResponse {
   string request_id = 1;
 }
 
-message DeleteInstanceRequest {
+message DeleteInstancesRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
   string endpoint = 3;
-  string instance_id = 4;
+  repeated string instance_ids = 4;
+  // 是否只预检此次请求。取值范围：
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  // false（默认）：发送正常请求，通过检查后直接创建实例。
+  bool dry_run = 5;
 }
 
-message DeleteInstanceResponse {
+message DeleteInstancesResponse {
   string request_id = 1;
 }

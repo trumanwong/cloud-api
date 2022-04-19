@@ -7,14 +7,12 @@ import (
 	v1 "tencent/api/instance/v1"
 )
 
-func (s *InstanceService) CreateInstance(ctx context.Context, request *v1.CreateInstanceRequest) (*v1.CreateInstanceResponse, error) {
+func (s *InstanceService) CreateInstances(ctx context.Context, request *v1.CreateInstancesRequest) (*v1.CreateInstancesResponse, error) {
 	var loginSettings *cvm.LoginSettings
-	{
-	}
 	if len(request.Password) > 0 {
 		loginSettings = &cvm.LoginSettings{Password: common.StringPtr(request.Password)}
 	}
-	response, err := s.uc.Create(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.RunInstancesRequest{
+	response, err := s.uc.CreateInstances(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.RunInstancesRequest{
 		InstanceType: common.StringPtr(request.InstanceType),
 		ImageId:      common.StringPtr(request.ImageId),
 		SystemDisk: &cvm.SystemDisk{
@@ -23,6 +21,7 @@ func (s *InstanceService) CreateInstance(ctx context.Context, request *v1.Create
 		InstanceCount: common.Int64Ptr(request.Amount),
 		InstanceName:  common.StringPtr(request.Name),
 		LoginSettings: loginSettings,
+		DryRun:        common.BoolPtr(request.DryRun),
 	})
 	if err != nil {
 		return nil, err
@@ -33,48 +32,48 @@ func (s *InstanceService) CreateInstance(ctx context.Context, request *v1.Create
 		instanceIdSets[i] = *v
 	}
 
-	createInstanceResponse := &v1.CreateInstanceResponse{
+	createInstancesResponse := &v1.CreateInstancesResponse{
 		RequestId:      *response.Response.RequestId,
 		InstanceIdSets: instanceIdSets,
 	}
-	return createInstanceResponse, nil
+	return createInstancesResponse, nil
 }
 
-func (s *InstanceService) ListInstance(ctx context.Context, request *v1.ListInstanceRequest) (*v1.ListInstanceResponse, error) {
-	response, err := s.uc.ListInstance(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.DescribeInstancesRequest{
+func (s *InstanceService) ListInstances(ctx context.Context, request *v1.ListInstancesRequest) (*v1.ListInstancesResponse, error) {
+	response, err := s.uc.ListInstances(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.DescribeInstancesRequest{
 		Offset: common.Int64Ptr(request.PageNumber - 1),
 		Limit:  common.Int64Ptr(request.PageSize),
 	})
 	if err != nil {
 		return nil, err
 	}
-	instances := make([]*v1.ListInstanceResponse_Instance, len(response.Response.InstanceSet))
+	instances := make([]*v1.ListInstancesResponse_Instance, len(response.Response.InstanceSet))
 	for i, instance := range response.Response.InstanceSet {
-		var gpuInfo *v1.ListInstanceResponse_Instance_GpuInfo
+		var gpuInfo *v1.ListInstancesResponse_Instance_GpuInfo
 		if instance.GPUInfo != nil {
 			gpuId := make([]string, len(instance.GPUInfo.GPUId))
 			for j, v := range instance.GPUInfo.GPUId {
 				gpuId[j] = *v
 			}
 
-			gpuInfo = &v1.ListInstanceResponse_Instance_GpuInfo{
+			gpuInfo = &v1.ListInstancesResponse_Instance_GpuInfo{
 				GpuCount: float32(*instance.GPUInfo.GPUCount),
 				GpuId:    gpuId,
 				GpuType:  *instance.GPUInfo.GPUType,
 			}
 		}
-		var systemDisk *v1.ListInstanceResponse_Instance_SystemDisk
+		var systemDisk *v1.ListInstancesResponse_Instance_SystemDisk
 		if instance.SystemDisk != nil {
-			systemDisk = &v1.ListInstanceResponse_Instance_SystemDisk{
+			systemDisk = &v1.ListInstancesResponse_Instance_SystemDisk{
 				DiskType: *instance.SystemDisk.DiskType,
 				DiskId:   *instance.SystemDisk.DiskId,
 				DiskSize: *instance.SystemDisk.DiskSize,
 				CdCid:    *instance.SystemDisk.CdcId,
 			}
 		}
-		dataDisks := make([]*v1.ListInstanceResponse_Instance_DataDisk, len(instance.DataDisks))
+		dataDisks := make([]*v1.ListInstancesResponse_Instance_DataDisk, len(instance.DataDisks))
 		for j, v := range instance.DataDisks {
-			dataDisks[j] = &v1.ListInstanceResponse_Instance_DataDisk{
+			dataDisks[j] = &v1.ListInstancesResponse_Instance_DataDisk{
 				DiskSize: *v.DiskSize,
 				DiskType: *v.DiskType,
 				DiskId:   *v.DiskId,
@@ -88,10 +87,10 @@ func (s *InstanceService) ListInstance(ctx context.Context, request *v1.ListInst
 		for j, v := range instance.PrivateIpAddresses {
 			publicIpAddresses[j] = *v
 		}
-		var internetAccessible *v1.ListInstanceResponse_Instance_InternetAccessible
-		var virtualPrivateCloud *v1.ListInstanceResponse_Instance_VirtualPrivateCloud
+		var internetAccessible *v1.ListInstancesResponse_Instance_InternetAccessible
+		var virtualPrivateCloud *v1.ListInstancesResponse_Instance_VirtualPrivateCloud
 		if instance.InternetAccessible != nil {
-			internetAccessible = &v1.ListInstanceResponse_Instance_InternetAccessible{
+			internetAccessible = &v1.ListInstancesResponse_Instance_InternetAccessible{
 				InternetChargeType:      *instance.InternetAccessible.InternetChargeType,
 				InternetMaxBandwidthOut: *instance.InternetAccessible.InternetMaxBandwidthOut,
 				PublicIpAssigned:        *instance.InternetAccessible.PublicIpAssigned,
@@ -103,7 +102,7 @@ func (s *InstanceService) ListInstance(ctx context.Context, request *v1.ListInst
 			for j, v := range instance.VirtualPrivateCloud.PrivateIpAddresses {
 				virtualPrivateIpAddresses[j] = *v
 			}
-			virtualPrivateCloud = &v1.ListInstanceResponse_Instance_VirtualPrivateCloud{
+			virtualPrivateCloud = &v1.ListInstancesResponse_Instance_VirtualPrivateCloud{
 				VpcId:              *instance.VirtualPrivateCloud.VpcId,
 				SubnetId:           *instance.VirtualPrivateCloud.SubnetId,
 				AsVpcGateway:       *instance.VirtualPrivateCloud.AsVpcGateway,
@@ -111,7 +110,7 @@ func (s *InstanceService) ListInstance(ctx context.Context, request *v1.ListInst
 				Ipv6AddressCount:   *instance.VirtualPrivateCloud.Ipv6AddressCount,
 			}
 		}
-		instances[i] = &v1.ListInstanceResponse_Instance{
+		instances[i] = &v1.ListInstancesResponse_Instance{
 			InstanceId:          *instance.InstanceId,
 			InstanceName:        *instance.InstanceName,
 			InstanceType:        *instance.InstanceType,
@@ -132,50 +131,50 @@ func (s *InstanceService) ListInstance(ctx context.Context, request *v1.ListInst
 			ImageId:             *instance.ImageId,
 		}
 	}
-	listInstanceResponse := &v1.ListInstanceResponse{
+	listInstancesResponse := &v1.ListInstancesResponse{
 		RequestId:  *response.Response.RequestId,
 		TotalCount: *response.Response.TotalCount,
 		Instances:  instances,
 	}
-	return listInstanceResponse, nil
+	return listInstancesResponse, nil
 }
 
-func (s *InstanceService) StartInstance(ctx context.Context, request *v1.StartInstanceRequest) (*v1.StartInstanceResponse, error) {
-	response, err := s.uc.StartInstance(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.StartInstancesRequest{
+func (s *InstanceService) StartInstances(ctx context.Context, request *v1.StartInstancesRequest) (*v1.StartInstancesResponse, error) {
+	response, err := s.uc.StartInstances(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.StartInstancesRequest{
 		InstanceIds: common.StringPtrs(request.InstanceIds),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.StartInstanceResponse{RequestId: *response.Response.RequestId}, nil
+	return &v1.StartInstancesResponse{RequestId: *response.Response.RequestId}, nil
 }
 
-func (s *InstanceService) StopInstance(ctx context.Context, request *v1.StopInstanceRequest) (*v1.StopInstanceResponse, error) {
-	response, err := s.uc.StopInstance(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.StopInstancesRequest{
+func (s *InstanceService) StopInstances(ctx context.Context, request *v1.StopInstancesRequest) (*v1.StopInstancesResponse, error) {
+	response, err := s.uc.StopInstances(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.StopInstancesRequest{
 		InstanceIds: common.StringPtrs(request.InstanceIds),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.StopInstanceResponse{RequestId: *response.Response.RequestId}, nil
+	return &v1.StopInstancesResponse{RequestId: *response.Response.RequestId}, nil
 }
 
-func (s *InstanceService) RebootInstance(ctx context.Context, request *v1.RebootInstanceRequest) (*v1.RebootInstanceResponse, error) {
-	response, err := s.uc.RebootInstance(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.RebootInstancesRequest{
+func (s *InstanceService) RebootInstances(ctx context.Context, request *v1.RebootInstancesRequest) (*v1.RebootInstancesResponse, error) {
+	response, err := s.uc.RebootInstances(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.RebootInstancesRequest{
 		InstanceIds: common.StringPtrs(request.InstanceIds),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.RebootInstanceResponse{RequestId: *response.Response.RequestId}, nil
+	return &v1.RebootInstancesResponse{RequestId: *response.Response.RequestId}, nil
 }
 
-func (s *InstanceService) DeleteInstance(ctx context.Context, request *v1.DeleteInstanceRequest) (*v1.DeleteInstanceResponse, error) {
-	response, err := s.uc.DeleteInstance(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.TerminateInstancesRequest{
+func (s *InstanceService) DeleteInstances(ctx context.Context, request *v1.DeleteInstancesRequest) (*v1.DeleteInstancesResponse, error) {
+	response, err := s.uc.DeleteInstances(ctx, request.SecretId, request.SecretKey, request.Region, &cvm.TerminateInstancesRequest{
 		InstanceIds: common.StringPtrs(request.InstanceIds),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.DeleteInstanceResponse{RequestId: *response.Response.RequestId}, nil
+	return &v1.DeleteInstancesResponse{RequestId: *response.Response.RequestId}, nil
 }
