@@ -7,8 +7,8 @@ import (
 	"github.com/alibabacloud-go/tea/tea"
 )
 
-// CreateInstance Create Instance
-func (service *InstanceService) CreateInstance(ctx context.Context, request *v1.CreateInstancesRequest) (*v1.CreateInstancesResponse, error) {
+// CreateInstances Create Instances
+func (service *InstanceService) CreateInstances(ctx context.Context, request *v1.CreateInstancesRequest) (*v1.CreateInstancesResponse, error) {
 	result, err := service.uc.CreateInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.RunInstancesRequest{
 		RegionId:     tea.String(request.RegionId),
 		ImageId:      tea.String(request.ImageId),

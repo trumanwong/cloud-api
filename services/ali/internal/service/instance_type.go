@@ -5,17 +5,17 @@ import (
 	"context"
 )
 
-func (service *InstanceService) ListInstanceType(ctx context.Context, request *v1.ListInstanceTypeRequest) (*v1.ListInstanceTypeResponse, error) {
+func (service *InstanceService) ListInstanceTypes(ctx context.Context, request *v1.ListInstanceTypesRequest) (*v1.ListInstanceTypesResponse, error) {
 	instanceTypes, err := service.itc.ListAll(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint)
 	if err != nil {
 		return nil, err
 	}
 
-	listInstanceTypeResponse := &v1.ListInstanceTypeResponse{
-		InstanceTypes: make([]*v1.ListInstanceTypeResponse_InstanceType, len(instanceTypes)),
+	listInstanceTypesResponse := &v1.ListInstanceTypesResponse{
+		InstanceTypes: make([]*v1.ListInstanceTypesResponse_InstanceType, len(instanceTypes)),
 	}
 	for i, instanceType := range instanceTypes {
-		listInstanceTypeResponse.InstanceTypes[i] = &v1.ListInstanceTypeResponse_InstanceType{
+		listInstanceTypesResponse.InstanceTypes[i] = &v1.ListInstanceTypesResponse_InstanceType{
 			InstanceTypeId:     *instanceType.InstanceTypeId,
 			InstanceTypeFamily: *instanceType.InstanceTypeFamily,
 			MemorySize:         *instanceType.MemorySize,
@@ -23,5 +23,5 @@ func (service *InstanceService) ListInstanceType(ctx context.Context, request *v
 			GpuSec:             *instanceType.GPUSpec,
 		}
 	}
-	return listInstanceTypeResponse, nil
+	return listInstanceTypesResponse, nil
 }

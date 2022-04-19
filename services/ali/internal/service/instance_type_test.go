@@ -9,14 +9,14 @@ import (
 	"testing"
 )
 
-func TestInstanceService_ListInstanceType(t *testing.T) {
+func TestInstanceService_ListInstanceTypes(t *testing.T) {
 	accessKeyId := os.Getenv("accessKeyId")
 	accessKeySecret := os.Getenv("accessKeySecret")
 	conn, err := grpc.Dial("127.0.0.1:9000", grpc.WithInsecure())
 	assert.Equal(t, err, nil)
 
 	instanceClient := v1.NewInstanceClient(conn)
-	_, err = instanceClient.ListInstanceType(context.Background(), &v1.ListInstanceTypeRequest{
+	_, err = instanceClient.ListInstanceTypes(context.Background(), &v1.ListInstanceTypesRequest{
 		AccessKeyId:     accessKeyId,
 		AccessKeySecret: accessKeySecret,
 	})

@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestInstanceService_ListImage(t *testing.T) {
+func TestInstanceService_ListImages(t *testing.T) {
 	accessKeyId := os.Getenv("accessKeyId")
 	accessKeySecret := os.Getenv("accessKeySecret")
 	endpoint := os.Getenv("endpoint")
@@ -19,7 +19,7 @@ func TestInstanceService_ListImage(t *testing.T) {
 	assert.Equal(t, err, nil)
 
 	instanceClient := v1.NewInstanceClient(conn)
-	_, err = instanceClient.ListImage(context.Background(), &v1.ListImageRequest{
+	_, err = instanceClient.ListImages(context.Background(), &v1.ListImagesRequest{
 		AccessKeyId:     accessKeyId,
 		AccessKeySecret: accessKeySecret,
 		Endpoint:        endpoint,

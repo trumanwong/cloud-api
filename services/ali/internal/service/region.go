@@ -7,7 +7,7 @@ import (
 	"github.com/alibabacloud-go/tea/tea"
 )
 
-func (service *InstanceService) ListRegion(ctx context.Context, request *v1.ListRegionRequest) (*v1.ListRegionResponse, error) {
+func (service *InstanceService) ListRegions(ctx context.Context, request *v1.ListRegionsRequest) (*v1.ListRegionsResponse, error) {
 	regions, err := service.rc.ListAll(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.DescribeRegionsRequest{
 		InstanceChargeType: tea.String(request.InstanceChargeType),
 		ResourceType:       tea.String(request.ResourceType),
@@ -17,15 +17,15 @@ func (service *InstanceService) ListRegion(ctx context.Context, request *v1.List
 		return nil, err
 	}
 
-	listRegionResponse := &v1.ListRegionResponse{
-		Regions: make([]*v1.ListRegionResponse_Region, len(regions)),
+	listRegionsResponse := &v1.ListRegionsResponse{
+		Regions: make([]*v1.ListRegionsResponse_Region, len(regions)),
 	}
 	for i, region := range regions {
-		listRegionResponse.Regions[i] = &v1.ListRegionResponse_Region{
+		listRegionsResponse.Regions[i] = &v1.ListRegionsResponse_Region{
 			RegionEndPoint: *region.RegionEndpoint,
 			LocalName:      *region.LocalName,
 			RegionId:       *region.RegionId,
 		}
 	}
-	return listRegionResponse, nil
+	return listRegionsResponse, nil
 }

@@ -8,23 +8,23 @@ option java_package = "api.instance.v1";
 
 service Instance {
   // 可使用的阿里云地域
-  rpc ListRegion (ListRegionRequest) returns (ListRegionResponse);
+  rpc ListRegions (ListRegionsRequest) returns (ListRegionsResponse);
   // 选择镜像
-  rpc ListImage (ListImageRequest) returns (ListImageResponse);
+  rpc ListImages (ListImagesRequest) returns (ListImagesResponse);
   // 选择实例规格
-  rpc ListInstanceType(ListInstanceTypeRequest) returns (ListInstanceTypeResponse);
+  rpc ListInstanceTypes(ListInstanceTypesRequest) returns (ListInstanceTypesResponse);
   // 创建实例
-  rpc CreateInstance (CreateInstancesRequest) returns (CreateInstancesResponse);
+  rpc CreateInstances (CreateInstancesRequest) returns (CreateInstancesResponse);
   // 实例列表
-  rpc ListInstance (ListInstancesRequest) returns (ListInstancesResponse);
+  rpc ListInstances (ListInstancesRequest) returns (ListInstancesResponse);
   // 开机
-  rpc StartInstance(StartInstancesRequest) returns (StartInstancesResponse);
+  rpc StartInstances(StartInstancesRequest) returns (StartInstancesResponse);
   // 关机
-  rpc StopInstance(StopInstancesRequest) returns (StopInstancesResponse);
+  rpc StopInstances(StopInstancesRequest) returns (StopInstancesResponse);
   // 重启
-  rpc RebootInstance(RebootInstancesRequest) returns (RebootInstancesResponse);
+  rpc RebootInstances(RebootInstancesRequest) returns (RebootInstancesResponse);
   // 删除实例
-  rpc DeleteInstance(DeleteInstancesRequest) returns (DeleteInstancesResponse);
+  rpc DeleteInstances(DeleteInstancesRequest) returns (DeleteInstancesResponse);
 }
 
 message CreateInstancesRequest {
@@ -158,7 +158,7 @@ message ListInstancesResponse {
   repeated Instance instances = 6;
 }
 
-message ListRegionRequest {
+message ListRegionsRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
   string endpoint = 3;
@@ -167,7 +167,7 @@ message ListRegionRequest {
   string accept_language = 6;
 }
 
-message ListRegionResponse {
+message ListRegionsResponse {
   message Region {
     string region_end_point = 1;
     string local_name = 2;
@@ -176,14 +176,14 @@ message ListRegionResponse {
   repeated Region regions = 1;
 }
 
-message ListImageRequest {
+message ListImagesRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
   string endpoint = 3;
   string region_id = 4;
 }
 
-message ListImageResponse {
+message ListImagesResponse {
   message Image {
     string image_id = 1;
     string image_name = 2;
@@ -196,13 +196,13 @@ message ListImageResponse {
   repeated Image images = 1;
 }
 
-message ListInstanceTypeRequest {
+message ListInstanceTypesRequest {
   string access_key_id = 1;
   string access_key_secret = 2;
   string endpoint = 3;
 }
 
-message ListInstanceTypeResponse {
+message ListInstanceTypesResponse {
   message InstanceType {
     string instance_type_id = 1;
     string instance_type_family = 2;

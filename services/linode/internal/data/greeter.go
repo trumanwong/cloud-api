@@ -3,7 +3,7 @@ package data
 import (
 	"context"
 
-	"vultr/internal/biz"
+	"linode/internal/biz"
 	"github.com/go-kratos/kratos/v2/log"
 )
 

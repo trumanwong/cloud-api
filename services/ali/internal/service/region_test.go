@@ -17,7 +17,7 @@ func TestInstanceService_ListRegion(t *testing.T) {
 	assert.Equal(t, err, nil)
 
 	instanceClient := v1.NewInstanceClient(conn)
-	_, err = instanceClient.ListRegion(context.Background(), &v1.ListRegionRequest{
+	_, err = instanceClient.ListRegions(context.Background(), &v1.ListRegionsRequest{
 		AccessKeyId:     accessKeyId,
 		AccessKeySecret: accessKeySecret,
 		Endpoint:        endpoint,

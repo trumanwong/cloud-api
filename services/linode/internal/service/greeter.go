@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	v1 "vultr/api/helloworld/v1"
-	"vultr/internal/biz"
+	v1 "linode/api/helloworld/v1"
+	"linode/internal/biz"
 )
 
 // GreeterService is a greeter service.

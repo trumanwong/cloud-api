@@ -5,17 +5,17 @@ import (
 	"context"
 )
 
-func (service *InstanceService) ListImage(ctx context.Context, request *v1.ListImageRequest) (*v1.ListImageResponse, error) {
+func (service *InstanceService) ListImages(ctx context.Context, request *v1.ListImagesRequest) (*v1.ListImagesResponse, error) {
 	images, err := service.ic.ListImage(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, request.RegionId)
 	if err != nil {
 		return nil, err
 	}
 
-	listImageResponse := &v1.ListImageResponse{
-		Images: make([]*v1.ListImageResponse_Image, len(images)),
+	listImageResponse := &v1.ListImagesResponse{
+		Images: make([]*v1.ListImagesResponse_Image, len(images)),
 	}
 	for i, image := range images {
-		listImageResponse.Images[i] = &v1.ListImageResponse_Image{
+		listImageResponse.Images[i] = &v1.ListImagesResponse_Image{
 			ImageId:          *image.ImageId,
 			ImageName:        *image.ImageName,
 			ImageDescription: *image.Description,
