@@ -7,6 +7,7 @@ require (
 	github.com/google/wire v0.5.0
 	github.com/vultr/govultr/v2 v2.15.1
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
+	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.27.1
 )
 
@@ -30,6 +31,5 @@ require (
 	golang.org/x/text v0.3.5 // indirect
 	google.golang.org/appengine v1.4.0 // indirect
 	google.golang.org/genproto v0.0.0-20220222213610-43724f9ea8cf // indirect
-	google.golang.org/grpc v1.44.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

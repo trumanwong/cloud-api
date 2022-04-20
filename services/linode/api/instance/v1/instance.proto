@@ -1,0 +1,280 @@
+syntax = "proto3";
+
+package services.vultr.api.instance.v1;
+
+option go_package = "cloud-api/services/vultr/api/instance/v1;v1";
+option java_multiple_files = true;
+option java_package = "services.vultr.api.instance.v1";
+
+service Instance {
+	// Returns a paginated list of Linodes you have permission to view.
+	rpc ListRegions (ListRegionsRequest) returns (ListRegionsResponse);
+	// List the OS images available for installation at Vultr.
+	rpc ListImages (ListImagesRequest) returns (ListImagesResponse);
+	// Get a list of all VPS plans at Vultr.
+	rpc ListPlans(ListPlansRequest) returns (ListPlansResponse);
+	// 创建实例
+	rpc CreateInstance (CreateInstanceRequest) returns (CreateInstanceResponse);
+	// 实例列表
+	rpc ListInstance (ListInstancesRequest) returns (ListInstancesResponse);
+	// 开机
+	rpc StartInstance(StartInstanceRequest) returns (StartInstanceResponse);
+	// 关机
+	rpc StopInstance(StopInstanceRequest) returns (StopInstanceResponse);
+	// 重启
+	rpc RebootInstance(RebootInstanceRequest) returns (RebootInstanceResponse);
+	// 删除实例
+	rpc DeleteInstance(DeleteInstanceRequest) returns (DeleteInstanceResponse);
+}
+
+message Meta {
+	int32 total = 1;
+	message Link {
+		string next = 1;
+		string prev = 2;
+	}
+	Link link = 2;
+}
+
+message CreateInstanceRequest {
+	string access_token = 1;
+	// The Region id where the Instance is located.
+	string region = 2;
+	// The Plan id to use when deploying this instance.
+	string plan = 3;
+	// The Operating System id to use when deploying this instance.
+	string image_id = 4;
+	// The hostname to use when deploying this instance.
+	string hostname = 5;
+}
+
+// Instance information.
+message InstanceObj {
+	message Alert {
+		// The percentage of CPU usage required to trigger an alert.
+		int32 cpu = 1;
+		// The amount of disk IO operation per second required to trigger an alert.
+		int32 io = 2;
+		// The amount of incoming traffic, in Mbit/s, required to trigger an alert.
+		int32 network_in = 3;
+		// The amount of outbound traffic, in Mbit/s, required to trigger an alert.
+		int32 network_out = 4;
+		// The percentage of network transfer that may be used before an alert is triggered.
+		int32 transfer_quota = 5;
+	}
+	Alert alters = 1;
+	// Information about this Linode’s backups status.
+	message Backup {
+		// If this Linode has the Backup service enabled.
+		bool enabled = 1;
+		// The last successful backup date. ‘null’ if there was no previous backup.
+		string last_successful = 2;
+		message Schedule {
+			// The day of the week that your Linode’s weekly Backup is taken.
+			string day = 1;
+			// Enum: Scheduling W0 W2 W4 W6 W8 W10 W12 W14 W16 W18 W20 W22
+			// The window in which your backups will be taken, in UTC. A backups window is a two-hour span of time in which the backup may occur.
+			string window = 2;
+		}
+		Schedule schedule = 3;
+	}
+	// Information about this Linode’s backups status.
+	Backup backups = 3;
+	// When this Linode was created.
+	string created = 4;
+	// The virtualization software powering this Linode.
+	string hypervisor = 5;
+	// This Linode’s ID which must be provided for all operations impacting this Linode.
+	int32 id = 6;
+	// An Image ID to deploy the Linode Disk from.
+	string image = 7;
+	// This Linode’s IPv4 Addresses.
+	repeated string ipv4 = 8;
+	// This Linode’s IPv6 SLAAC address.
+	string ipv6 = 9;
+	// The Linode’s label is for display purposes only.
+	string label = 10;
+	// This is the Region where the Linode was deployed.
+	string region = 11;
+	// Information about the resources available to this Linode.
+	message Specs {
+		// The amount of storage space, in MB, this Linode has access to.
+		int32 disk = 1;
+		// The amount of RAM, in MB, this Linode has access to.
+		int32 memory = 2;
+		// The amount of network transfer this Linode is allotted each month.
+		int32 transfer = 3;
+		// The number of vcpus this Linode has access to.
+		int32 vcpus = 4;
+	}
+	// Information about the resources available to this Linode.
+	Specs specs = 12;
+	// Enum: running offline booting rebooting shutting_down provisioning deleting migrating rebuilding cloning restoring stopped
+	// A brief description of this Linode’s current state.
+	string status = 13;
+	// An array of tags applied to this object. Tags are for organizational purposes only.
+	repeated string tags = 14;
+	// This is the Linode Type that this Linode was deployed with.
+	string instance_type = 15;
+	// When this Linode was last updated.
+	string updated = 16;
+	// The watchdog, named Lassie, is a Shutdown Watchdog that monitors your Linode and will reboot it if it powers off unexpectedly.
+	bool watchdog_enabled = 17;
+}
+
+message CreateInstanceResponse {
+	// Instance information.
+	InstanceObj instance = 1;
+}
+
+message ListInstancesRequest {
+	string access_token = 1;
+	// Number of items requested per page. Default is 100 and Max is 500.
+	int32 per_page = 2;
+}
+
+message ListInstancesResponse {
+	// Array of objects (instance)
+	repeated InstanceObj instances = 1;
+	// The current page.
+	int32 page = 2;
+	// The total number of pages.
+	int32 pages = 3;
+	// The total number of results.
+	int32 results = 4;
+}
+
+message ListRegionsRequest {
+	string access_token = 1;
+	// Type: integer >= 1, Default: 1
+	// The page of a collection to return.
+	int32 page = 2;
+	// Type: integer 25..100, Default: 100
+	// The number of items to return per page.
+	int32 per_page = 3;
+}
+
+message ListRegionsResponse {
+	message Region {
+		// A unique ID for the Region.
+		string id = 1;
+		// The name of the city for this Region.
+		string city = 2;
+		// The two-letter country code for this Region.
+		string country = 3;
+		// The name of the continent for this Region.
+		string continent = 4;
+		// An array of product features available in this Region.
+		repeated string options = 5;
+	}
+	repeated Region regions = 1;
+	Meta meta = 2;
+}
+
+message ListImagesRequest {
+	string access_token = 1;
+	// Number of items requested per page. Default is 100 and Max is 500.
+	int32 per_page = 2;
+	// Cursor for paging.
+	string cursor = 3;
+}
+
+message ListImagesResponse {
+	message Image {
+		// The Operating System id.
+		int32 id = 1;
+		// The Operating System description.
+		string name = 2;
+		// The Operating System architecture.
+		string arch = 3;
+		// The Operating System family.
+		string family = 4;
+	}
+	repeated Image images = 1;
+	Meta meta = 2;
+}
+
+message ListPlansRequest {
+	string access_token = 1;
+	// Number of items requested per page. Default is 100 and Max is 500.
+	int32 per_page = 2;
+	// Cursor for paging.
+	string cursor = 3;
+	// Filter the results by type.
+	//  Type		Description
+	//  all			All available types
+	//	vc2			Cloud Compute
+	//	vdc			Dedicated Cloud
+	//	vhf			High Frequency Compute
+	//	vhp			High Performance
+	//	voc			All Optimized Cloud types
+	//	voc-g		General Purpose Optimized Cloud
+	//	voc-c		CPU Optimized Cloud
+	//	voc-m		Memory Optimized Cloud
+	//	voc-s		Storage Optimized Cloud
+	string plan_type = 4;
+}
+
+message ListPlansResponse {
+	message Plan {
+		// A unique ID for the Plan.
+		string id = 1;
+		// The number of vCPUs in this Plan.
+		int32 vcpu_count = 2;
+		// The amount of RAM in MB.
+		int32 ram = 3;
+		// The disk size in GB.
+		int32 disk = 4;
+		// The monthly bandwidth quota in GB.
+		int32 bandwidth = 5;
+		// The monthly cost in US Dollars.
+		int32 monthly_cost = 6;
+		// The plan type.
+		// vc2	Cloud Compute
+		// vhf	High Frequency Compute
+		// vdc	Dedicated Cloud
+		string plan_type = 7;
+		// An array of Regions where this plan is valid for use.
+		repeated string locations = 8;
+		// The number of disks that this plan offers.
+		int32 disk_count = 9;
+	}
+	repeated Plan plans = 1;
+	Meta meta = 2;
+}
+
+message StartInstanceRequest {
+	string access_token = 1;
+	// The Instance ID.
+	string instance_id = 2;
+}
+
+message StartInstanceResponse {
+}
+
+message StopInstanceRequest {
+	string access_token = 1;
+	// The Instance ID.
+	string instance_id = 2;
+}
+
+message StopInstanceResponse {
+}
+
+message RebootInstanceRequest {
+	string access_token = 1;
+	// The Instance ID.
+	string instance_id = 2;
+}
+
+message RebootInstanceResponse {
+}
+
+message DeleteInstanceRequest {
+	string access_token = 1;
+	// The Instance ID.
+	string instance_id = 2;
+}
+
+message DeleteInstanceResponse {
+}
