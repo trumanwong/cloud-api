@@ -22,7 +22,7 @@ func NewImageRepo(data *Data, logger log.Logger) biz.ImageResponse {
 }
 
 func (r *imageResponse) ListImage(ctx context.Context, accessKeyId, accessKeySecret, endpoint, regionId string) ([]*ecs20140526.DescribeImagesResponseBodyImagesImage, error) {
-	client, err := createClient(
+	client, err := getClient(
 		accessKeyId,
 		accessKeySecret,
 		endpoint,

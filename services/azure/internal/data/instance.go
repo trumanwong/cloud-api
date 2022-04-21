@@ -21,7 +21,7 @@ func NewInstanceRepo(data *Data, logger log.Logger) biz.InstanceResponse {
 }
 
 func (r *instanceResponse) CreateInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error) {
-	client, err := getClient(
+	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
 		endpoint,
@@ -38,7 +38,7 @@ func (r *instanceResponse) CreateInstances(ctx context.Context, accessKeyId, acc
 }
 
 func (r *instanceResponse) ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error) {
-	client, err := getClient(
+	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
 		endpoint,
@@ -54,7 +54,7 @@ func (r *instanceResponse) ListInstances(ctx context.Context, accessKeyId, acces
 }
 
 func (r *instanceResponse) StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstancesRequest) (*string, error) {
-	client, err := getClient(
+	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
 		endpoint,
@@ -70,7 +70,7 @@ func (r *instanceResponse) StartInstances(ctx context.Context, accessKeyId, acce
 }
 
 func (r *instanceResponse) StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstancesRequest) (*string, error) {
-	client, err := getClient(
+	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
 		endpoint,
@@ -86,7 +86,7 @@ func (r *instanceResponse) StopInstances(ctx context.Context, accessKeyId, acces
 }
 
 func (r *instanceResponse) RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstancesRequest) (*string, error) {
-	client, err := getClient(
+	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
 		endpoint,
@@ -102,7 +102,7 @@ func (r *instanceResponse) RebootInstances(ctx context.Context, accessKeyId, acc
 }
 
 func (r *instanceResponse) DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstancesRequest) (*string, error) {
-	client, err := getClient(
+	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
 		endpoint,

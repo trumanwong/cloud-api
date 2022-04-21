@@ -10,7 +10,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewInstanceRepo)
+var ProviderSet = wire.NewSet(NewData, NewInstanceRepo, NewImageRepo, NewRegionRepo, NewInstanceTypeRepo)
 
 // Data .
 type Data struct {
@@ -25,7 +25,7 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	return &Data{}, cleanup, nil
 }
 
-func createClient(accessKeyId string, accessKeySecret, endpoint string) (result *ecs20140526.Client, _err error) {
+func getClient(accessKeyId string, accessKeySecret, endpoint string) (result *ecs20140526.Client, _err error) {
 	config := &openapi.Config{
 		// 您的AccessKey ID
 		AccessKeyId: tea.String(accessKeyId),

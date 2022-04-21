@@ -2,39 +2,37 @@ package service
 
 import (
 	"context"
-	"github.com/vultr/govultr/v2"
-	v1 "vultr/api/instance/v1"
+	"github.com/linode/linodego"
+	v1 "linode/api/instance/v1"
 )
 
 func (service *InstanceService) ListRegions(ctx context.Context, request *v1.ListRegionsRequest) (*v1.ListRegionsResponse, error) {
-	regions, meta, err := service.rc.ListRegions(ctx, request.AccessToken, &govultr.ListOptions{
-		PerPage: int(request.PerPage),
-		Cursor:  request.Cursor,
-	})
+	options := &linodego.ListOptions{
+		PageSize: int(request.PageSize),
+		PageOptions: &linodego.PageOptions{
+			Page: int(request.Page),
+		},
+	}
+	regions, err := service.rc.ListRegions(ctx, request.AccessToken, options)
 	if err != nil {
 		return nil, err
 	}
-	var link *v1.Meta_Link
-	if meta.Links != nil {
-		link = &v1.Meta_Link{
-			Next: meta.Links.Next,
-			Prev: meta.Links.Prev,
-		}
-	}
 	listRegionsResponse := &v1.ListRegionsResponse{
 		Regions: make([]*v1.ListRegionsResponse_Region, len(regions)),
-		Meta: &v1.Meta{
-			Total: int32(meta.Total),
-			Link:  link,
-		},
+		Page:    int32(options.Page),
+		Pages:   int32(options.Pages),
+		Results: int32(options.Results),
 	}
 	for i, region := range regions {
 		listRegionsResponse.Regions[i] = &v1.ListRegionsResponse_Region{
-			Id:        region.ID,
-			City:      region.City,
-			Country:   region.Country,
-			Continent: region.Continent,
-			Options:   region.Options,
+			Capabilities: region.Capabilities,
+			Country:      region.Country,
+			Id:           region.ID,
+			Resolvers: &v1.ListRegionsResponse_Region_Resolvers{
+				Ipv4: region.Resolvers.IPv4,
+				Ipv6: region.Resolvers.IPv6,
+			},
+			Status: region.Status,
 		}
 	}
 	return listRegionsResponse, nil

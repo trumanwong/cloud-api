@@ -21,7 +21,7 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 }
 
 func (r *regionResponse) ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeRegionsRequest) ([]*ecs20140526.DescribeRegionsResponseBodyRegionsRegion, error) {
-	client, err := getClient(
+	client, err := createClient(
 		accessKeyId,
 		accessKeySecret,
 		endpoint,

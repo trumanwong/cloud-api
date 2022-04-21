@@ -2,45 +2,61 @@ package service
 
 import (
 	"context"
-	"github.com/vultr/govultr/v2"
-	v1 "vultr/api/instance/v1"
+	"github.com/linode/linodego"
+	v1 "linode/api/instance/v1"
 )
 
-func (service *InstanceService) ListPlans(ctx context.Context, request *v1.ListPlansRequest) (*v1.ListPlansResponse, error) {
-	result, meta, err := service.pc.ListPlans(ctx, request.AccessToken, request.PlanType, &govultr.ListOptions{
-		PerPage: int(request.PerPage),
-		Cursor:  request.Cursor,
-	})
+func (service *InstanceService) ListInstanceTypes(ctx context.Context, request *v1.ListInstanceTypesRequest) (*v1.ListInstanceTypesResponse, error) {
+	options := &linodego.ListOptions{
+		PageSize: int(request.PageSize),
+		PageOptions: &linodego.PageOptions{
+			Page: int(request.Page),
+		},
+	}
+
+	result, err := service.itc.ListInstanceTypes(ctx, request.AccessToken, options)
 	if err != nil {
 		return nil, err
 	}
 
-	var link *v1.Meta_Link
-	if meta.Links != nil {
-		link = &v1.Meta_Link{
-			Next: meta.Links.Next,
-			Prev: meta.Links.Prev,
+	listInstanceTypesResponse := &v1.ListInstanceTypesResponse{
+		InstanceTypes: make([]*v1.ListInstanceTypesResponse_InstanceType, len(result)),
+		Page:          int32(options.Page),
+		Pages:         int32(options.Pages),
+		Results:       int32(options.Results),
+	}
+	for i, v := range result {
+		var addons *v1.ListInstanceTypesResponse_InstanceType_Addon
+		if v.Addons != nil && v.Addons.Backups != nil && v.Addons.Backups.Price != nil {
+			addons = &v1.ListInstanceTypesResponse_InstanceType_Addon{
+				Backups: &v1.ListInstanceTypesResponse_InstanceType_Addon_Backup{
+					Price: &v1.ListInstanceTypesResponse_Price{
+						Hourly:  v.Addons.Backups.Price.Hourly,
+						Monthly: v.Addons.Backups.Price.Monthly,
+					},
+				},
+			}
+		}
+		var price *v1.ListInstanceTypesResponse_Price
+		if v.Price != nil {
+			price = &v1.ListInstanceTypesResponse_Price{
+				Hourly:  v.Price.Hourly,
+				Monthly: v.Price.Monthly,
+			}
+		}
+		listInstanceTypesResponse.InstanceTypes[i] = &v1.ListInstanceTypesResponse_InstanceType{
+			Addons:     addons,
+			Class:      string(v.Class),
+			Disk:       int32(v.Disk),
+			Gpus:       0,
+			Id:         v.ID,
+			Label:      v.Label,
+			Memory:     int32(v.Memory),
+			NetworkOut: int32(v.NetworkOut),
+			Price:      price,
+			Transfer:   int32(v.Transfer),
+			Vcpus:      int32(v.VCPUs),
 		}
 	}
-	listPlansResponse := &v1.ListPlansResponse{
-		Plans: make([]*v1.ListPlansResponse_Plan, len(result)),
-		Meta: &v1.Meta{
-			Total: int32(meta.Total),
-			Link:  link,
-		},
-	}
-	for i, plan := range result {
-		listPlansResponse.Plans[i] = &v1.ListPlansResponse_Plan{
-			Id:          plan.ID,
-			VcpuCount:   int32(plan.VCPUCount),
-			Ram:         int32(plan.RAM),
-			Disk:        int32(plan.Disk),
-			Bandwidth:   int32(plan.Bandwidth),
-			MonthlyCost: int32(plan.MonthlyCost),
-			PlanType:    plan.Type,
-			Locations:   plan.Locations,
-			DiskCount:   int32(plan.DiskCount),
-		}
-	}
-	return listPlansResponse, nil
+	return listInstanceTypesResponse, nil
 }

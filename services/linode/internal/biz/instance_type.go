@@ -10,18 +10,18 @@ type PlanResponse interface {
 	ListInstanceTypes(context.Context, string, *linodego.ListOptions) ([]linodego.LinodeType, error)
 }
 
-// PlanUseCase is a Plan UseCase.
-type PlanUseCase struct {
+// InstanceTypeUseCase is a Plan UseCase.
+type InstanceTypeUseCase struct {
 	repo PlanResponse
 	log  *log.Helper
 }
 
-// NewPlanUseCase new a Plan UseCase.
-func NewPlanUseCase(repo PlanResponse, logger log.Logger) *PlanUseCase {
-	return &PlanUseCase{repo: repo, log: log.NewHelper(logger)}
+// NewInstanceTypeUseCase new a Plan UseCase.
+func NewInstanceTypeUseCase(repo PlanResponse, logger log.Logger) *InstanceTypeUseCase {
+	return &InstanceTypeUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
 // ListInstanceTypes List All InstanceTypes
-func (uc *PlanUseCase) ListInstanceTypes(ctx context.Context, accessToken string, request *linodego.ListOptions) ([]linodego.LinodeType, error) {
+func (uc *InstanceTypeUseCase) ListInstanceTypes(ctx context.Context, accessToken string, request *linodego.ListOptions) ([]linodego.LinodeType, error) {
 	return uc.repo.ListInstanceTypes(ctx, accessToken, request)
 }
