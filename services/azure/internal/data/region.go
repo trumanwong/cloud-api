@@ -1,9 +1,9 @@
 package data
 
 import (
-	"ali/internal/biz"
+	"azure/internal/biz"
 	"context"
-	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v4/client"
+	"github.com/Azure/azure-sdk-for-go/profiles/latest/resources/mgmt/subscriptions"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -20,18 +20,14 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	}
 }
 
-func (r *regionResponse) ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeRegionsRequest) ([]*ecs20140526.DescribeRegionsResponseBodyRegionsRegion, error) {
-	client, err := createClient(
-		accessKeyId,
-		accessKeySecret,
-		endpoint,
-	)
+func (r *regionResponse) ListRegions(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string, includeExtendedLocations bool) (*[]subscriptions.Location, error) {
+	client, err := getSubscriptionsClient(tenantID, clientID, clientSecret, subscriptionId)
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.DescribeRegions(request)
+	result, err := client.ListLocations(ctx, subscriptionId, &includeExtendedLocations)
 	if err != nil {
 		return nil, err
 	}
-	return result.Body.Regions.Region, nil
+	return result.Value, nil
 }

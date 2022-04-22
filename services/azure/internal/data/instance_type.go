@@ -3,7 +3,7 @@ package data
 import (
 	"azure/internal/biz"
 	"context"
-	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v4/client"
+	"github.com/Azure/azure-sdk-for-go/profiles/latest/resources/mgmt/subscriptions"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -20,14 +20,14 @@ func NewInstanceTypeRepo(data *Data, logger log.Logger) biz.InstanceTypeResponse
 	}
 }
 
-func (r *instanceTypeResponse) ListAll(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string) ([]*ecs20140526.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error) {
+func (r *instanceTypeResponse) ListInstanceType(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string, includeExtendedLocations bool) (*[]subscriptions.Location, error) {
 	client, err := getSubscriptionsClient(tenantID, clientID, clientSecret, subscriptionId)
 	if err != nil {
 		return nil, err
 	}
-	client.L
+	result, err := client.ListLocations(ctx, subscriptionId, &includeExtendedLocations)
 	if err != nil {
 		return nil, err
 	}
-	return result.Body.InstanceTypes.InstanceType, nil
+	return result.Value, nil
 }

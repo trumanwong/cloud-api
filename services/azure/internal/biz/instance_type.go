@@ -2,12 +2,12 @@ package biz
 
 import (
 	"context"
-	"github.com/alibabacloud-go/ecs-20140526/v4/client"
+	"github.com/Azure/azure-sdk-for-go/profiles/latest/resources/mgmt/subscriptions"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
 type InstanceTypeResponse interface {
-	ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string) ([]*client.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error)
+	ListInstanceType(context.Context, string, string, string, string, bool) (*[]subscriptions.Location, error)
 }
 
 // InstanceTypeUseCase is a InstanceType UseCase.
@@ -21,7 +21,7 @@ func NewInstanceTypeUseCase(repo InstanceTypeResponse, logger log.Logger) *Insta
 	return &InstanceTypeUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// ListAll List All Regions
-func (uc *InstanceTypeUseCase) ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string) ([]*client.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error) {
-	return uc.repo.ListAll(ctx, accessKeyId, accessKeySecret, endpoint)
+// ListInstanceType List All Regions
+func (uc *InstanceTypeUseCase) ListInstanceType(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string, includeExtendedLocations bool) (*[]subscriptions.Location, error) {
+	return uc.repo.ListInstanceType(ctx, tenantID, clientID, clientSecret, subscriptionId, includeExtendedLocations)
 }

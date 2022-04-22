@@ -2,9 +2,9 @@ package data
 
 import (
 	"azure/internal/conf"
+	"github.com/Azure/azure-sdk-for-go/profiles/latest/resources/mgmt/subscriptions"
 	"github.com/Azure/azure-sdk-for-go/profiles/preview/marketplaceordering/mgmt/marketplaceordering"
 	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2019-07-01/compute"
-	"github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2015-11-01/resources"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/adal"
 	"github.com/Azure/go-autorest/autorest/azure"
@@ -85,11 +85,12 @@ func getMarketplaceAgreementsClient(tenantID, clientID, clientSecret, subscripti
 	return &marketplaceAgreementsClient, nil
 }
 
-func getResourcesClient(tenantID, clientID, clientSecret, subscriptionId string) (*resources.BaseClient, error) {
-	client := resources.New(subscriptionId)
+func getSubscriptionsClient(tenantID, clientID, clientSecret, subscriptionId string) (*subscriptions.Client, error) {
+	client := subscriptions.NewClient()
 	authorizer, err := getAuthorizerForResource(tenantID, clientID, clientSecret)
 	if err != nil {
 		return nil, err
 	}
 	client.Authorizer = authorizer
+	return &client, nil
 }
