@@ -9,3 +9,5 @@ require (
 	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.27.1
 )
+
+require github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.85 // indirect
