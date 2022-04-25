@@ -15,6 +15,7 @@ type InstanceService struct {
 	ic  *biz.ImageUseCase
 	itc *biz.InstanceTypeUseCase
 	vc  *biz.VpcUseCase
+	sc  *biz.SubnetUseCase
 }
 
 // NewInstanceService new a Instance service.

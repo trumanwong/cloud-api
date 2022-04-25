@@ -35,6 +35,16 @@ service Instance {
   rpc ShowVpc(ShowVpcRequest) returns (ShowVpcResponse);
   // 更新虚拟私有云
   rpc UpdateVpc(UpdateVpcRequest) returns (UpdateVpcResponse);
+  // 创建子网
+  rpc CreateSubnet(CreateSubnetRequest) returns (CreateSubnetResponse);
+  // 删除子网
+  rpc DeleteSubnet(DeleteSubnetRequest) returns (DeleteSubnetResponse);
+  // 查询子网列表
+  rpc ListSubnets(ListVpcsRequest) returns (ListSubnetsResponse);
+  // 查询子网
+  rpc ShowSubnet(ShowSubnetRequest) returns (ShowSubnetResponse);
+  // 更新子网
+  rpc UpdateSubnet(UpdateSubnetRequest) returns (UpdateSubnetResponse);
 }
 
 message CreateInstancesRequest {
@@ -541,4 +551,160 @@ message ShowVpcRequest {
 
 message ShowVpcResponse {
   Vpc vpc = 1;
+}
+
+message Subnet {
+  // 子网ID
+  string id = 1;
+  // 功能说明：子网名称 取值范围：1-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）
+  string name = 2;
+  // 功能说明：子网描述 取值范围：0-255个字符，不能包含“<”和“>”。
+  string description = 3;
+  // 功能说明：子网的网段 取值范围：必须在vpc对应cidr范围内 约束：必须是cidr格式。掩码长度不能大于28
+  string cidr = 4;
+  // 功能说明：子网的网关 取值范围：子网网段中的IP地址 约束：必须是ip格式
+  string gateway_ip = 5;
+  // 功能说明：是否创建cidr_v6 取值范围：true（开启），false（关闭）
+  bool ipv6_enable = 6;
+  // IPv6子网的网段，如果子网为IPv4子网，则不返回此参数
+  string cidr_v6 = 7;
+  // IPv6子网的网关，如果子网为IPv4子网，则不返回此参数
+  string gateway_ip_v6 = 8;
+  // 子网是否开启dhcp功能
+  bool dhcp_enable = 9;
+  // 子网dns服务器地址1
+  string primary_dns = 10;
+  // 子网dns服务器地址2
+  string secondary_dns = 11;
+  // 子网dns服务器地址列表
+  repeated string dns_list = 12;
+  // 子网所在的可用区标识
+  string availability_zone = 13;
+  // 子网所在VPC标识
+  string vpc_id = 14;
+  // 功能说明：子网的状态 取值范围： - ACTIVE：表示子网已挂载到ROUTER上 - UNKNOWN：表示子网还未挂载到ROUTER上 - ERROR：表示子网状态故障
+  string status = 15;
+  // 对应网络（OpenStack Neutron接口）id
+  string neutron_network_id = 16;
+  // 对应子网（OpenStack Neutron接口）id
+  string neutron_subnet_id = 17;
+  // 对应IPv6子网（OpenStack Neutron接口）id，如果子网为IPv4子网，则不返回此参数
+  string neutron_subnet_id_v6 = 18;
+  repeated ExtraDhcpOpts extra_dhcp_opts = 19;
+  // 功能说明：子网作用域 取值范围：center-表示作用域为中心；{azId}表示作用域为具体的AZ
+  string scope = 20;
+}
+
+// 子网配置的NTP地址
+message ExtraDhcpOpts {
+  // 功能说明：子网配置的NTP地址名称 约束：目前只支持字段“ntp”
+  string opt_name = 1;
+  // 功能说明：子网配置的NTP地址 约束：目前只支持IPv4地址，每个IP地址以逗号隔开，IP地址个数不能超过4个，不能存在相同地址。该字段为null表示取消该子网NTP的设置，不能为””(空字符串)。
+  string opt_value = 2;
+}
+
+message CreateSubnetRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 功能说明：子网的网段 取值范围：必须在vpc对应cidr范围内 约束：必须是cidr格式。掩码长度不能大于28
+  string cidr = 5;
+  // 功能说明：子网名称 取值范围：1-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）
+  string name = 6;
+  // 子网所在VPC标识
+  string vpc_id = 7;
+  // 功能说明：子网的网关 取值范围：子网网段中的IP地址 约束：必须是ip格式
+  string gateway_ip = 8;
+  // 功能说明：子网描述 取值范围：0-255个字符，不能包含“<”和“>”。
+  string description = 9;
+  // 功能说明：是否创建cidr_v6 取值范围：true（开启），false（关闭） 约束：不填时默认为false > 说明 该参数目前仅在“华北-北京四”区域开放，且申请IPv6公测后才可设置。
+  bool ipv6_enable = 10;
+  // 功能说明：子网是否开启dhcp功能 取值范围：true（开启），false（关闭） 约束：不填时默认为true。当设置为false时，会导致新创建的ECS无法获取IP地址，cloudinit无法注入账号密码，请谨慎操作。
+  bool dhcp_enable = 11;
+  // 功能说明：子网dns服务器地址1 约束：ip格式，不支持IPv6地址 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+  string primary_dns = 12;
+  // 功能说明：子网dns服务器地址2 约束：ip格式，不支持IPv6地址 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+  string secondary_dns = 13;
+  // 功能说明：子网dns服务器地址的集合；如果想使用两个以上dns服务器，请使用该字段 约束：是子网dns服务器地址1跟子网dns服务器地址2的合集的父集，不支持IPv6地址。 默认值：不填时为空，无法使用云内网DNS功能 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+  repeated string dns_list = 14;
+  // 功能说明：子网所在的可用分区标识 约束：系统存在的可用分区标识
+  string availability_zone = 15;
+  // 子网配置的NTP地址
+  repeated ExtraDhcpOpts extra_dhcp_opts = 16;
+}
+
+message CreateSubnetResponse {
+  Subnet subnet = 1;
+}
+
+message ListSubnetsRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 按照vpc_id过滤查询, 企业项目细粒度授权场景下，该字段必传
+  string vpc_id = 5;
+}
+
+message ListSubnetsResponse {
+  repeated Subnet subnets = 1;
+}
+
+message UpdateSubnetRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 子网对应的vpc_id
+  string vpc_id = 5;
+  // 子网唯一标识
+  string subnet_id = 6;
+  // 功能说明：子网名称 取值范围：1-64，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）
+  string name = 7;
+  // 功能说明：子网描述 取值范围：0-255个字符，不能包含“<”和“>”。
+  string description = 8;
+  // 功能说明：是否创建ipv6子网 取值范围：true（开启），false（关闭）
+  string ipv6_enable = 9;
+  // 功能说明：子网是否开启dhcp功能 取值范围：true（开启），false（关闭） 约束：不填时默认为true。当设置为false时，会导致新创建的ECS无法获取IP地址，cloudinit无法注入账号密码，请谨慎操作。
+  bool dhcp_enable = 10;
+  // 功能说明：子网dns服务器地址1 约束：ip格式 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+  string primary_dns = 11;
+  // 功能说明：子网dns服务器地址2 约束：ip格式 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+  string secondary_dns = 12;
+  // 功能说明：子网dns服务器地址的集合；如果想使用两个以上dns服务器，请使用该字段。 约束：是子网dns服务器地址1跟子网dns服务器地址2的合集的父集 默认值：不填时为空，无法使用云内网DNS功能 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+  repeated string dns_list = 13;
+  // 子网配置的NTP地址
+  repeated ExtraDhcpOpts extra_dhcp_opts = 14;
+}
+
+message UpdateSubnetResponse {
+  Subnet subnet = 1;
+}
+
+message DeleteSubnetRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 子网对应的vpc_id
+  string vpc_id = 5;
+  // 子网ID
+  string subnet_id = 6;
+}
+
+message DeleteSubnetResponse {
+}
+
+message ShowSubnetRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 子网ID
+  string subnet_id = 5;
+}
+
+message ShowSubnetResponse {
+  Subnet subnet = 1;
 }

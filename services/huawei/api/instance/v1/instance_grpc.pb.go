@@ -50,6 +50,16 @@ type InstanceClient interface {
 	ShowVpc(ctx context.Context, in *ShowVpcRequest, opts ...grpc.CallOption) (*ShowVpcResponse, error)
 	// 更新虚拟私有云
 	UpdateVpc(ctx context.Context, in *UpdateVpcRequest, opts ...grpc.CallOption) (*UpdateVpcResponse, error)
+	// 创建子网
+	CreateSubnet(ctx context.Context, in *CreateSubnetRequest, opts ...grpc.CallOption) (*CreateSubnetResponse, error)
+	// 删除子网
+	DeleteSubnet(ctx context.Context, in *DeleteSubnetRequest, opts ...grpc.CallOption) (*DeleteSubnetResponse, error)
+	// 查询子网列表
+	ListSubnets(ctx context.Context, in *ListVpcsRequest, opts ...grpc.CallOption) (*ListSubnetsResponse, error)
+	// 查询子网
+	ShowSubnet(ctx context.Context, in *ShowSubnetRequest, opts ...grpc.CallOption) (*ShowSubnetResponse, error)
+	// 更新子网
+	UpdateSubnet(ctx context.Context, in *UpdateSubnetRequest, opts ...grpc.CallOption) (*UpdateSubnetResponse, error)
 }
 
 type instanceClient struct {
@@ -186,6 +196,51 @@ func (c *instanceClient) UpdateVpc(ctx context.Context, in *UpdateVpcRequest, op
 	return out, nil
 }
 
+func (c *instanceClient) CreateSubnet(ctx context.Context, in *CreateSubnetRequest, opts ...grpc.CallOption) (*CreateSubnetResponse, error) {
+	out := new(CreateSubnetResponse)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/CreateSubnet", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *instanceClient) DeleteSubnet(ctx context.Context, in *DeleteSubnetRequest, opts ...grpc.CallOption) (*DeleteSubnetResponse, error) {
+	out := new(DeleteSubnetResponse)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/DeleteSubnet", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *instanceClient) ListSubnets(ctx context.Context, in *ListVpcsRequest, opts ...grpc.CallOption) (*ListSubnetsResponse, error) {
+	out := new(ListSubnetsResponse)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListSubnets", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *instanceClient) ShowSubnet(ctx context.Context, in *ShowSubnetRequest, opts ...grpc.CallOption) (*ShowSubnetResponse, error) {
+	out := new(ShowSubnetResponse)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ShowSubnet", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *instanceClient) UpdateSubnet(ctx context.Context, in *UpdateSubnetRequest, opts ...grpc.CallOption) (*UpdateSubnetResponse, error) {
+	out := new(UpdateSubnetResponse)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/UpdateSubnet", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InstanceServer is the server API for Instance service.
 // All implementations must embed UnimplementedInstanceServer
 // for forward compatibility
@@ -218,6 +273,16 @@ type InstanceServer interface {
 	ShowVpc(context.Context, *ShowVpcRequest) (*ShowVpcResponse, error)
 	// 更新虚拟私有云
 	UpdateVpc(context.Context, *UpdateVpcRequest) (*UpdateVpcResponse, error)
+	// 创建子网
+	CreateSubnet(context.Context, *CreateSubnetRequest) (*CreateSubnetResponse, error)
+	// 删除子网
+	DeleteSubnet(context.Context, *DeleteSubnetRequest) (*DeleteSubnetResponse, error)
+	// 查询子网列表
+	ListSubnets(context.Context, *ListVpcsRequest) (*ListSubnetsResponse, error)
+	// 查询子网
+	ShowSubnet(context.Context, *ShowSubnetRequest) (*ShowSubnetResponse, error)
+	// 更新子网
+	UpdateSubnet(context.Context, *UpdateSubnetRequest) (*UpdateSubnetResponse, error)
 	mustEmbedUnimplementedInstanceServer()
 }
 
@@ -266,6 +331,21 @@ func (UnimplementedInstanceServer) ShowVpc(context.Context, *ShowVpcRequest) (*S
 }
 func (UnimplementedInstanceServer) UpdateVpc(context.Context, *UpdateVpcRequest) (*UpdateVpcResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateVpc not implemented")
+}
+func (UnimplementedInstanceServer) CreateSubnet(context.Context, *CreateSubnetRequest) (*CreateSubnetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSubnet not implemented")
+}
+func (UnimplementedInstanceServer) DeleteSubnet(context.Context, *DeleteSubnetRequest) (*DeleteSubnetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteSubnet not implemented")
+}
+func (UnimplementedInstanceServer) ListSubnets(context.Context, *ListVpcsRequest) (*ListSubnetsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListSubnets not implemented")
+}
+func (UnimplementedInstanceServer) ShowSubnet(context.Context, *ShowSubnetRequest) (*ShowSubnetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowSubnet not implemented")
+}
+func (UnimplementedInstanceServer) UpdateSubnet(context.Context, *UpdateSubnetRequest) (*UpdateSubnetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSubnet not implemented")
 }
 func (UnimplementedInstanceServer) mustEmbedUnimplementedInstanceServer() {}
 
@@ -532,6 +612,96 @@ func _Instance_UpdateVpc_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Instance_CreateSubnet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateSubnetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstanceServer).CreateSubnet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.instance.v1.Instance/CreateSubnet",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstanceServer).CreateSubnet(ctx, req.(*CreateSubnetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Instance_DeleteSubnet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSubnetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstanceServer).DeleteSubnet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.instance.v1.Instance/DeleteSubnet",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstanceServer).DeleteSubnet(ctx, req.(*DeleteSubnetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Instance_ListSubnets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListVpcsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstanceServer).ListSubnets(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.instance.v1.Instance/ListSubnets",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstanceServer).ListSubnets(ctx, req.(*ListVpcsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Instance_ShowSubnet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowSubnetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstanceServer).ShowSubnet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.instance.v1.Instance/ShowSubnet",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstanceServer).ShowSubnet(ctx, req.(*ShowSubnetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Instance_UpdateSubnet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateSubnetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstanceServer).UpdateSubnet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.instance.v1.Instance/UpdateSubnet",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstanceServer).UpdateSubnet(ctx, req.(*UpdateSubnetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Instance_ServiceDesc is the grpc.ServiceDesc for Instance service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -594,6 +764,26 @@ var Instance_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateVpc",
 			Handler:    _Instance_UpdateVpc_Handler,
+		},
+		{
+			MethodName: "CreateSubnet",
+			Handler:    _Instance_CreateSubnet_Handler,
+		},
+		{
+			MethodName: "DeleteSubnet",
+			Handler:    _Instance_DeleteSubnet_Handler,
+		},
+		{
+			MethodName: "ListSubnets",
+			Handler:    _Instance_ListSubnets_Handler,
+		},
+		{
+			MethodName: "ShowSubnet",
+			Handler:    _Instance_ShowSubnet_Handler,
+		},
+		{
+			MethodName: "UpdateSubnet",
+			Handler:    _Instance_UpdateSubnet_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
