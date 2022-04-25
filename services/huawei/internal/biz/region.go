@@ -3,15 +3,11 @@ package biz
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/region"
 )
 
-type Region struct {
-	Id       string `json:"id"`
-	Endpoint string `json:"endpoint"`
-}
-
 type RegionResponse interface {
-	ListRegions(context.Context, string) []*Region
+	ListRegions(context.Context, string) []*region.Region
 }
 
 // RegionUseCase is a Region UseCase.
@@ -26,6 +22,6 @@ func NewRegionUseCase(repo RegionResponse, logger log.Logger) *RegionUseCase {
 }
 
 // ListRegions List All Regions
-func (uc *RegionUseCase) ListRegions(ctx context.Context, regionType string) []*Region {
+func (uc *RegionUseCase) ListRegions(ctx context.Context, regionType string) []*region.Region {
 	return uc.repo.ListRegions(ctx, regionType)
 }

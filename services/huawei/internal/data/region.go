@@ -6,6 +6,7 @@ import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/region"
 	ecsregion "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/region"
 	imsregion "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ims/v2/region"
+	vpcregion "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/vpc/v2/region"
 	"huawei/internal/biz"
 )
 
@@ -14,7 +15,7 @@ type regionResponse struct {
 	log  *log.Helper
 }
 
-var staticImageRegionFields = map[string]*region.Region{
+var staticImageRegions = map[string]*region.Region{
 	"af-south-1":     imsregion.AF_SOUTH_1,
 	"cn-north-4":     imsregion.CN_NORTH_4,
 	"cn-north-1":     imsregion.CN_NORTH_1,
@@ -29,7 +30,7 @@ var staticImageRegionFields = map[string]*region.Region{
 	"cn-south-2":     imsregion.CN_SOUTH_2,
 }
 
-var staticEcsFields = map[string]*region.Region{
+var staticEcsRegions = map[string]*region.Region{
 	"cn-north-1":     ecsregion.CN_NORTH_1,
 	"cn-north-4":     ecsregion.CN_NORTH_4,
 	"cn-south-1":     ecsregion.CN_SOUTH_1,
@@ -47,6 +48,22 @@ var staticEcsFields = map[string]*region.Region{
 	"la-south-2":     ecsregion.LA_SOUTH_2,
 }
 
+var staticVpcRegionRegions = map[string]*region.Region{
+	"af-south-1":     vpcregion.AF_SOUTH_1,
+	"cn-north-4":     vpcregion.CN_NORTH_4,
+	"cn-north-1":     vpcregion.CN_NORTH_1,
+	"cn-east-2":      vpcregion.CN_EAST_2,
+	"cn-east-3":      vpcregion.CN_EAST_3,
+	"cn-south-1":     vpcregion.CN_SOUTH_1,
+	"cn-southwest-2": vpcregion.CN_SOUTHWEST_2,
+	"ap-southeast-2": vpcregion.AP_SOUTHEAST_2,
+	"cn-north-9":     vpcregion.CN_NORTH_9,
+	"ap-southeast-1": vpcregion.AP_SOUTHEAST_1,
+	"ap-southeast-3": vpcregion.AP_SOUTHEAST_3,
+	"sa-brazil-1":    vpcregion.SA_BRAZIL_1,
+	"la-north-2":     vpcregion.LA_NORTH_2,
+}
+
 // NewRegionRepo .
 func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	return &regionResponse{
@@ -55,15 +72,15 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	}
 }
 
-func (r *regionResponse) ListRegions(ctx context.Context, regionType string) []*biz.Region {
-	regionFields := staticEcsFields
+func (r *regionResponse) ListRegions(ctx context.Context, regionType string) []*region.Region {
+	regionFields := staticEcsRegions
 	if regionType == "image" {
-		regionFields = staticImageRegionFields
+		regionFields = staticImageRegions
 	}
-	result := make([]*biz.Region, len(regionFields))
+	result := make([]*region.Region, len(regionFields))
 	i := 0
-	for _, v := range staticImageRegionFields {
-		result[i] = &biz.Region{
+	for _, v := range staticImageRegions {
+		result[i] = &region.Region{
 			Id:       v.Id,
 			Endpoint: v.Endpoint,
 		}

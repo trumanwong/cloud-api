@@ -2,12 +2,12 @@ package biz
 
 import (
 	"context"
-	"github.com/alibabacloud-go/ecs-20140526/v4/client"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/model"
 )
 
 type InstanceTypeResponse interface {
-	ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string) ([]*client.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error)
+	ListInstanceTypes(context.Context, string, string, string, string, *model.ListFlavorsRequest) (*model.ListFlavorsResponse, error)
 }
 
 // InstanceTypeUseCase is a InstanceType UseCase.
@@ -21,7 +21,7 @@ func NewInstanceTypeUseCase(repo InstanceTypeResponse, logger log.Logger) *Insta
 	return &InstanceTypeUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// ListAll List All Regions
-func (uc *InstanceTypeUseCase) ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string) ([]*client.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error) {
-	return uc.repo.ListAll(ctx, accessKeyId, accessKeySecret, endpoint)
+// ListInstanceTypes List All InstanceTypes
+func (uc *InstanceTypeUseCase) ListInstanceTypes(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.ListFlavorsRequest) (*model.ListFlavorsResponse, error) {
+	return uc.repo.ListInstanceTypes(ctx, accessKey, secretKey, regionId, projectId, request)
 }

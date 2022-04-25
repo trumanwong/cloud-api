@@ -1,10 +1,10 @@
 package data
 
 import (
-	"ali/internal/biz"
 	"context"
-	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v4/client"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/model"
+	"huawei/internal/biz"
 )
 
 type instanceTypeResponse struct {
@@ -20,19 +20,11 @@ func NewInstanceTypeRepo(data *Data, logger log.Logger) biz.InstanceTypeResponse
 	}
 }
 
-func (r *instanceTypeResponse) ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string) ([]*ecs20140526.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error) {
-	client, err := getClient(
-		accessKeyId,
-		accessKeySecret,
-		endpoint,
-	)
+func (r *instanceTypeResponse) ListInstanceTypes(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.ListFlavorsRequest) (*model.ListFlavorsResponse, error) {
+	client := getEcsClient(accessKey, secretKey, regionId, projectId)
+	result, err := client.ListFlavors(request)
 	if err != nil {
 		return nil, err
 	}
-	describeInstanceTypesRequest := &ecs20140526.DescribeInstanceTypesRequest{}
-	result, err := client.DescribeInstanceTypes(describeInstanceTypesRequest)
-	if err != nil {
-		return nil, err
-	}
-	return result.Body.InstanceTypes.InstanceType, nil
+	return result, nil
 }

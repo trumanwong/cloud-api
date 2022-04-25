@@ -1,10 +1,10 @@
 package data
 
 import (
-	"ali/internal/biz"
 	"context"
-	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v4/client"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/model"
+	"huawei/internal/biz"
 )
 
 type instanceResponse struct {
@@ -20,99 +20,56 @@ func NewInstanceRepo(data *Data, logger log.Logger) biz.InstanceResponse {
 	}
 }
 
-func (r *instanceResponse) CreateInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error) {
-	client, err := getClient(
-		accessKeyId,
-		accessKeySecret,
-		endpoint,
-	)
+func (r *instanceResponse) CreateInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.CreateServersRequest) (*model.CreateServersResponse, error) {
+	client := getEcsClient(accessKey, secretKey, regionId, projectId)
+	result, err := client.CreateServers(request)
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.RunInstances(request)
-	if err != nil {
-		return nil, err
-	}
-
-	return result.Body, nil
+	return result, nil
 }
 
-func (r *instanceResponse) ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error) {
-	client, err := getClient(
-		accessKeyId,
-		accessKeySecret,
-		endpoint,
-	)
+func (r *instanceResponse) ListInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.ListServersDetailsRequest) (*model.ListServersDetailsResponse, error) {
+	client := getEcsClient(accessKey, secretKey, regionId, projectId)
+	result, err := client.ListServersDetails(request)
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.DescribeInstances(request)
-	if err != nil {
-		return nil, err
-	}
-	return result.Body, nil
+	return result, nil
 }
 
-func (r *instanceResponse) StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstancesRequest) (*string, error) {
-	client, err := getClient(
-		accessKeyId,
-		accessKeySecret,
-		endpoint,
-	)
+func (r *instanceResponse) StartInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.BatchStartServersRequest) (*model.BatchStartServersResponse, error) {
+	client := getEcsClient(accessKey, secretKey, regionId, projectId)
+	result, err := client.BatchStartServers(request)
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.StartInstances(request)
-	if err != nil {
-		return nil, err
-	}
-	return result.Body.RequestId, nil
+	return result, nil
 }
 
-func (r *instanceResponse) StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstancesRequest) (*string, error) {
-	client, err := getClient(
-		accessKeyId,
-		accessKeySecret,
-		endpoint,
-	)
+func (r *instanceResponse) StopInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.BatchStopServersRequest) (*model.BatchStopServersResponse, error) {
+	client := getEcsClient(accessKey, secretKey, regionId, projectId)
+	result, err := client.BatchStopServers(request)
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.StopInstances(request)
-	if err != nil {
-		return nil, err
-	}
-	return result.Body.RequestId, nil
+	return result, nil
 }
 
-func (r *instanceResponse) RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstancesRequest) (*string, error) {
-	client, err := getClient(
-		accessKeyId,
-		accessKeySecret,
-		endpoint,
-	)
+func (r *instanceResponse) RebootInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.BatchRebootServersRequest) (*model.BatchRebootServersResponse, error) {
+	client := getEcsClient(accessKey, secretKey, regionId, projectId)
+	result, err := client.BatchRebootServers(request)
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.RebootInstances(request)
-	if err != nil {
-		return nil, err
-	}
-	return result.Body.RequestId, nil
+	return result, nil
 }
 
-func (r *instanceResponse) DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstancesRequest) (*string, error) {
-	client, err := getClient(
-		accessKeyId,
-		accessKeySecret,
-		endpoint,
-	)
+func (r *instanceResponse) DeleteInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.DeleteServersRequest) (*model.DeleteServersResponse, error) {
+	client := getEcsClient(accessKey, secretKey, regionId, projectId)
+	result, err := client.DeleteServers(request)
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.DeleteInstances(request)
-	if err != nil {
-		return nil, err
-	}
-	return result.Body.RequestId, nil
+	return result, nil
 }

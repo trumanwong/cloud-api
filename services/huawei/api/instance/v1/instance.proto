@@ -1,0 +1,544 @@
+syntax = "proto3";
+
+package api.instance.v1;
+
+option go_package = "/api/instance/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.instance.v1";
+
+service Instance {
+  // 可使用的地域
+  rpc ListRegions (ListRegionsRequest) returns (ListRegionsResponse);
+  // 选择镜像
+  rpc ListImages (ListImagesRequest) returns (ListImagesResponse);
+  // 选择实例规格
+  rpc ListInstanceTypes(ListInstanceTypesRequest) returns (ListInstanceTypesResponse);
+  // 创建实例
+  rpc CreateInstances (CreateInstancesRequest) returns (CreateInstancesResponse);
+  // 实例列表
+  rpc ListInstances (ListInstancesRequest) returns (ListInstancesResponse);
+  // 开机
+  rpc StartInstances(StartInstancesRequest) returns (StartInstancesResponse);
+  // 关机
+  rpc StopInstances(StopInstancesRequest) returns (StopInstancesResponse);
+  // 重启
+  rpc RebootInstances(RebootInstancesRequest) returns (RebootInstancesResponse);
+  // 删除实例
+  rpc DeleteInstances(DeleteInstancesRequest) returns (DeleteInstancesResponse);
+  // 创建虚拟私有云
+  rpc CreateVpc(CreateVpcRequest) returns (CreateVpcResponse);
+  // 删除虚拟私有云
+  rpc DeleteVpc(DeleteVpcRequest) returns (DeleteVpcResponse);
+  // 查询虚拟私有云列表
+  rpc ListVpcs(ListVpcsRequest) returns (ListVpcsResponse);
+  // 查询虚拟私有云
+  rpc ShowVpc(ShowVpcRequest) returns (ShowVpcResponse);
+  // 更新虚拟私有云
+  rpc UpdateVpc(UpdateVpcRequest) returns (UpdateVpcResponse);
+}
+
+message CreateInstancesRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  // 区域id
+  string region_id = 3;
+  // project_id
+  string project_id = 4;
+  // 镜像id
+  string image_id = 5;
+  // 实例名称只能由中文字符、英文字母、数字及“_”、“-”、“.”组成,且长度为[1-64]个字符。
+  // 创建的云服务器器数量(count字段对应的值)大于1时,为区分不同云服务器,创建过程中系统会自动在名称后加“-0000”的类似标记。故此时名称的长度为[1-59]个字符。
+  string name = 6;
+  // 实例规格
+  string instance_type = 7;
+  // 系统盘大小
+  string system_disk_size = 8;
+  // 是否为instance_name自动添加有序后缀（默认false）
+  bool unique_suffix = 9;
+  // 创建数量(1-100，默认1)
+  // 不传该字段时默认取值为1。 租户的配额足够时,最大值为500。
+  uint32 amount = 10;
+  // 实例密码
+  string password = 11;
+  // 是否只预检此次请求
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式等。
+  // 如果检查不通过，则返回对应错误。
+  // 如果检查通过，则返回202状态码。
+  // false：发送正常请求，通过检查后并且执行创建云服务器请求。
+  bool dry_run = 12;
+}
+
+message CreateInstancesResponse {
+  // 阿里云请求id
+  string request_id = 1;
+  // 订单id，该参数只有创建包年包月ECS实例（请求参数InstanceChargeType=PrePaid）时有返回值
+  string order_id = 2;
+  // 订单成交价
+  float trade_price = 3;
+  // 实例id列表
+  repeated string instance_id_sets = 4;
+}
+
+message ListInstancesRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  string endpoint = 3;
+  // 实例所属的地域ID
+  string region_id = 4;
+  // 实例状态列表的页码，起始值1，默认值1
+  uint32 page_number = 5;
+  // 分页查询时设置的每页行数
+  uint32 page_size = 6;
+  // 查询凭证（Token），取值为上一次API调用返回的NextToken参数值
+  string next_token = 7;
+}
+
+message ListInstancesResponse {
+  string request_id = 1;
+  // 实例状态列表的页码，起始值1，默认值1
+  uint32 page_number = 2;
+  // 分页查询时设置的每页行数
+  uint32 page_size = 3;
+  // 查询到的实例总数
+  uint32 total_count = 4;
+  // 本次调用返回的查询凭证值
+  string next_token = 5;
+  message Instance {
+    // 实例ID
+    string instance_id = 1;
+    // 实例名称
+    string instance_name = 2;
+    // 实例规格
+    string instance_type = 3;
+    // 实例的计费方式
+    string instance_charge_type = 4;
+    // 实例所属地域ID
+    string region_id = 5;
+    // vCPU数
+    uint32 cpu = 6;
+    // 实例操作系统的英文名称
+    string os_name_en = 7;
+    // 实例状态
+    string status = 8;
+    // 实例创建时间，UTC+0时间
+    string creation_time = 9;
+    // 实例网络类型
+    string instance_network_type = 10;
+    // 内存大小，单位为MiB
+    uint32 memory = 11;
+    // 实例规格附带的GPU类型
+    string gpu_spec = 12;
+    // 按量付费实例的自动释放时间
+    string auto_release_time = 13;
+    // 实例规格附带的GPU数量
+    uint32 gpu_amount = 14;
+    // 实例的操作系统类型
+    string os_type = 15;
+    // 过期时间
+    string expired_time = 16;
+    // 实例最近一次的启动时间
+    string start_time = 17;
+    // 实例公网IP地址
+    repeated string public_ip_address = 18;
+    // 经典网络类型实例的内网IP地址
+    repeated string inner_ip_address = 19;
+    // HPC实例的Rdma网络IP
+    repeated string rdma_ip_address = 20;
+    // 实例所属安全组集合
+    repeated string security_group_ids = 21;
+    // 弹性公网IP绑定信息
+    message EipAddress {
+      // 弹性公网IP的ID
+      string allocation_id = 1;
+      // 是否可以解绑弹性公网IP
+      bool is_support_un_associate = 2;
+      // 弹性公网IP的计费方式
+      string internal_charge_type = 3;
+      // 弹性公网IP
+      string ip_address = 4;
+      // 弹性公网IP
+      uint32 bandwidth = 5;
+    }
+    EipAddress eip_address = 22;
+    // 实例是否可以挂载数据盘
+    bool device_available = 23;
+    // 实例挂载的本地存储容量
+    uint64 local_storage_capacity = 24;
+    // 实例挂载的本地存储数量
+    uint32 local_storage_amount = 25;
+    // 实例运行的镜像ID
+    string image_id = 26;
+  }
+  // 实例信息
+  repeated Instance instances = 6;
+}
+
+message ListRegionsRequest {
+  // 查询地域类别，查询ims地域：image，查询ecs地域：ecs
+  string region_type = 1;
+}
+
+message ListRegionsResponse {
+  message Region {
+    string end_point = 1;
+    string id = 2;
+  }
+  repeated Region regions = 1;
+}
+
+message ListImagesRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  // 用于分页,表示查询几条镜像记录,取值为整数,默认返回25条镜像记录
+  int32 limit = 4;
+  // 用于分页,表示从哪个镜像开始查询,取值为镜像ID。
+  string marker = 5;
+}
+
+message ListImagesResponse {
+  message Image {
+    // 镜像ID
+    string image_id = 1;
+    // 镜像名称
+    string image_name = 2;
+    // 镜像描述信息
+    string image_description = 3;
+    // 镜像文件的大小
+    int64 image_size = 4;
+    // 镜像类型，目前支持以下类型：
+    // 公共镜像：gold
+    // 私有镜像：private
+    // 共享镜像：shared
+    string image_type = 5;
+    // 是否被其他租户可见。取值如下：
+    //    public：表示公共镜像
+    //    private：表示私有镜像
+    //    shared：表示共享镜像
+    string visibility = 6;
+    // 镜像状态。取值如下：
+    //    queued：表示镜像元数据已经创建成功，等待上传镜像文件。
+    //    saving：表示镜像正在上传文件到后端存储。
+    //    deleted：表示镜像已经删除。
+    //    killed：表示镜像上传错误。
+    //    active：表示镜像可以正常使用。
+    string status = 7;
+    // 镜像运行需要的最小内存，单位为MB。参数取值依据云服务器的规格限制，一般为0
+    int32 min_ram = 8;
+    // 镜像支持的最大内存，单位为MB。
+    string max_ram = 9;
+    // 镜像运行需要的最小磁盘容量，单位为GB 。取值为40～1024GB。
+    int32 min_disk = 10;
+    // 操作系统位数，一般取值为32或者64。
+    string os_bit = 11;
+    // 镜像平台分类，取值为Windows、Ubuntu、RedHat、SUSE、CentOS、Debian、OpenSUSE、Oracle Linux、Fedora、Other、CoreOS和EulerOS
+    string platform = 12;
+    // 镜像系统类型，取值为Linux、Windows、Other
+    string os_type = 13;
+    // 操作系统具体版本
+    string os_version = 14;
+    // 创建时间。格式为UTC时间。
+    string created_at = 15;
+    // 更新时间。格式为UTC时间。
+    string updated_at = 16;
+    // 镜像状态变为正常的时间。
+    string active_at = 17;
+  }
+  repeated Image images = 1;
+  // 用于分页,表示从哪个镜像开始查询,取值为镜像ID。
+  string marker = 2;
+}
+
+message ListInstanceTypesRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+}
+
+message ListInstanceTypesResponse {
+  message InstanceType {
+    // 云服务器规格的ID
+    string id = 1;
+    // 云服务器规格的名称
+    string name = 2;
+    // 云服务器规格对应的CPU核数
+    string v_cpus = 3;
+    // 云服务器规格对应的内存大小，单位为MB。
+    int32 memory_size = 4;
+    message OsExtraSpec {
+      // 云服务器规格的分类：  - normal：通用型 - cpuv1：计算I型 - cpuv2：计算II型 - highmem：内存优化型 - gpu：GPU加速型 - entry：通用入门型 - saphana：大内存型 - ultracpu：超高性能计算型 - diskintensive：磁盘增强型 - highio：超高I/O型 - fpga：FPGA加速型  > 说明：  - 早期注册的规格该字段为hws:performancetype。
+      string ecs_performance_type = 1;
+      // 主机的物理cpu数量。
+      string hw_numa_nodes = 2;
+      // 资源类型。resource_type是为了区分云服务器的物理主机类型。
+      string resource_type = 3;
+      // 弹性运服务器高精度时钟是否开启，开启为true，否则为false。（该字段是否返回根据云服务器规格而定）
+      string h_pet_support = 4;
+      // 网卡类型，值固定为“enhanced”，表示使用增强型网络的资源创建云服务器。
+      string instance_v_nic_type = 5;
+      // 最大带宽，单位Mbps，最大值为10000。
+      string instance_v_nic_instance_bandwidth = 6;
+      // 最大网卡个数，最大为4。
+      string instance_vnic_max_count = 7;
+      // 值格式为{type}:{count}:{size}:{safeFormat}，其中：  - type指磁盘类型，当前只支持hdd。 - count指本地磁盘数量，目前支持d1类型：3/6/12/24，d2类型：2/4/8/12/16/24，d3类型：2/4/8/12/16/24/28。 - size指单个磁盘容量，单位GB，目前只支持1675（实际磁盘大小为1800，格式化后可用大小为1675）。 - safeFormat指云服务器本地磁盘是否安全格式化，目前仅支持d1类型：FALSE，d2/d3类型：True。  > 说明：  - 磁盘增强型特有字段。
+      string quota_local_disk = 8;
+      // 值格式为{type}:{spec}:{size}:{safeFormat}，其中：  - type指主机上配备的nvme ssd的单卡容量大小，当前只支持1.6T/3.2T。 - spec指nvme ssd的规格，包括large/small。large表示大规格，small表示小规格。目前仅支持i3类型：large。 - size指guest使用的盘的容量大小，单位为GB。在spec值为large的情况下，此项即为host单卡大小。在spec值为small的情况下，此为1/4规格或者1/2规格。 - safeFormat指云服务器本地磁盘是否安全格式化，目前仅支持i3类型：True。  > 说明：  - 超高I/O型特有字段。
+      string quota_nvme_ssd = 9;
+      // 是否支持持久化，值为true。  代表云服务器访问存储的方式为持久化授权。   > 说明：  - 密集存储D1型特有字段。
+      string extra_spec_io_persistent_grant = 10;
+      // 弹性云服务器类型的代数。  - s1：通用型I代 - s2：通用型II代 - s3：通用型 - m1：内存优化型I代 - m2：内存优化型II代 - m3：内存优化型 - h1：高性能计算型I代 - h2：高性能计算型II代 - h3：高性能计算型 - hi3：超高性能计算型 - d1：密集存储型I代 - d2：密集存储型II代 - d3：磁盘增强型 - g1：GPU加速型I代 - g2：GPU加速型II代 - f1：FPGA高性能型 - f2：FPGA通用型 - c3：通用计算增强型 - e3：大内存型 - i3：超高I/O型
+      string ecs_generation = 11;
+      // 虚拟化类型。  - 如果值为“FusionCompute”，表示弹性云服务器使用基于XEN的虚拟化技术。 - 如果值为“CloudCompute”，表示弹性云服务器使用基于KVM的虚拟化技术。
+      string ecs_virtualization_env_types = 12;
+      // 显卡是否直通。  值为“true”，表示GPU直通。
+      string pci_passthrough_enable_gpu = 13;
+      // G1型和G2型云服务器应用的技术，包括GPU虚拟化和GPU直通。  - 如果该规格的云服务器使用GPU虚拟化技术，且GPU卡的型号为M60-1Q，参数值可设置为“m60_1q:virt:1”。 - 如果该规格的云服务器使用GPU直通技术，且GPU卡的型号为M60，参数值可设置为“m60:direct_graphics:1”。
+      string pci_passthrough_gpu_specs = 14;
+      // P1型v本地直通GPU的型号和数量，参数值可设置为“nvidia-p100:1”，表示使用该规格创建的弹性云服务器将占用1张NVIDIA P100显卡。
+      string pci_passthrough_alias = 15;
+      // 此参数是Region级配置，某个AZ没有在cond:operation:az参数中配置时默认使用此参数的取值。不配置或无此参数时等同于“normal”。取值范围：  - normal：正常商用 - abandon：下线（即不显示） - sellout：售罄 - obt：公测 - promotion：推荐(等同normal，也是商用)
+      string cond_operation_status = 16;
+      // 此参数是AZ级配置，某个AZ没有在此参数中配置时默认使用cond:operation:status参数的取值。此参数的配置格式“az(xx)”。()内为某个AZ的flavor状态，()内必须要填有状态，不填为无效配置。状态的取值范围与cond:operation:status参数相同。  例如：flavor在某个region的az0正常商用，az1售罄，az2公测，az3正常商用，其他az显示下线，可配置为：  - “cond:operation:status”设置为“abandon” - “cond:operation:az”设置为“az0(normal), az1(sellout), az2(obt), az3(normal)”  > 说明：  - 如果flavor在某个AZ下的状态与cond:operation:status配置状态不同，必须配置该参数。
+      string cond_operation_az = 17;
+      // 最大带宽  - 单位Mbps，显示为Gbps时除以1000
+      string quota_max_rate = 18;
+      // 基准带宽  - 单位Mbps，显示为Gbps时除以1000
+      string quota_min_rate = 19;
+      // 内网最大收发包能力  - 单位个，显示为xx万时除以10000
+      string quota_max_pps = 20;
+      // 计费类型  - 计费场景，不配置时都支持 - period，包周期 - demand，按需
+      string cond_operation_charge = 21;
+      // 关机是否收费  - 关机是否计费，默认免费： - charge - free
+      string cond_operation_charge_stop = 22;
+      // 计费类型  - 计费场景，不配置时都支持 - period，包周期 - demand，按需
+      string cond_spot_operation_az = 23;
+      // 允许的角色 匹配的用户标签（roles的op_gatexxx标签）。不设置时所有用户可见
+      string cond_operation_roles = 24;
+      // Flavor在竞价销售模式下的状态  - 不配置时等同abandon - normal，正常商用 - abandon，下线 - sellout，售罄 - obt，公测，未申请时提示申请（暂不支持） - private，私有，只给特定用户显示（暂不支持） - test，试用/免费（暂不支持） - promotion，推荐
+      string cond_spot_operation_status = 25;
+      // 网络约束 支持网络特性，不配置时以UI配置为准。
+      string cond_network = 26;
+      // 存储约束  - 支持磁盘特性，不配置时以UI配置为准。 - scsi，支持scsi - localdisk，支持本地盘 - ib，支持ib
+      string cond_storage = 27;
+      // 计算约束  - true，支持在线扩容。 - false或不存在该字段，不支持在线扩容。
+      string cond_compute_live_resizable = 28;
+      // 计算约束  - autorecovery，自动恢复特性。 - 不存在该字段，不支持自动恢复。
+      string cond_compute = 29;
+      // GPU显卡数量和名称。
+      string info_gpu_name = 30;
+      // CPU名称
+      string info_cpu_name = 31;
+      // GPU显卡名称。
+      string quota_gpu = 32;
+      // 该规格对应的CPU架构，且仅鲲鹏实例架构规格返回该字段  - 取值为arm64表示CPU架构为鲲鹏计算。
+      string ecs_instance_architecture = 33;
+    }
+    OsExtraSpec os_extra_spec = 5;
+    message ServerAttachableQuantity {
+      // 可挂载scsi卷数。
+      int32 free_scsi = 1;
+      // 可挂载vbd卷数。
+      int32 free_blk = 2;
+      // 可挂载卷数。
+      int32 free_disk = 3;
+      // 可挂载网卡数。
+      int32 free_nic = 4;
+    }
+    ServerAttachableQuantity server_attachable_quantity = 6;
+  }
+  repeated InstanceType instance_types = 1;
+}
+
+message StartInstancesRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  string endpoint = 3;
+  repeated string instance_ids = 4;
+  // 是否只预检此次请求。取值范围：
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  // false（默认）：发送正常请求，通过检查后直接创建实例。
+  bool dry_run = 5;
+}
+
+message StartInstancesResponse {
+  // 请求ID
+  string request_id = 1;
+  // 实例操作结果错误码。返回值200为成功
+  string code = 2;
+  // 实例操作返回错误信息。返回值success为成功
+  string message = 3;
+  // 实例ID
+  string instance_id = 4;
+  // 实例当前状态
+  string current_status = 5;
+  // 操作前实例的状态
+  string previous_status = 6;
+  // 是否只预检此次请求。取值范围：
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  // false（默认）：发送正常请求，通过检查后直接创建实例。
+  bool dry_run = 7;
+}
+
+message StopInstancesRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  string endpoint = 3;
+  repeated string instance_ids = 4;
+  // 是否只预检此次请求。取值范围：
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  // false（默认）：发送正常请求，通过检查后直接创建实例。
+  bool dry_run = 5;
+}
+
+message StopInstancesResponse {
+  string request_id = 1;
+}
+
+message RebootInstancesRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  string endpoint = 3;
+  repeated string instance_ids = 4;
+  // 是否只预检此次请求。取值范围：
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  // false（默认）：发送正常请求，通过检查后直接创建实例。
+  bool dry_run = 5;
+}
+
+message RebootInstancesResponse {
+  string request_id = 1;
+}
+
+message DeleteInstancesRequest {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+  string endpoint = 3;
+  repeated string instance_ids = 4;
+  // 是否只预检此次请求。取值范围：
+  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  // false（默认）：发送正常请求，通过检查后直接创建实例。
+  bool dry_run = 5;
+}
+
+message DeleteInstancesResponse {
+  string request_id = 1;
+}
+
+message Vpc {
+  // 功能说明：虚拟私有云ID 取值范围：带\"-\"的UUID
+  string id = 1;
+  // 功能说明：虚拟私有云名称 取值范围：0-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点） 约束：如果名称不为空，则同一个租户下的名称不能重复
+  string name = 2;
+  // 功能说明：虚拟私有云下可用子网的范围 取值范围： - 10.0.0.0/8~10.255.255.240/28 - 172.16.0.0/12 ~ 172.31.255.240/28 - 192.168.0.0/16 ~ 192.168.255.240/28 不指定cidr时，默认值为空 约束：必须是ipv4 cidr格式，例如:192.168.0.0/16
+  string cidr = 3;
+  // 功能说明：虚拟私有云的描述 取值范围：0-255个字符，不能包含“<”和“>”
+  string description = 4;
+  // 功能说明：路由信息列表，详情参见route对象
+  repeated VpcRoute routes = 5;
+  // 功能说明：虚拟私有云的状态 取值范围： - CREATING：创建中 - OK：创建成功
+  string status = 6;
+  // 功能说明：企业项目ID。 取值范围：最大长度36字节，带“-”连字符的UUID格式，或者是字符串“0”。“0”表示默认企业项目。
+  string enterprise_project_id = 7;
+}
+
+message VpcRoute {
+  // 功能说明：路由目的地 取值范围：IP地址段 约束：仅支持配置默认路由，且其取值只能是0.0.0.0/0
+  string destination = 1;
+  // 功能说明：路由下一跳IP地址 取值范围：ipv4地址格式 约束：nexthop仅支持所关联的子网范围内IP地址
+  string next_hop = 2;
+}
+
+message CreateVpcRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 功能说明:虚拟私有云下可用子网的范围
+  //  取值范围:
+  //    10.0.0.0/8 ~ 10.255.255.240/28
+  //    172.16.0.0/12 ~ 172.31.255.240/28
+  //    192.168.0.0/16 ~ 192.168.255.240/28 约束:必须是ipv4 cidr格式,例如:192.168.0.0/16
+  string cidr = 5;
+  // 虚拟私有云名称
+  //  取值范围:0-64个字符,支持数字、字母、中文、_(下划线)、-(中划线)、.(点)
+  //  约束:如果名称不为空,则同一个租户下的名称不能重复
+  string name = 6;
+  // 虚拟私有云的描述
+  //  取值范围:0-255个字符,不能包含“<”和“>”。
+  string description = 7;
+  // 企业项目ID。创建虚拟私有云时,给虚拟私有云绑定企业项目ID。
+  //  取值范围:最大长度36字节,带“-”连字符的UUID格式,或者是字符串“0”。“0”表示默认企业项目。
+  //  默认值:"0"
+  string enterprise_project_id = 8;
+}
+
+message CreateVpcResponse {
+  Vpc vpc = 1;
+}
+
+message ListVpcsRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 功能说明：虚拟私有云ID。可以使用该字段过滤某个ID的虚拟私有云。
+  string id = 5;
+  // 功能说明：企业项目ID。可以使用该字段过滤某个企业项目下的虚拟私有云。若未传值则默认返回所有企业项目绑定的虚拟私有云。  取值范围：最大长度36字节，带“-”连字符的UUID格式，或者是字符串“0”。“0”表示默认企业项目。若需要查询当前用户所有企业项目绑定的虚拟私有云，请传参all_granted_eps。
+  string enterprise_project_id = 6;
+}
+
+message ListVpcsResponse {
+  repeated Vpc vpcs = 1;
+}
+
+message UpdateVpcRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 虚拟私有云ID
+  string vpc_id = 5;
+  // 功能说明:虚拟私有云下可用子网的范围
+  //  取值范围:
+  //    10.0.0.0/8 ~ 10.255.255.240/28
+  //    172.16.0.0/12 ~ 172.31.255.240/28
+  //    192.168.0.0/16 ~ 192.168.255.240/28 约束:必须是ipv4 cidr格式,例如:192.168.0.0/16
+  string cidr = 6;
+  // 虚拟私有云名称
+  //  取值范围:0-64个字符,支持数字、字母、中文、_(下划线)、-(中划线)、.(点)
+  //  约束:如果名称不为空,则同一个租户下的名称不能重复
+  string name = 7;
+  // 虚拟私有云的描述
+  //  取值范围:0-255个字符,不能包含“<”和“>”。
+  string description = 8;
+  // 路由信息列表
+  repeated VpcRoute routes = 9;
+}
+
+message UpdateVpcResponse {
+  Vpc vpc = 1;
+}
+
+message DeleteVpcRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  string vpc_id = 5;
+}
+
+message DeleteVpcResponse {
+}
+
+message ShowVpcRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  string vpc_id = 5;
+}
+
+message ShowVpcResponse {
+  Vpc vpc = 1;
+}

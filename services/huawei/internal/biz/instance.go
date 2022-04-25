@@ -2,19 +2,19 @@ package biz
 
 import (
 	"context"
-	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v4/client"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/model"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
 
 // InstanceResponse is a Instance repo.
 type InstanceResponse interface {
-	CreateInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error)
-	ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error)
-	StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstancesRequest) (*string, error)
-	StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstancesRequest) (*string, error)
-	RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstancesRequest) (*string, error)
-	DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstancesRequest) (*string, error)
+	CreateInstances(context.Context, string, string, string, string, *model.CreateServersRequest) (*model.CreateServersResponse, error)
+	ListInstances(context.Context, string, string, string, string, *model.ListServersDetailsRequest) (*model.ListServersDetailsResponse, error)
+	StartInstances(context.Context, string, string, string, string, *model.BatchStartServersRequest) (*model.BatchStartServersResponse, error)
+	StopInstances(context.Context, string, string, string, string, *model.BatchStopServersRequest) (*model.BatchStopServersResponse, error)
+	RebootInstances(context.Context, string, string, string, string, *model.BatchRebootServersRequest) (*model.BatchRebootServersResponse, error)
+	DeleteInstances(context.Context, string, string, string, string, *model.DeleteServersRequest) (*model.DeleteServersResponse, error)
 }
 
 // InstanceUseCase is a Instance UseCase.
@@ -29,26 +29,26 @@ func NewInstanceUseCase(repo InstanceResponse, logger log.Logger) *InstanceUseCa
 }
 
 // CreateInstances creates Instances, and returns the new Instances.
-func (uc *InstanceUseCase) CreateInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error) {
-	return uc.repo.CreateInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) CreateInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.CreateServersRequest) (*model.CreateServersResponse, error) {
+	return uc.repo.CreateInstances(ctx, accessKey, secretKey, regionId, projectId, request)
 }
 
-func (uc *InstanceUseCase) ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error) {
-	return uc.repo.ListInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) ListInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.ListServersDetailsRequest) (*model.ListServersDetailsResponse, error) {
+	return uc.repo.ListInstances(ctx, accessKey, secretKey, regionId, projectId, request)
 }
 
-func (uc *InstanceUseCase) StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstancesRequest) (*string, error) {
-	return uc.repo.StartInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) StartInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.BatchStartServersRequest) (*model.BatchStartServersResponse, error) {
+	return uc.repo.StartInstances(ctx, accessKey, secretKey, regionId, projectId, request)
 }
 
-func (uc *InstanceUseCase) StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstancesRequest) (*string, error) {
-	return uc.repo.StopInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) StopInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.BatchStopServersRequest) (*model.BatchStopServersResponse, error) {
+	return uc.repo.StopInstances(ctx, accessKey, secretKey, regionId, projectId, request)
 }
 
-func (uc *InstanceUseCase) RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstancesRequest) (*string, error) {
-	return uc.repo.RebootInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) RebootInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.BatchRebootServersRequest) (*model.BatchRebootServersResponse, error) {
+	return uc.repo.RebootInstances(ctx, accessKey, secretKey, regionId, projectId, request)
 }
 
-func (uc *InstanceUseCase) DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstancesRequest) (*string, error) {
-	return uc.repo.DeleteInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) DeleteInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.DeleteServersRequest) (*model.DeleteServersResponse, error) {
+	return uc.repo.DeleteInstances(ctx, accessKey, secretKey, regionId, projectId, request)
 }

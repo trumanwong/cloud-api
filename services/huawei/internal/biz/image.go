@@ -2,13 +2,13 @@ package biz
 
 import (
 	"context"
-	"github.com/alibabacloud-go/ecs-20140526/v4/client"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ims/v2/model"
 )
 
 // ImageResponse is a Greater repo.
 type ImageResponse interface {
-	ListImage(context context.Context, accessKeyId, accessKeySecret, endpoint, regionId string) ([]*client.DescribeImagesResponseBodyImagesImage, error)
+	ListImages(context.Context, string, string, string, *model.GlanceListImagesRequest) (*model.GlanceListImagesResponse, error)
 }
 
 // ImageUseCase is a Image UseCase.
@@ -22,7 +22,7 @@ func NewImageUseCase(repo ImageResponse, logger log.Logger) *ImageUseCase {
 	return &ImageUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// ListImage List Image
-func (uc *ImageUseCase) ListImage(ctx context.Context, accessKeyId, accessKeySecret, endpoint, regionId string) ([]*client.DescribeImagesResponseBodyImagesImage, error) {
-	return uc.repo.ListImage(ctx, accessKeyId, accessKeySecret, endpoint, regionId)
+// ListImages List all Images
+func (uc *ImageUseCase) ListImages(ctx context.Context, accessKey, secretKey, regionId string, request *model.GlanceListImagesRequest) (*model.GlanceListImagesResponse, error) {
+	return uc.repo.ListImages(ctx, accessKey, secretKey, regionId, request)
 }
