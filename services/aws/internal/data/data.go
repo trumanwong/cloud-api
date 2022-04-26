@@ -11,7 +11,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewGreeterRepo)
+var ProviderSet = wire.NewSet(NewData, NewInstanceRepo, NewInstanceTypeRepo, NewRegionRepo, NewImageRepo)
 
 // Data .
 type Data struct {
@@ -26,7 +26,7 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	return &Data{}, cleanup, nil
 }
 
-func newClient(accessKeyId, secretAccessKey, region string) (*ec2.Client, error) {
+func getClient(accessKeyId, secretAccessKey, region string) (*ec2.Client, error) {
 	if len(region) == 0 {
 		region = "us-east-1"
 	}

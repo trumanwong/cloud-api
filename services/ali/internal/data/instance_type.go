@@ -20,7 +20,7 @@ func NewInstanceTypeRepo(data *Data, logger log.Logger) biz.InstanceTypeResponse
 	}
 }
 
-func (r *instanceTypeResponse) ListAll(ctx context.Context, accessKeyId, accessKeySecret, endpoint string) ([]*ecs20140526.DescribeInstanceTypesResponseBodyInstanceTypesInstanceType, error) {
+func (r *instanceTypeResponse) ListInstanceTypes(ctx context.Context, accessKeyId, accessKeySecret, endpoint string) (*ecs20140526.DescribeInstanceTypesResponse, error) {
 	client, err := getClient(
 		accessKeyId,
 		accessKeySecret,
@@ -34,5 +34,5 @@ func (r *instanceTypeResponse) ListAll(ctx context.Context, accessKeyId, accessK
 	if err != nil {
 		return nil, err
 	}
-	return result.Body.InstanceTypes.InstanceType, nil
+	return result, nil
 }

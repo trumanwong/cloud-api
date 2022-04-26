@@ -17,6 +17,8 @@ service Instance {
   rpc CreateInstances (CreateInstancesRequest) returns (CreateInstancesResponse);
   // 实例列表
   rpc ListInstances (ListInstancesRequest) returns (ListInstancesResponse);
+  // 查询任务的执行状态
+  rpc ShowJob(ShowJobRequest) returns (ShowJobResponse);
   // 开机
   rpc StartInstances(StartInstancesRequest) returns (StartInstancesResponse);
   // 关机
@@ -61,126 +63,236 @@ message CreateInstancesRequest {
   string name = 6;
   // 实例规格
   string instance_type = 7;
-  // 系统盘大小
-  string system_disk_size = 8;
+  // 待创建云服务器所属虚拟私有云(简称VPC),需要指定已创建VPC的ID,UUID格式。
+  string vpc_id = 8;
+  // 待创建云服务器的网卡信息。  约束：  - 网卡对应的子网（subnet）必须属于vpcid对应的VPC。 - 当前单个云服务器支持最多挂载12张网卡。 - 不同的规格对网卡上限有一定的区别，参考[规格清单](https://support.huaweicloud.com/productdesc-ecs/zh-cn_topic_0159822360.html)。
+  message Nic {
+    // 待创建云服务器所在的子网信息,需要指定vpcid对应VPC下的子网ID,UUID格式。
+    string subnet_id = 1;
+  }
+  // 待创建云服务器的网卡信息。  约束：  - 网卡对应的子网（subnet）必须属于vpcid对应的VPC。 - 当前单个云服务器支持最多挂载12张网卡。 - 不同的规格对网卡上限有一定的区别，参考[规格清单](https://support.huaweicloud.com/productdesc-ecs/zh-cn_topic_0159822360.html)。
+  repeated Nic nics = 9;
+  message RootVolume {
+    // 云服务器系统盘对应的磁盘类型，需要与系统所提供的磁盘类型相匹配。  - SATA：普通IO磁盘类型。 - SAS：高IO磁盘类型。 - SSD：超高IO磁盘类型。 - co-p1：高IO (性能优化Ⅰ型) - uh-l1：超高IO (时延优化)  > 说明： >  > 对于HANA云服务器、HL1型云服务器、HL2型云服务器，需使用co-p1和uh-l1两种磁盘类型。对于其他类型的云服务器，不能使用co-p1和uh-l1两种磁盘类型。
+    string volume_type = 1;
+
+    // 系统盘大小，容量单位为GB， 输入大小范围为[1,1024]。  约束：  - 系统盘大小取值应不小于镜像支持的系统盘的最小值(镜像的min_disk属性)。 - 若该参数没有指定或者指定为0时，系统盘大小默认取值为镜像中系统盘的最小值(镜像的min_disk属性)。  > 说明：  > 镜像系统盘的最小值(镜像的min_disk属性)可在控制台中点击镜像详情查看。或通过调用“查询镜像详情（OpenStack原生）”API获取，详细操作请参考[《镜像服务API参考》](https://support.huaweicloud.com/api-ims/ims_03_0702.html)中“查询镜像详情（OpenStack原生）”章节。
+    int32 size = 2;
+  }
+  RootVolume root_volume = 10;
   // 是否为instance_name自动添加有序后缀（默认false）
-  bool unique_suffix = 9;
+  bool unique_suffix = 11;
   // 创建数量(1-100，默认1)
   // 不传该字段时默认取值为1。 租户的配额足够时,最大值为500。
-  uint32 amount = 10;
+  int32 amount = 12;
   // 实例密码
-  string password = 11;
+  string password = 13;
   // 是否只预检此次请求
   // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式等。
   // 如果检查不通过，则返回对应错误。
   // 如果检查通过，则返回202状态码。
   // false：发送正常请求，通过检查后并且执行创建云服务器请求。
-  bool dry_run = 12;
+  bool dry_run = 14;
 }
 
 message CreateInstancesResponse {
-  // 阿里云请求id
-  string request_id = 1;
-  // 订单id，该参数只有创建包年包月ECS实例（请求参数InstanceChargeType=PrePaid）时有返回值
+  // 提交任务成功后返回的任务ID，用户可以使用该ID对任务执行情况进行查询。
+  string job_id = 1;
+  // 订单号，创建包年包月的弹性云服务器时返回该参数。
   string order_id = 2;
-  // 订单成交价
-  float trade_price = 3;
-  // 实例id列表
-  repeated string instance_id_sets = 4;
+  // 云服务器ID列表。  通过云服务器ID查询云服务器详情 ，若返回404 可能云服务器还在创建或者已经创建失败。
+  repeated string server_ids = 3;
 }
 
 message ListInstancesRequest {
-  string access_key_id = 1;
-  string access_key_secret = 2;
-  string endpoint = 3;
-  // 实例所属的地域ID
-  string region_id = 4;
-  // 实例状态列表的页码，起始值1，默认值1
-  uint32 page_number = 5;
-  // 分页查询时设置的每页行数
-  uint32 page_size = 6;
-  // 查询凭证（Token），取值为上一次API调用返回的NextToken参数值
-  string next_token = 7;
+  string access_key = 1;
+  string secret_key = 2;
+  // 区域id
+  string region_id = 3;
+  // project_id
+  string project_id = 4;
+  // 查询返回云服务器当前页面的大小。每页最多返回1000台云服务器的信息。
+  int32 limit = 5;
+  // 页码。 当前页面数，默认为1。  取值大于等于0，取值为0时返回第1页。
+  int32 offset = 6;
+  // 云服务器名称,匹配规则为模糊匹配。
+  string name = 7;
 }
 
 message ListInstancesResponse {
-  string request_id = 1;
-  // 实例状态列表的页码，起始值1，默认值1
-  uint32 page_number = 2;
-  // 分页查询时设置的每页行数
-  uint32 page_size = 3;
-  // 查询到的实例总数
-  uint32 total_count = 4;
-  // 本次调用返回的查询凭证值
-  string next_token = 5;
   message Instance {
-    // 实例ID
-    string instance_id = 1;
-    // 实例名称
-    string instance_name = 2;
-    // 实例规格
-    string instance_type = 3;
-    // 实例的计费方式
-    string instance_charge_type = 4;
-    // 实例所属地域ID
-    string region_id = 5;
-    // vCPU数
-    uint32 cpu = 6;
-    // 实例操作系统的英文名称
-    string os_name_en = 7;
-    // 实例状态
-    string status = 8;
-    // 实例创建时间，UTC+0时间
-    string creation_time = 9;
-    // 实例网络类型
-    string instance_network_type = 10;
-    // 内存大小，单位为MiB
-    uint32 memory = 11;
-    // 实例规格附带的GPU类型
-    string gpu_spec = 12;
-    // 按量付费实例的自动释放时间
-    string auto_release_time = 13;
-    // 实例规格附带的GPU数量
-    uint32 gpu_amount = 14;
-    // 实例的操作系统类型
-    string os_type = 15;
-    // 过期时间
-    string expired_time = 16;
-    // 实例最近一次的启动时间
-    string start_time = 17;
-    // 实例公网IP地址
-    repeated string public_ip_address = 18;
-    // 经典网络类型实例的内网IP地址
-    repeated string inner_ip_address = 19;
-    // HPC实例的Rdma网络IP
-    repeated string rdma_ip_address = 20;
-    // 实例所属安全组集合
-    repeated string security_group_ids = 21;
-    // 弹性公网IP绑定信息
-    message EipAddress {
-      // 弹性公网IP的ID
-      string allocation_id = 1;
-      // 是否可以解绑弹性公网IP
-      bool is_support_un_associate = 2;
-      // 弹性公网IP的计费方式
-      string internal_charge_type = 3;
-      // 弹性公网IP
-      string ip_address = 4;
-      // 弹性公网IP
-      uint32 bandwidth = 5;
+    // 弹性云服务器状态。  取值范围：  ACTIVE、BUILD、DELETED、ERROR、HARD_REBOOT、MIGRATING、PAUSED、REBOOT、REBUILD、RESIZE、REVERT_RESIZE、SHUTOFF、SHELVED、SHELVED_OFFLOADED、SOFT_DELETED、SUSPENDED、VERIFY_RESIZE  弹性云服务器状态说明请参考[云服务器状态](https://support.huaweicloud.com/api-ecs/ecs_08_0002.html)
+    string status = 1;
+    // 弹性云服务器更新时间。  时间格式例如：2019-05-22T03:30:52Z
+    string updated = 2;
+    // 弹性云服务器自动释放时间。  时间格式例如：2020-01-19T03:30:52Z
+    string auto_terminate_time = 3;
+    // 弹性云服务器所在主机的主机ID。
+    string host_id = 4;
+    // 弹性云服务器所在主机的主机名称。
+    string os_ext_srv_attr_host = 5;
+    // 弹性云服务器的网络属性。
+    message ServerAddress {
+      // IP地址版本。  - “4”：代表IPv4。 - “6”：代表IPv6。
+      string version = 1;
+      // IP地址。
+      string addr = 2;
+      // IP地址类型。  - fixed：代表私有IP地址。 - floating：代表浮动IP地址。
+      string os_ext_ips_type = 3;
+      // MAC地址。
+      string os_ext_ips_mac_mac_addr = 4;
+      // IP地址对应的端口ID。
+      string os_ext_ip_sport_id = 5;
     }
-    EipAddress eip_address = 22;
-    // 实例是否可以挂载数据盘
-    bool device_available = 23;
-    // 实例挂载的本地存储容量
-    uint64 local_storage_capacity = 24;
-    // 实例挂载的本地存储数量
-    uint32 local_storage_amount = 25;
-    // 实例运行的镜像ID
-    string image_id = 26;
+    message ServerAddresses {
+      repeated ServerAddress server_addresses = 1;
+    }
+    map<string, ServerAddresses> addresses = 6;
+    // 弹性云服务器使用的密钥对名称。
+    string key_name = 7;
+    // 镜像id
+    string image_id = 8;
+    // 扩展属性，弹性云服务器当前任务的状态。  取值范围请参考[云服务器状态](https://support.huaweicloud.com/api-ecs/ecs_08_0002.html)表3。
+    string os_ext_sts_task_state = 9;
+    // 扩展属性，弹性云服务器当前状态。  云服务器状态说明请参考[云服务器状态](https://support.huaweicloud.com/api-ecs/ecs_08_0002.html)。
+    string os_ext_sts_vm_state = 10;
+    // 扩展属性，弹性云服务器别名。
+    string os_ext_srv_attr_instance_name = 11;
+    // 扩展属性，弹性云服务器所在虚拟化主机名。
+    string os_ext_srv_attr_hypervisor_hostname = 12;
+    message InstanceType {
+      // 弹性云服务器规格ID。
+      string id = 1;
+      // 弹性云服务器规格名称。
+      string name = 2;
+      // 该云服务器规格对应要求系统盘大小，0为不限制。此字段在本系统中无效。
+      string disk = 3;
+      // 该云服务器规格对应的CPU核数。
+      string vcpus = 4;
+      // 该云服务器规格对应的内存大小，单位为MB。
+      string ram = 5;
+    }
+    InstanceType instance_type = 13;
+    // 弹性云服务器ID，格式为UUID。
+    string id = 14;
+    // 弹性云服务器所属安全组列表。
+    message  SecurityGroup {
+      // 安全组名称或者UUID。
+      string name = 1;
+      // 安全组ID。
+      string id = 2;
+    }
+    repeated SecurityGroup security_groups = 15;
+    // 扩展属性，弹性云服务器所在可用区名称。
+    string os_ext_az_availability_zone = 16;
+    // 创建弹性云服务器的用户ID，格式为UUID。
+    string user_id = 17;
+    // 弹性云服务器名称。
+    string name = 18;
+    // 弹性云服务器创建时间。  时间格式例如：2019-05-22T03:19:19Z
+    string created = 19;
+    // 弹性云服务器所属租户ID，即项目id，和project_id表示相同的概念，格式为UUID。
+    string tenant_id = 20;
+    // 扩展属性， diskConfig的类型。  - MANUAL，镜像空间不会扩展。 - AUTO，系统盘镜像空间会自动扩展为与flavor大小一致。
+    string os_dcf_disk_config = 21;
+    // 预留属性。
+    string access_ipv4 = 22;
+    // 预留属性。
+    string access_ipv6 = 23;
+    message ServerFault {
+      // 错误码。
+      int32 code = 1;
+      // 异常出现的时间。
+      string created = 2;
+      // 异常描述信息。
+      string message = 3;
+      // 异常详情信息。
+      string details = 4;
+    }
+    ServerFault fault = 24;
+    // 弹性云服务器进度。
+    int32 progress = 25;
+    // 扩展属性，弹性云服务器电源状态。
+    int32 os_ext_sts_power_state = 26;
+    // config drive信息。
+    string config_drive = 27;
+    // 弹性云服务器元数据。  > 说明： >  > 元数据包含系统默认添加字段和用户设置的字段。  系统默认添加字段  1. charging_mode 云服务器的计费类型。  - “0”：按需计费（即postPaid-后付费方式）。 - “1”：按包年包月计费（即prePaid-预付费方式）。\"2\"：竞价实例计费  2. metering.order_id 按“包年/包月”计费的云服务器对应的订单ID。  3. metering.product_id 按“包年/包月”计费的云服务器对应的产品ID。  4. vpc_id 云服务器所属的虚拟私有云ID。  5. EcmResStatus 云服务器的冻结状态。  - normal：云服务器正常状态（未被冻结）。 - freeze：云服务器被冻结。  > 当云服务器被冻结或者解冻后，系统默认添加该字段，且该字段必选。  6. metering.image_id 云服务器操作系统对应的镜像ID  7.  metering.imagetype 镜像类型，目前支持：  - 公共镜像（gold） - 私有镜像（private） - 共享镜像（shared）  8. metering.resourcespeccode 云服务器对应的资源规格。  9. image_name 云服务器操作系统对应的镜像名称。  10. os_bit 操作系统位数，一般取值为“32”或者“64”。  11. lockCheckEndpoint 回调URL，用于检查弹性云服务器的加锁是否有效。  - 如果有效，则云服务器保持锁定状态。 - 如果无效，解除锁定状态，删除失效的锁。  12. lockSource 弹性云服务器来自哪个服务。订单加锁（ORDER）  13. lockSourceId 弹性云服务器的加锁来自哪个ID。lockSource为“ORDER”时，lockSourceId为订单ID。  14. lockScene 弹性云服务器的加锁类型。  - 按需转包周期（TO_PERIOD_LOCK）  15. virtual_env_type  - IOS镜像创建虚拟机，\"virtual_env_type\": \"IsoImage\" 属性； - 非IOS镜像创建虚拟机，在19.5.0版本以后创建的虚拟机将不会添加virtual_env_type 属性，而在此之前的版本创建的虚拟机可能会返回\"virtual_env_type\": \"FusionCompute\"属性 。  > virtual_env_type属性不允许用户增加、删除和修改。  16. metering.resourcetype 云服务器对应的资源类型。  17. os_type 操作系统类型，取值为：Linux、Windows。  18. cascaded.instance_extrainfo 系统内部虚拟机扩展信息。  19. __support_agent_list 云服务器是否支持企业主机安全、主机监控。  - “hss”：企业主机安全 -  “ces”：主机监控  20. agency_name 委托的名称。  委托是由租户管理员在统一身份认证服务（Identity and Access Management，IAM）上创建的，可以为弹性云服务器提供访问云服务的临时凭证。
+    map<string, string> metadata = 28;
+    // 弹性云服务器启动时间。时间格式例如：2019-05-22T03:23:59.000000
+    string os_srv_usg_launched_at = 29;
+    // 弹性云服务器删除时间。  时间格式例如：2019-05-22T03:23:59.000000
+    string os_srv_usg_terminated_at = 30;
+    message ServerExtendVolumeAttachment {
+      // 磁盘ID，格式为UUID。
+      string id = 1;
+      // 删弹性云服务器时是否一并删除该磁盘。  - true：是 - false：否 微版本2.3及以上版本支持。
+      string delete_on_termination = 2;
+      // 启动标识，“0”代表启动盘，“-1“代表非启动盘。
+      string boot_index = 3;
+      // 云硬盘挂载盘符，即磁盘挂载点。
+      string device = 4;
+    }
+    // 挂载到弹性云服务器上的磁盘。
+    repeated ServerExtendVolumeAttachment os_extended_volumes_volumes_Attached = 31;
+    // 弹性云服务器的描述信息。
+    string description = 32;
+    // nova-compute状态。  - UP：服务正常 - UNKNOWN：状态未知 - DOWN：服务异常 - MAINTENANCE：维护状态 - 空字符串：弹性云服务器无主机信息
+    string host_status = 33;
+    // 弹性云服务器的主机名。
+    string os_ext_srv_attr_hostname = 34;
+    // 批量创建场景，弹性云服务器的预留ID。
+    string os_ext_srv_attr_reservation_id = 35;
+    // 批量创建场景，弹性云服务器的启动顺序。
+    int32 os_ext_srv_attr_launch_index = 36;
+    // 若使用AMI格式的镜像，则表示kernel image的UUID；否则，留空。
+    string os_ext_srv_attr_kernel_id = 37;
+    // 若使用AMI格式镜像，则表示ramdisk image的UUID；否则，留空。
+    string os_ext_srv_attr_ramdisk_id = 38;
+    // 弹性云服务器系统盘的设备名称。
+    string os_ext_srv_attr_root_device_name = 39;
+    // 创建弹性云服务器时指定的user_data。
+    string os_ext_srv_attr_user_data = 40;
+    // 弹性云服务器是否为锁定状态。  - true：锁定 - false：未锁定
+    bool locked = 41;
+    // 弹性云服务器标签。
+    repeated string tags = 42;
+    message ServerSchedulerHints {
+      // 反亲和性组信息。  UUID格式。
+      repeated string group = 1;
+      // 在专属主机或共享池中创建弹性云服务器。默认为在共享池创建。值为： shared或dedicated。  - shared：表示共享池。 - dedicated:表示专属主机。  创建与查询此值均有效。
+      repeated string tenancy = 2;
+      // 专属主机ID。  此属性仅在tenancy值为dedicated时有效。  不指定此属性，系统将自动分配租户可自动放置弹性云服务器的专属主机。  创建与查询此值均有效。
+      repeated string dedicated_host_id = 3;
+    }
+    ServerSchedulerHints os_scheduler_hints = 43;
+    // 弹性云服务器所属的企业项目ID。
+    string enterprise_project_id = 44;
+    // 弹性云服务器系统标签
+    message ServerSystemTag {
+      // 系统标签的Key值。
+      string key = 1;
+      // 系统标签的value值。
+      string value = 2;
+    }
+    // 弹性云服务器系统标签。
+    repeated ServerSystemTag sys_tags = 45;
+    message CpuOptions {
+      // CPU超线程数， 决定CPU是否开启超线程
+      int32 hw_cpu_threads = 1;
+    }
+    CpuOptions cpu_options = 46;
+    message Hypervisor {
+      // hypervisor类型
+      string hypervisor_type = 1;
+      // hypervisor csd信息
+      string csd_hypervisor = 2;
+    }
+    Hypervisor hypervisor = 47;
   }
-  // 实例信息
-  repeated Instance instances = 6;
+  // 弹性云服务器详情列表,具体参照-查询云服务器详情接口。查询级别不同,返回的详情不同。
+  repeated Instance instances = 1;
+  // 弹性云服务器的列表总数。
+  int32 count = 2;
 }
 
 message ListRegionsRequest {
@@ -361,78 +473,68 @@ message ListInstanceTypesResponse {
 }
 
 message StartInstancesRequest {
-  string access_key_id = 1;
-  string access_key_secret = 2;
-  string endpoint = 3;
-  repeated string instance_ids = 4;
-  // 是否只预检此次请求。取值范围：
-  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
-  // false（默认）：发送正常请求，通过检查后直接创建实例。
-  bool dry_run = 5;
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 云服务器id列表
+  repeated ServerId servers = 5;
 }
 
 message StartInstancesResponse {
-  // 请求ID
-  string request_id = 1;
-  // 实例操作结果错误码。返回值200为成功
-  string code = 2;
-  // 实例操作返回错误信息。返回值success为成功
-  string message = 3;
-  // 实例ID
-  string instance_id = 4;
-  // 实例当前状态
-  string current_status = 5;
-  // 操作前实例的状态
-  string previous_status = 6;
-  // 是否只预检此次请求。取值范围：
-  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
-  // false（默认）：发送正常请求，通过检查后直接创建实例。
-  bool dry_run = 7;
+  string job_id = 1;
 }
 
 message StopInstancesRequest {
-  string access_key_id = 1;
-  string access_key_secret = 2;
-  string endpoint = 3;
-  repeated string instance_ids = 4;
-  // 是否只预检此次请求。取值范围：
-  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
-  // false（默认）：发送正常请求，通过检查后直接创建实例。
-  bool dry_run = 5;
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 云服务器id列表
+  repeated ServerId servers = 5;
+  // 关机类型，默认为SOFT：  - SOFT：普通关机（默认）。 - HARD：强制关机。
+  string stop_type = 6;
 }
 
 message StopInstancesResponse {
-  string request_id = 1;
+  string job_id = 1;
 }
 
 message RebootInstancesRequest {
-  string access_key_id = 1;
-  string access_key_secret = 2;
-  string endpoint = 3;
-  repeated string instance_ids = 4;
-  // 是否只预检此次请求。取值范围：
-  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
-  // false（默认）：发送正常请求，通过检查后直接创建实例。
-  bool dry_run = 5;
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 云服务器id列表
+  repeated ServerId servers = 5;
+  // 重启类型，默认为SOFT：  - SOFT：普通关机（默认）。 - HARD：强制关机。
+  string restart_type = 6;
 }
 
 message RebootInstancesResponse {
-  string request_id = 1;
+  string job_id = 1;
+}
+
+message ServerId {
+  // 云服务器ID。
+  string id = 1;
 }
 
 message DeleteInstancesRequest {
-  string access_key_id = 1;
-  string access_key_secret = 2;
-  string endpoint = 3;
-  repeated string instance_ids = 4;
-  // 是否只预检此次请求。取值范围：
-  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
-  // false（默认）：发送正常请求，通过检查后直接创建实例。
-  bool dry_run = 5;
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 配置删除云服务器是否删除云服务器绑定的弹性IP。如果选择不删除，则系统仅做解绑定操作，保留弹性IP资源。 取值为true或false，默认为false。   - true：删除云服务器时会同时删除绑定在云服务器上的弹性IP。  - false：删除云服务器时，仅解绑定在云服务器上的弹性IP，不删除弹性IP
+  bool delete_public_ip = 5;
+  // 配置删除云服务器是否删除云服务器对应的数据盘，如果选择不删除，则系统仅做解绑定操作，保留云磁盘资源。 取值为false或true，默认为false。  - true：删除云服务器时会同时删除挂载在云服务器上的数据盘。 - false：删除云服务器时，仅卸载云服务器上挂载的数据盘，不删除该数据盘。
+  bool delete_volume = 6;
+  // 所需要删除的云服务器列表。
+  repeated ServerId servers = 7;
 }
 
 message DeleteInstancesResponse {
-  string request_id = 1;
+  string job_id = 1;
 }
 
 message Vpc {
@@ -665,7 +767,7 @@ message UpdateSubnetRequest {
   // 功能说明：子网描述 取值范围：0-255个字符，不能包含“<”和“>”。
   string description = 8;
   // 功能说明：是否创建ipv6子网 取值范围：true（开启），false（关闭）
-  string ipv6_enable = 9;
+  bool ipv6_enable = 9;
   // 功能说明：子网是否开启dhcp功能 取值范围：true（开启），false（关闭） 约束：不填时默认为true。当设置为false时，会导致新创建的ECS无法获取IP地址，cloudinit无法注入账号密码，请谨慎操作。
   bool dhcp_enable = 10;
   // 功能说明：子网dns服务器地址1 约束：ip格式 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
@@ -679,7 +781,10 @@ message UpdateSubnetRequest {
 }
 
 message UpdateSubnetResponse {
-  Subnet subnet = 1;
+  // uuid形式的一个资源标识。
+  string subnet_id = 1;
+  // 功能说明：子网的状态。   取值范围：ACTIVE,UNKNOWN,ERROR       ACTIVE表示子网已挂载到ROUTER上       UNKNOWN表示子网还未挂载到ROUTER上       ERROR表示子网状态故障
+  string status = 2;
 }
 
 message DeleteSubnetRequest {
@@ -707,4 +812,34 @@ message ShowSubnetRequest {
 
 message ShowSubnetResponse {
   Subnet subnet = 1;
+}
+
+message ShowJobRequest {
+  string access_key = 1;
+  string secret_key = 2;
+  string region_id = 3;
+  string project_id = 4;
+  // 异步请求的任务ID
+  string job_id = 5;
+}
+
+message ShowJobResponse {
+  // 开始时间。
+  string begin_time = 1;
+  // 查询Job的API请求出现错误时，返回的错误码。
+  string code = 2;
+  // 结束时间。
+  string end_time = 3;
+  // Job执行失败时的错误码。  Job执行成功后，该值为空。
+  string error_code = 4;
+  // Job执行失败时的错误原因。  Job执行成功后，该值为空。
+  string fail_reason = 5;
+  // 异步请求的任务ID。
+  string job_id = 6;
+  // 异步请求的任务类型。
+  string job_type = 7;
+  // 查询Job的API请求出现错误时，返回的错误消息。
+  string message = 8;
+  // Job的状态。  - SUCCESS：成功。  - RUNNING：运行中。  - FAIL：失败。  - INIT：正在初始化。
+  string status = 9;
 }

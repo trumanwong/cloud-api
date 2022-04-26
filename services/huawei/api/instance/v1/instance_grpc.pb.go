@@ -32,6 +32,8 @@ type InstanceClient interface {
 	CreateInstances(ctx context.Context, in *CreateInstancesRequest, opts ...grpc.CallOption) (*CreateInstancesResponse, error)
 	// 实例列表
 	ListInstances(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error)
+	// 查询任务的执行状态
+	ShowJob(ctx context.Context, in *ShowJobRequest, opts ...grpc.CallOption) (*ShowJobResponse, error)
 	// 开机
 	StartInstances(ctx context.Context, in *StartInstancesRequest, opts ...grpc.CallOption) (*StartInstancesResponse, error)
 	// 关机
@@ -109,6 +111,15 @@ func (c *instanceClient) CreateInstances(ctx context.Context, in *CreateInstance
 func (c *instanceClient) ListInstances(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error) {
 	out := new(ListInstancesResponse)
 	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListInstances", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *instanceClient) ShowJob(ctx context.Context, in *ShowJobRequest, opts ...grpc.CallOption) (*ShowJobResponse, error) {
+	out := new(ShowJobResponse)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ShowJob", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -255,6 +266,8 @@ type InstanceServer interface {
 	CreateInstances(context.Context, *CreateInstancesRequest) (*CreateInstancesResponse, error)
 	// 实例列表
 	ListInstances(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error)
+	// 查询任务的执行状态
+	ShowJob(context.Context, *ShowJobRequest) (*ShowJobResponse, error)
 	// 开机
 	StartInstances(context.Context, *StartInstancesRequest) (*StartInstancesResponse, error)
 	// 关机
@@ -304,6 +317,9 @@ func (UnimplementedInstanceServer) CreateInstances(context.Context, *CreateInsta
 }
 func (UnimplementedInstanceServer) ListInstances(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListInstances not implemented")
+}
+func (UnimplementedInstanceServer) ShowJob(context.Context, *ShowJobRequest) (*ShowJobResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowJob not implemented")
 }
 func (UnimplementedInstanceServer) StartInstances(context.Context, *StartInstancesRequest) (*StartInstancesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartInstances not implemented")
@@ -446,6 +462,24 @@ func _Instance_ListInstances_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstanceServer).ListInstances(ctx, req.(*ListInstancesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Instance_ShowJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowJobRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstanceServer).ShowJob(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.instance.v1.Instance/ShowJob",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstanceServer).ShowJob(ctx, req.(*ShowJobRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -728,6 +762,10 @@ var Instance_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListInstances",
 			Handler:    _Instance_ListInstances_Handler,
+		},
+		{
+			MethodName: "ShowJob",
+			Handler:    _Instance_ShowJob_Handler,
 		},
 		{
 			MethodName: "StartInstances",

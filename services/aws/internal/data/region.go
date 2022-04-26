@@ -22,7 +22,7 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 }
 
 func (r *regionResponse) ListAll(ctx context.Context, accessKeyId, secretAccessKey string, request *ec2.DescribeRegionsInput) ([]types.Region, error) {
-	client, err := newClient(accessKeyId, secretAccessKey, "")
+	client, err := getClient(accessKeyId, secretAccessKey, "")
 	if err != nil {
 		return nil, err
 	}

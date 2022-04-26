@@ -21,7 +21,7 @@ func NewImageRepo(data *Data, logger log.Logger) biz.ImageResponse {
 	}
 }
 
-func (r *imageResponse) ListImage(ctx context.Context, accessKeyId, accessKeySecret, endpoint, regionId string) ([]*ecs20140526.DescribeImagesResponseBodyImagesImage, error) {
+func (r *imageResponse) ListImages(ctx context.Context, accessKeyId, accessKeySecret, endpoint, regionId string) (*ecs20140526.DescribeImagesResponse, error) {
 	client, err := getClient(
 		accessKeyId,
 		accessKeySecret,
@@ -37,5 +37,5 @@ func (r *imageResponse) ListImage(ctx context.Context, accessKeyId, accessKeySec
 	if err != nil {
 		return nil, err
 	}
-	return result.Body.Images.Image, nil
+	return result, nil
 }

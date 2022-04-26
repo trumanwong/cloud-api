@@ -73,3 +73,12 @@ func (r *instanceResponse) DeleteInstances(ctx context.Context, accessKey, secre
 	}
 	return result, nil
 }
+
+func (r *instanceResponse) ShowJob(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.ShowJobRequest) (*model.ShowJobResponse, error) {
+	client := getEcsClient(accessKey, secretKey, regionId, projectId)
+	result, err := client.ShowJob(request)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}

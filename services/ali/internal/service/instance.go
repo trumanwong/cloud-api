@@ -39,75 +39,154 @@ func (service *InstanceService) CreateInstances(ctx context.Context, request *v1
 
 func (service *InstanceService) ListInstances(ctx context.Context, request *v1.ListInstancesRequest) (*v1.ListInstancesResponse, error) {
 	result, err := service.uc.ListInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.DescribeInstancesRequest{
-		RegionId:   tea.String(request.RegionId),
-		PageNumber: tea.Int32(int32(request.PageNumber)),
-		PageSize:   tea.Int32(int32(request.PageSize)),
-		NextToken:  tea.String(request.NextToken),
+		RegionId:     tea.String(request.RegionId),
+		PageNumber:   tea.Int32(int32(request.PageNumber)),
+		PageSize:     tea.Int32(int32(request.PageSize)),
+		NextToken:    tea.String(request.NextToken),
+		InstanceName: tea.String(request.InstanceName),
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	instances := make([]v1.ListInstancesResponse_Instance, len(result.Instances.Instance))
-	for i, v := range result.Instances.Instance {
+	for i, instance := range result.Instances.Instance {
 		publicIpAddress, innerIpAddress, rdmaIpAddress, securityGroupIds := make([]string, 0), make([]string, 0), make([]string, 0), make([]string, 0)
-		if v.PublicIpAddress != nil {
-			for _, v := range v.PublicIpAddress.IpAddress {
+		if instance.PublicIpAddress != nil {
+			for _, v := range instance.PublicIpAddress.IpAddress {
 				publicIpAddress = append(publicIpAddress, *v)
 			}
 		}
-		if v.InnerIpAddress != nil {
-			for _, v := range v.InnerIpAddress.IpAddress {
+		if instance.InnerIpAddress != nil {
+			for _, v := range instance.InnerIpAddress.IpAddress {
 				innerIpAddress = append(innerIpAddress, *v)
 			}
 		}
-		if v.RdmaIpAddress != nil {
-			for _, v := range v.RdmaIpAddress.IpAddress {
+		if instance.RdmaIpAddress != nil {
+			for _, v := range instance.RdmaIpAddress.IpAddress {
 				rdmaIpAddress = append(rdmaIpAddress, *v)
 			}
 		}
-		if v.SecurityGroupIds != nil {
-			for _, v := range v.SecurityGroupIds.SecurityGroupId {
+		if instance.SecurityGroupIds != nil {
+			for _, v := range instance.SecurityGroupIds.SecurityGroupId {
 				securityGroupIds = append(securityGroupIds, *v)
 			}
 		}
 		var eIpAddress *v1.ListInstancesResponse_Instance_EipAddress
-		if v.EipAddress != nil {
+		if instance.EipAddress != nil {
 			eIpAddress = &v1.ListInstancesResponse_Instance_EipAddress{
-				AllocationId:         *v.EipAddress.AllocationId,
-				IsSupportUnAssociate: *v.EipAddress.IsSupportUnassociate,
-				InternalChargeType:   *v.EipAddress.InternetChargeType,
-				IpAddress:            *v.EipAddress.IpAddress,
-				Bandwidth:            uint32(*v.EipAddress.Bandwidth),
+				AllocationId:         *instance.EipAddress.AllocationId,
+				IsSupportUnAssociate: *instance.EipAddress.IsSupportUnassociate,
+				InternalChargeType:   *instance.EipAddress.InternetChargeType,
+				IpAddress:            *instance.EipAddress.IpAddress,
+				Bandwidth:            uint32(*instance.EipAddress.Bandwidth),
+			}
+		}
+		var networkInterfaces []*v1.ListInstancesResponse_Instance_NetworkInterface
+		if instance.NetworkInterfaces != nil {
+			networkInterfaces = make([]*v1.ListInstancesResponse_Instance_NetworkInterface, len(instance.NetworkInterfaces.NetworkInterface))
+			for j, v := range instance.NetworkInterfaces.NetworkInterface {
+				var privateIpSets []*v1.ListInstancesResponse_Instance_NetworkInterface_PrivateIpSet
+				if v.PrivateIpSets != nil {
+					privateIpSets = make([]*v1.ListInstancesResponse_Instance_NetworkInterface_PrivateIpSet, len(v.PrivateIpSets.PrivateIpSet))
+					for k, privateIpSet := range v.PrivateIpSets.PrivateIpSet {
+						privateIpSets[k] = &v1.ListInstancesResponse_Instance_NetworkInterface_PrivateIpSet{
+							PrivateIpAddress: *privateIpSet.PrivateIpAddress,
+							Primary:          *privateIpSet.Primary,
+						}
+					}
+				}
+				var ipv6Sets []*v1.ListInstancesResponse_Instance_NetworkInterface_Ipv6Set
+				if v.Ipv6Sets != nil {
+					ipv6Sets = make([]*v1.ListInstancesResponse_Instance_NetworkInterface_Ipv6Set, len(v.Ipv6Sets.Ipv6Set))
+					for k, ipv6Set := range v.Ipv6Sets.Ipv6Set {
+						ipv6Sets[k] = &v1.ListInstancesResponse_Instance_NetworkInterface_Ipv6Set{Ipv6Address: *ipv6Set.Ipv6Address}
+					}
+				}
+				networkInterfaces[j] = &v1.ListInstancesResponse_Instance_NetworkInterface{
+					Type:               *v.Type,
+					MacAddress:         *v.MacAddress,
+					PrimaryIpAddress:   *v.PrimaryIpAddress,
+					NetworkInterfaceId: *v.NetworkInterfaceId,
+					PrivateIpSets:      privateIpSets,
+					Ipv6Sets:           ipv6Sets,
+				}
+			}
+		}
+		var operationLocks []*v1.ListInstancesResponse_Instance_OperationLock
+		if instance.OperationLocks != nil {
+			operationLocks = make([]*v1.ListInstancesResponse_Instance_OperationLock, len(instance.OperationLocks.LockReason))
+			for j, v := range instance.OperationLocks.LockReason {
+				operationLocks[j] = &v1.ListInstancesResponse_Instance_OperationLock{
+					LockMsg:    *v.LockMsg,
+					LockReason: *v.LockReason,
+				}
+			}
+		}
+		var tags []*v1.ListInstancesResponse_Instance_Tag
+		if instance.Tags != nil {
+			tags = make([]*v1.ListInstancesResponse_Instance_Tag, len(instance.Tags.Tag))
+			for j, v := range instance.Tags.Tag {
+				tags[j] = &v1.ListInstancesResponse_Instance_Tag{
+					TagValue: *v.TagValue,
+					TagKey:   *v.TagKey,
+				}
 			}
 		}
 		instances[i] = v1.ListInstancesResponse_Instance{
-			InstanceId:           *v.InstanceId,
-			InstanceName:         *v.InstanceName,
-			InstanceType:         *v.InstanceType,
-			InstanceChargeType:   *v.InstanceChargeType,
-			RegionId:             *v.RegionId,
-			Cpu:                  uint32(*v.Cpu),
-			OsNameEn:             *v.OSNameEn,
-			Status:               *v.Status,
-			CreationTime:         *v.CreationTime,
-			InstanceNetworkType:  *v.InstanceNetworkType,
-			Memory:               uint32(*v.Memory),
-			GpuSpec:              *v.GPUSpec,
-			AutoReleaseTime:      *v.AutoReleaseTime,
-			GpuAmount:            uint32(*v.GPUAmount),
-			OsType:               *v.OSType,
-			ExpiredTime:          *v.ExpiredTime,
-			StartTime:            *v.StartTime,
-			PublicIpAddress:      publicIpAddress,
-			InnerIpAddress:       innerIpAddress,
-			RdmaIpAddress:        rdmaIpAddress,
-			SecurityGroupIds:     securityGroupIds,
-			EipAddress:           eIpAddress,
-			DeviceAvailable:      *v.DeviceAvailable,
-			LocalStorageCapacity: uint64(*v.LocalStorageCapacity),
-			LocalStorageAmount:   uint32(*v.LocalStorageAmount),
-			ImageId:              *v.ImageId,
+			CreationTime:               *instance.CreationTime,
+			SerialNumber:               *instance.SerialNumber,
+			Status:                     *instance.Status,
+			DeploymentSetId:            *instance.DeploymentSetId,
+			KeyPairName:                *instance.KeyPairName,
+			SaleCycle:                  *instance.SaleCycle,
+			DeviceAvailable:            *instance.DeviceAvailable,
+			LocalStorageCapacity:       *instance.LocalStorageCapacity,
+			Description:                *instance.Description,
+			SpotDuration:               *instance.SpotDuration,
+			InstanceNetworkType:        *instance.InstanceNetworkType,
+			InstanceName:               *instance.InstanceName,
+			OsNameEn:                   *instance.OSNameEn,
+			HpcClusterId:               *instance.HpcClusterId,
+			Memory:                     *instance.Memory,
+			OsName:                     *instance.OSName,
+			DeploymentSetGroupNo:       *instance.DeploymentSetGroupNo,
+			ImageId:                    *instance.ImageId,
+			GpuSpec:                    *instance.GPUSpec,
+			AutoReleaseTime:            *instance.AutoReleaseTime,
+			DeletionProtection:         *instance.DeletionProtection,
+			StoppedMode:                *instance.StoppedMode,
+			GpuAmount:                  *instance.GPUAmount,
+			HostName:                   *instance.HostName,
+			InstanceId:                 *instance.InstanceId,
+			InternetMaxBandwidthOut:    *instance.InternetMaxBandwidthOut,
+			InternetMaxBandwidthIn:     *instance.InternetMaxBandwidthIn,
+			InstanceType:               *instance.InstanceType,
+			InstanceChargeType:         *instance.InstanceChargeType,
+			RegionId:                   *instance.RegionId,
+			IoOptimized:                *instance.IoOptimized,
+			StartTime:                  *instance.StartTime,
+			Cpu:                        *instance.Cpu,
+			LocalStorageAmount:         *instance.LocalStorageAmount,
+			ExpiredTime:                *instance.ExpiredTime,
+			ResourceGroupId:            *instance.ResourceGroupId,
+			InternetChargeType:         *instance.InternetChargeType,
+			ZoneId:                     *instance.ZoneId,
+			Recyclable:                 *instance.Recyclable,
+			CreditSpecification:        *instance.CreditSpecification,
+			InstanceTypeFamily:         *instance.InstanceTypeFamily,
+			OsType:                     *instance.OSType,
+			NetworkInterfaces:          networkInterfaces,
+			OperationLocks:             operationLocks,
+			Tags:                       tags,
+			RdmaIpAddress:              rdmaIpAddress,
+			SecurityGroupIds:           securityGroupIds,
+			PublicIpAddress:            publicIpAddress,
+			InnerIpAddress:             innerIpAddress,
+			VpcAttributes:              nil,
+			EipAddress:                 eIpAddress,
+			DedicatedInstanceAttribute: nil,
+			CpuOptions:                 nil,
 		}
 	}
 	listInstancesResponse := &v1.ListInstancesResponse{

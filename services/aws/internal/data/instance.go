@@ -22,7 +22,7 @@ func NewInstanceRepo(data *Data, logger log.Logger) biz.InstanceResponse {
 }
 
 func (r *instanceResponse) Create(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.RunInstancesInput) (*ec2.RunInstancesOutput, error) {
-	client, err := newClient(
+	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,
 		region,
@@ -39,7 +39,7 @@ func (r *instanceResponse) Create(ctx context.Context, accessKeyId, secretAccess
 }
 
 func (r *instanceResponse) ListInstance(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.DescribeInstancesInput) (*ec2.DescribeInstancesOutput, error) {
-	client, err := newClient(
+	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,
 		region,
@@ -55,7 +55,7 @@ func (r *instanceResponse) ListInstance(ctx context.Context, accessKeyId, secret
 }
 
 func (r *instanceResponse) StartInstance(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.StartInstancesInput) (*ec2.StartInstancesOutput, error) {
-	client, err := newClient(
+	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,
 		region,
@@ -71,7 +71,7 @@ func (r *instanceResponse) StartInstance(ctx context.Context, accessKeyId, secre
 }
 
 func (r *instanceResponse) StopInstance(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.StopInstancesInput) (*ec2.StopInstancesOutput, error) {
-	client, err := newClient(
+	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,
 		region,
@@ -87,7 +87,7 @@ func (r *instanceResponse) StopInstance(ctx context.Context, accessKeyId, secret
 }
 
 func (r *instanceResponse) RebootInstance(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.RebootInstancesInput) (*ec2.RebootInstancesOutput, error) {
-	client, err := newClient(
+	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,
 		region,
@@ -103,7 +103,7 @@ func (r *instanceResponse) RebootInstance(ctx context.Context, accessKeyId, secr
 }
 
 func (r *instanceResponse) DeleteInstance(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) {
-	client, err := newClient(
+	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,
 		region,

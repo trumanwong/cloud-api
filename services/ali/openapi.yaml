@@ -3,8 +3,1113 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: Instance API
     version: 0.0.1
-paths: {}
+paths:
+    /api/images:
+        get:
+            tags:
+                - Instance
+            description: 查询可以使用的镜像资源
+            operationId: Instance_ListImages
+            parameters:
+                - name: accessKeyId
+                  in: query
+                  description: 阿里云AccessKey ID
+                  schema:
+                    type: string
+                - name: accessKeySecret
+                  in: query
+                  description: 阿里云AccessKey Secret
+                  schema:
+                    type: string
+                - name: endpoint
+                  in: query
+                  description: 访问的域名
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 地域id
+                  schema:
+                    type: string
+                - name: status
+                  in: query
+                  description: 查询某种状态下的镜像。取值范围：  Creating：镜像正在创建中。  Waiting：多任务排队中。  Available（默认）：您可以使用的镜像。  UnAvailable：您不能使用的镜像。  CreateFailed：创建失败的镜像。  Deprecated：已弃用的镜像。  支持同时取多个值，值之间以半角逗号（,）隔开。
+                  schema:
+                    type: string
+                - name: imageId
+                  in: query
+                  description: 镜像ID。
+                  schema:
+                    type: string
+                - name: showExpired
+                  in: query
+                  description: 订阅型镜像是否已经超过使用期限。
+                  schema:
+                    type: boolean
+                - name: imageName
+                  in: query
+                  description: 镜像名称
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListImagesResponse'
+    /api/instance:
+        get:
+            tags:
+                - Instance
+            description: 实例列表
+            operationId: Instance_ListInstances
+            parameters:
+                - name: accessKeyId
+                  in: query
+                  description: 阿里云AccessKey ID
+                  schema:
+                    type: string
+                - name: accessKeySecret
+                  in: query
+                  description: 阿里云AccessKey Secret
+                  schema:
+                    type: string
+                - name: endpoint
+                  in: query
+                  description: 访问的域名
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 实例所属的地域ID
+                  schema:
+                    type: string
+                - name: pageNumber
+                  in: query
+                  description: 实例状态列表的页码，起始值1，默认值1
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: pageSize
+                  in: query
+                  description: 分页查询时设置的每页行数。  最大值为100。  默认值为10。
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: nextToken
+                  in: query
+                  description: 查询凭证（Token），取值为上一次API调用返回的NextToken参数值
+                  schema:
+                    type: string
+                - name: instanceName
+                  in: query
+                  description: 实例名称，支持使用通配符*进行模糊搜索。
+                  schema:
+                    type: string
+                - name: dryRun
+                  in: query
+                  description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会查询资源状况。检查项包括AccessKey是否有效、RAM用户的授权情况和是否填写了必需参数。如果检查不通过，则返回对应错误。如果检查通过，会返回错误码DryRunOperation。  false（默认值）：发送正常请求，通过检查后返回2XX HTTP状态码并直接查询资源状况。
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListInstancesResponse'
+        post:
+            tags:
+                - Instance
+            description: 创建实例
+            operationId: Instance_CreateInstances
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateInstancesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateInstancesResponse'
+        delete:
+            tags:
+                - Instance
+            description: 删除实例
+            operationId: Instance_DeleteInstances
+            parameters:
+                - name: accessKeyId
+                  in: query
+                  description: 阿里云AccessKey ID
+                  schema:
+                    type: string
+                - name: accessKeySecret
+                  in: query
+                  description: 阿里云AccessKey Secret
+                  schema:
+                    type: string
+                - name: endpoint
+                  in: query
+                  description: 访问的域名
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 地域id
+                  schema:
+                    type: string
+                - name: force
+                  in: query
+                  description: 是否强制释放运行中（Running）的实例。  true：强制释放运行中（Running）的实例。强制释放相当于断电，实例内存以及存储中的临时数据都会被擦除，无法恢复。  false：正常释放实例，此时实例必须处于已停止（Stopped）状态。  默认值为false。
+                  schema:
+                    type: boolean
+                - name: terminateSubscription
+                  in: query
+                  description: 是否释放已到期的包年包月实例。  默认值为false。
+                  schema:
+                    type: boolean
+                - name: instanceIds
+                  in: query
+                  schema:
+                    type: array
+                    items:
+                        type: string
+                - name: dryRun
+                  in: query
+                  description: 是否只预检此次请求。取值范围： true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。 false（默认）：发送正常请求，通过检查后直接创建实例。
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteInstancesResponse'
+    /api/instance-types:
+        get:
+            tags:
+                - Instance
+            description: 选择实例规格
+            operationId: Instance_ListInstanceTypes
+            parameters:
+                - name: accessKeyId
+                  in: query
+                  description: 阿里云AccessKey ID
+                  schema:
+                    type: string
+                - name: accessKeySecret
+                  in: query
+                  description: 阿里云AccessKey Secret
+                  schema:
+                    type: string
+                - name: endpoint
+                  in: query
+                  description: 访问的域名
+                  schema:
+                    type: string
+                - name: maxResults
+                  in: query
+                  description: 分页查询时每页的最大条目数。最大值：1600    默认值：1600
+                  schema:
+                    type: integer
+                    format: int64
+                - name: nextToken
+                  in: query
+                  description: 查询凭证（Token）。取值为上一次调用该接口返回的NextToken参数值，初次调用接口时无需设置该参数。
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListInstanceTypesResponse'
+    /api/instance/reboot:
+        put:
+            tags:
+                - Instance
+            description: 重启
+            operationId: Instance_RebootInstances
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RebootInstancesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RebootInstancesResponse'
+    /api/instance/start:
+        put:
+            tags:
+                - Instance
+            description: 开机
+            operationId: Instance_StartInstances
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/StartInstancesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StartInstancesResponse'
+    /api/instance/stop:
+        put:
+            tags:
+                - Instance
+            description: 关机
+            operationId: Instance_StopInstances
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/StopInstancesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StopInstancesResponse'
+    /api/regions:
+        get:
+            tags:
+                - Instance
+            description: 查询可以使用的阿里云地域
+            operationId: Instance_ListRegions
+            parameters:
+                - name: accessKeyId
+                  in: query
+                  description: 阿里云AccessKey ID
+                  schema:
+                    type: string
+                - name: accessKeySecret
+                  in: query
+                  description: 阿里云AccessKey Secret
+                  schema:
+                    type: string
+                - name: endpoint
+                  in: query
+                  description: 访问的域名
+                  schema:
+                    type: string
+                - name: instanceChargeType
+                  in: query
+                  description: 实例的计费方式，更多详情，请参见计费概述。取值范围：  PrePaid：包年包月。此时，您必须确认自己的账号支持余额支付或者信用支付，否则将报错InvalidPayMethod。  PostPaid：按量付费。  默认值：PostPaid
+                  schema:
+                    type: string
+                - name: resourceType
+                  in: query
+                  description: 资源类型。取值范围：  instance：ECS实例  disk：磁盘  reservedinstance：预留实例券  scu：存储容量单位包  默认值：instance
+                  schema:
+                    type: string
+                - name: acceptLanguage
+                  in: query
+                  description: 根据汉语、英语和日语筛选返回结果。更多详情，请参见RFC7231。取值范围：  zh-CN：中文  en-US：英文  ja：日文  默认值：zh-CN
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListRegionsResponse'
 components:
-    schemas: {}
+    schemas:
+        CreateInstancesRequest:
+            type: object
+            properties:
+                accessKeyId:
+                    type: string
+                    description: 阿里云AccessKey ID
+                accessKeySecret:
+                    type: string
+                    description: 阿里云AccessKey Secret
+                endpoint:
+                    type: string
+                    description: 访问的域名
+                regionId:
+                    type: string
+                    description: 地域id
+                imageId:
+                    type: string
+                    description: 镜像id
+                name:
+                    type: string
+                    description: 实例名称
+                instanceType:
+                    type: string
+                    description: 实例规格
+                systemDiskSize:
+                    type: string
+                    description: 系统盘大小
+                uniqueSuffix:
+                    type: boolean
+                    description: 是否为instance_name自动添加有序后缀（默认false）
+                amount:
+                    type: integer
+                    description: 创建数量(1-100，默认1)
+                    format: uint32
+                password:
+                    type: string
+                    description: 实例密码
+                dryRun:
+                    type: boolean
+                    description: 是否只预检此次请求。取值范围： true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。 false（默认）：发送正常请求，通过检查后直接创建实例。
+        CreateInstancesResponse:
+            type: object
+            properties:
+                requestId:
+                    type: string
+                    description: 阿里云请求id
+                orderId:
+                    type: string
+                    description: 订单id，该参数只有创建包年包月ECS实例（请求参数InstanceChargeType=PrePaid）时有返回值
+                tradePrice:
+                    type: number
+                    description: 订单成交价
+                    format: float
+                instanceIdSets:
+                    type: array
+                    items:
+                        type: string
+                    description: 实例id列表
+        DeleteInstancesResponse:
+            type: object
+            properties:
+                requestId:
+                    type: string
+                    description: 请求ID。
+        InstanceResponse:
+            type: object
+            properties:
+                code:
+                    type: string
+                    description: 实例操作结果错误码。返回值200为成功
+                message:
+                    type: string
+                    description: 实例操作返回错误信息。返回值success为成功
+                instanceId:
+                    type: string
+                    description: 实例ID
+                currentStatus:
+                    type: string
+                    description: 实例当前状态
+                previousStatus:
+                    type: string
+                    description: 操作前实例的状态
+        Instance_CpuOptions:
+            type: object
+            properties:
+                numa:
+                    type: string
+                    description: 分配的线程数。可能值为2。
+                coreCount:
+                    type: integer
+                    description: 物理CPU核心数。
+                    format: int32
+                threadPerCore:
+                    type: integer
+                    description: CPU线程数。
+                    format: int32
+            description: CPU配置详情。
+        Instance_DedicatedInstanceAttribute:
+            type: object
+            properties:
+                affinity:
+                    type: string
+                    description: 专有宿主机实例是否与专有宿主机关联。可能值：  default：专有宿主机实例不与专有宿主机关联。停机不收费实例重启后，可能会放置在自动资源部署池中的其它专有宿主机上。  host：专有宿主机实例与专有宿主机关联。停机不收费实例重启后，仍放置在原专有宿主机上。
+                tenancy:
+                    type: string
+                    description: 实例的宿主机类型是否为专有宿主机。可能值：  default：实例的宿主机类型不是专有宿主机。  host：实例的宿主机类型为专有宿主机。
+        Instance_EipAddress:
+            type: object
+            properties:
+                allocationId:
+                    type: string
+                    description: 弹性公网IP的ID
+                isSupportUnAssociate:
+                    type: boolean
+                    description: 是否可以解绑弹性公网IP
+                internalChargeType:
+                    type: string
+                    description: 弹性公网IP的计费方式
+                ipAddress:
+                    type: string
+                    description: 弹性公网IP
+                bandwidth:
+                    type: integer
+                    description: 弹性公网IP
+                    format: uint32
+        Instance_NetworkInterface:
+            type: object
+            properties:
+                type:
+                    type: string
+                    description: 弹性网卡类型。可能值：  Primary：主网卡。  Secondary：辅助弹性网卡。
+                macAddress:
+                    type: string
+                    description: 弹性网卡的MAC地址。
+                primaryIpAddress:
+                    type: string
+                    description: 弹性网卡主私有IP地址。
+                networkInterfaceId:
+                    type: string
+                    description: 弹性网卡的ID。
+                privateIpSets:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/NetworkInterface_PrivateIpSet'
+                    description: PrivateIpSet组成的集合。
+                ipv6Sets:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/NetworkInterface_Ipv6Set'
+                    description: 为弹性网卡分配的IPv6地址集合。仅当请求参数AdditionalAttributes.N取值为NETWORK_PRIMARY_ENI_IP时，才会返回该参数值。
+            description: 弹性网卡
+        Instance_OperationLock:
+            type: object
+            properties:
+                lockMsg:
+                    type: string
+                    description: 实例被锁定的描述信息。
+                lockReason:
+                    type: string
+                    description: 锁定类型。可能值：  financial：因欠费被锁定。  security：因安全原因被锁定。  Recycling：抢占式实例的待释放锁定状态。  dedicatedhostfinancial：因为专有宿主机欠费导致ECS实例被锁定。  refunded：因退款被锁定。
+        Instance_Tag:
+            type: object
+            properties:
+                tagValue:
+                    type: string
+                    description: 实例的标签值。
+                tagKey:
+                    type: string
+                    description: 实例的标签键。
+        Instance_VpcAttributes:
+            type: object
+            properties:
+                vpcId:
+                    type: string
+                    description: 专有网络VPC ID。
+                natIpAddress:
+                    type: string
+                    description: 云产品的IP，用于VPC云产品之间的网络互通。
+                vSwitchId:
+                    type: string
+                    description: 虚拟交换机ID。
+                privateIpAddress:
+                    type: array
+                    items:
+                        type: string
+                    description: 私有IP地址。
+            description: 专有网络VPC属性。
+        ListImagesResponse:
+            type: object
+            properties:
+                pageSize:
+                    type: integer
+                    description: 当前分页包含多少条目。
+                    format: int32
+                pageNumber:
+                    type: integer
+                    description: 当前页码。
+                    format: int32
+                requestId:
+                    type: string
+                    description: 请求ID。
+                totalCount:
+                    type: integer
+                    description: 镜像总数
+                    format: int32
+                regionId:
+                    type: string
+                    description: 镜像所属地域ID。
+                images:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ListImagesResponse_Image'
+        ListImagesResponse_Image:
+            type: object
+            properties:
+                creationTime:
+                    type: string
+                    description: 镜像的创建时间
+                status:
+                    type: string
+                    description: 镜像的状态。可能值：  UnAvailable：不可用  Available：可用  Creating：创建中  CreateFailed：创建失败
+                imageFamily:
+                    type: string
+                    description: 镜像族系名称
+                progress:
+                    type: string
+                    description: 镜像完成的进度，单位为百分比。
+                isCopied:
+                    type: boolean
+                    description: 是否是拷贝的镜像。
+                isSupportIoOptimized:
+                    type: boolean
+                    description: 是否可以在I/O优化实例上运行。
+                imageOwnerAlias:
+                    type: string
+                    description: 镜像来源。可能值：    system：阿里云提供的公共镜像。    self：您创建的自定义镜像。    others：其他阿里云用户提供的共享镜像或社区镜像。    marketplace：镜像市场提供的镜像。
+                isSupportCloudInit:
+                    type: boolean
+                    description: 是否支持Cloud Init。
+                imageVersion:
+                    type: string
+                    description: 镜像版本。
+                usage:
+                    type: string
+                    description: 有引用关系的资源类型。可能值：    instance：创建了一台或多台ECS实例。    none：未创建过ECS实例。
+                isSelfShared:
+                    type: string
+                    description: 是否共享过该自定义镜像给其他用户。
+                description:
+                    type: string
+                    description: 描述信息。
+                size:
+                    type: integer
+                    description: 镜像大小，单位：GiB。
+                    format: int32
+                resourceGroupId:
+                    type: string
+                    description: 镜像所在的企业资源组ID。
+                platform:
+                    type: string
+                    description: 操作系统平台。
+                osNameEn:
+                    type: string
+                    description: 操作系统的英文显示名称。
+                imageName:
+                    type: string
+                    description: 镜像的名称。
+                osName:
+                    type: string
+                    description: 操作系统的中文显示名称。
+                imageId:
+                    type: string
+                    description: 镜像ID。
+                osType:
+                    type: string
+                    description: 操作系统类型。可能值：  windows。  linux。
+                isSubscribed:
+                    type: boolean
+                    description: 是否订阅了该镜像的商品码对应的镜像商品的服务条款。
+                productCode:
+                    type: string
+                    description: 镜像市场的镜像商品标示。
+                architecture:
+                    type: string
+                    description: 镜像系统架构类型。可能值：  i386。  x86_64。  arm64。
+                isPublic:
+                    type: boolean
+                    description: 是否为公开镜像。公开镜像包括阿里云提供的公共镜像以及您已发布为社区镜像的自定义镜像。可能值：  true：公开镜像。  false：非公开镜像。
+                imageOwnerId:
+                    type: integer
+                    description: 镜像所属的阿里云账号ID。该参数仅在查询共享镜像以及社区镜像时生效。
+                    format: int64
+                loginAsNonRootSupported:
+                    type: boolean
+                    description: 当前镜像是否支持非root用户登录。可能值：    true：支持。    false：不支持。
+                supplierName:
+                    type: string
+                    description: 社区镜像认证企业名称。
+        ListInstanceTypesResponse:
+            type: object
+            properties:
+                requestId:
+                    type: string
+                    description: 请求ID。
+                instanceTypes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ListInstanceTypesResponse_InstanceType'
+                    description: 实例规格集合。
+                nextToken:
+                    type: string
+                    description: 本次调用返回的查询凭证（Token）。
+        ListInstanceTypesResponse_InstanceType:
+            type: object
+            properties:
+                localStorageCategory:
+                    type: string
+                    description: 本地盘类型。更多信息，请参见本地盘。可能值：    localhddpro：实例规格族d1ne和d1搭载的SATA HDD本地盘。    localssdpro：实例规格族i2、i2g、i1、ga1和gn5等搭载的NVMe SSD本地盘。
+                primaryEniQueueNumber:
+                    type: integer
+                    description: 主网卡默认队列数。
+                    format: int32
+                memorySize:
+                    type: number
+                    description: 内存大小。单位：GiB
+                    format: float
+                localStorageCapacity:
+                    type: integer
+                    description: 实例挂载的本地盘的单盘容量。单位：GiB
+                    format: int64
+                instanceFamilyLevel:
+                    type: string
+                    description: 实例规格族级别。可能值：    EntryLevel：入门级（共享型）。    EnterpriseLevel：企业级。    CreditEntryLevel：积分入门级。
+                instancePpsRx:
+                    type: integer
+                    description: 内网入方向网络收发包能力。单位：Pps
+                    format: int64
+                eniIpv6AddressQuantity:
+                    type: integer
+                    description: 单块弹性网卡的IPv6地址上限。
+                    format: int32
+                maximumQueueNumberPerEni:
+                    type: integer
+                    description: 单块弹性网卡最大队列数。
+                    format: int32
+                instanceTypeId:
+                    type: string
+                    description: 实例规格ID。
+                instanceBandwidthRx:
+                    type: integer
+                    description: 内网入方向带宽限制。单位：kbit/s
+                    format: int32
+                secondaryEniQueueNumber:
+                    type: integer
+                    description: 辅助弹性网卡默认队列数。
+                    format: int32
+                gpuSpec:
+                    type: string
+                    description: GPU类型。
+                queuePairNumber:
+                    type: integer
+                    description: 内网出方向带宽限制。单位：kbit/s
+                    format: int32
+                eriQuatity:
+                    type: integer
+                    description: 弹性RDMA网卡（ERI）数量。
+                    format: int32
+                gpuAmount:
+                    type: integer
+                    description: GPU数量。
+                    format: int32
+                totalEniQueueQuantity:
+                    type: integer
+                    description: 实例规格允许修改的弹性网卡队列数总配额。
+                    format: int32
+                nvmeSupport:
+                    type: string
+                    description: 实例规格所挂载的云盘是否支持NVMe。可能值：    required：支持。表示云盘以NVMe的方式挂载。    unsupported：不支持。表示云盘不以NVMe的方式挂载。
+                diskQuantity:
+                    type: integer
+                    description: 支持挂载的云盘数量上限。
+                    format: int32
+                initialCredit:
+                    type: integer
+                    description: 突发性能实例t5、t6的初始vCPU积分值。
+                    format: int32
+                localStorageAmount:
+                    type: integer
+                    description: 实例挂载的本地盘的数量。
+                    format: int32
+                baselineCredit:
+                    type: integer
+                    description: 突发性能实例t5、t6的基准vCPU计算性能（所有vCPU之和）。
+                    format: int32
+                instancePpsTx:
+                    type: integer
+                    description: 内网出方向网络收发包能力。单位：Pps
+                    format: int64
+                eniPrivateIpAddressQuantity:
+                    type: integer
+                    description: 单块弹性网卡的私有IP地址上限。
+                    format: int32
+                cpuCoreCount:
+                    type: integer
+                    description: vCPU内核数目。
+                    format: int32
+                instanceTypeFamily:
+                    type: string
+                    description: 实例规格族。
+                eniQuantity:
+                    type: integer
+                    description: 支持挂载的弹性网卡上限。
+                    format: int32
+        ListInstancesResponse:
+            type: object
+            properties:
+                requestId:
+                    type: string
+                pageNumber:
+                    type: integer
+                    description: 实例状态列表的页码，起始值1，默认值1
+                    format: uint32
+                pageSize:
+                    type: integer
+                    description: 分页查询时设置的每页行数
+                    format: uint32
+                totalCount:
+                    type: integer
+                    description: 查询到的实例总数
+                    format: uint32
+                nextToken:
+                    type: string
+                    description: 本次调用返回的查询凭证值
+                instances:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ListInstancesResponse_Instance'
+                    description: 实例信息
+        ListInstancesResponse_Instance:
+            type: object
+            properties:
+                creationTime:
+                    type: string
+                    description: 实例创建时间。以ISO8601为标准，并使用UTC+0时间，格式为yyyy-MM-ddTHH:mmZ。
+                serialNumber:
+                    type: string
+                    description: 实例序列号。
+                status:
+                    type: string
+                    description: 实例状态
+                deploymentSetId:
+                    type: string
+                    description: 部署集ID。
+                keyPairName:
+                    type: string
+                    description: 密钥对名称。
+                saleCycle:
+                    type: string
+                    description: 实例计费周期。
+                deviceAvailable:
+                    type: boolean
+                    description: 实例是否可以挂载数据盘。
+                localStorageCapacity:
+                    type: integer
+                    description: 实例挂载的本地存储容量。
+                    format: int64
+                description:
+                    type: string
+                    description: 实例描述。
+                spotDuration:
+                    type: integer
+                    description: 抢占式实例的保留时长，单位为小时。可能值为0~6。  保留时长2~6正在邀测中，如需开通请提交工单。  值为0，则为无保护期模式。
+                    format: int32
+                instanceNetworkType:
+                    type: string
+                    description: 实例网络类型。可能值：  classic：经典网络。  vpc：专有网络VPC。
+                instanceName:
+                    type: string
+                    description: 实例名称
+                osNameEn:
+                    type: string
+                    description: 实例操作系统的英文名称
+                hpcClusterId:
+                    type: string
+                    description: 实例所属的HPC集群ID。
+                memory:
+                    type: integer
+                    description: 内存大小，单位为MiB
+                    format: int32
+                osName:
+                    type: string
+                    description: 实例的操作系统名称。
+                deploymentSetGroupNo:
+                    type: integer
+                    description: ECS实例绑定部署集分散部署时，实例在部署集中的分组位置。
+                    format: int32
+                imageId:
+                    type: string
+                    description: 实例运行的镜像ID
+                gpuSpec:
+                    type: string
+                    description: 实例规格附带的GPU类型。
+                autoReleaseTime:
+                    type: string
+                    description: 按量付费实例的自动释放时间
+                deletionProtection:
+                    type: boolean
+                    description: 实例释放保护属性，指定是否支持通过控制台或API（DeleteInstance）释放实例。  true：已开启实例释放保护。  false：未开启实例释放保护。
+                stoppedMode:
+                    type: string
+                    description: 实例停机后是否继续收费。可能值：  KeepCharging：停机后继续收费，为您继续保留库存资源。  StopCharging：停机后不收费。停机后，我们释放实例对应的资源，例如vCPU、内存和公网IP等资源。重启是否成功依赖于当前地域中是否仍有资源库存。  Not-applicable：本实例不支持停机不收费功能。
+                gpuAmount:
+                    type: integer
+                    description: 实例规格附带的GPU数量
+                    format: int32
+                hostName:
+                    type: string
+                    description: 实例主机名。
+                instanceId:
+                    type: string
+                    description: 实例ID
+                internetMaxBandwidthOut:
+                    type: integer
+                    description: 公网出带宽最大值，单位为Mbit/s。
+                    format: int32
+                internetMaxBandwidthIn:
+                    type: integer
+                    description: 公网入带宽最大值，单位为Mbit/s。
+                    format: int32
+                instanceType:
+                    type: string
+                    description: 实例规格
+                instanceChargeType:
+                    type: string
+                    description: 实例的计费方式。可能值：  PrePaid：包年包月。  PostPaid：按量付费。
+                regionId:
+                    type: string
+                    description: 实例所属地域ID
+                ioOptimized:
+                    type: boolean
+                    description: 是否为I/O优化型实例。
+                startTime:
+                    type: string
+                    description: 实例最近一次的启动时间。以ISO8601为标准，并使用UTC+0时间，格式为yyyy-MM-ddTHH:mmZ。
+                cpu:
+                    type: integer
+                    description: vCPU数
+                    format: int32
+                localStorageAmount:
+                    type: integer
+                    description: 实例挂载的本地存储数量
+                    format: int32
+                expiredTime:
+                    type: string
+                    description: 过期时间。以ISO8601为标准，并使用UTC+0时间，格式为yyyy-MM-ddTHH:mmZ。
+                resourceGroupId:
+                    type: string
+                    description: 实例所属的企业资源组ID。
+                internetChargeType:
+                    type: string
+                    description: 网络计费类型。可能值：  PayByBandwidth：按固定带宽计费。  PayByTraffic：按使用流量计费。
+                zoneId:
+                    type: string
+                    description: 实例所属可用区。
+                recyclable:
+                    type: boolean
+                    description: 实例是否可以回收。
+                creditSpecification:
+                    type: string
+                    description: 修改突发性能实例的运行模式。可能值：  Standard：标准模式。  Unlimited：无性能约束模式，
+                instanceTypeFamily:
+                    type: string
+                    description: 实例规格族。
+                osType:
+                    type: string
+                    description: 实例的操作系统类型
+                networkInterfaces:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Instance_NetworkInterface'
+                    description: 实例包含的弹性网卡集合。
+                operationLocks:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Instance_OperationLock'
+                    description: 实例的锁定原因。
+                tags:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Instance_Tag'
+                    description: 实例的标签集合。
+                rdmaIpAddress:
+                    type: array
+                    items:
+                        type: string
+                    description: HPC实例的Rdma网络IP
+                securityGroupIds:
+                    type: array
+                    items:
+                        type: string
+                    description: 实例所属安全组集合
+                publicIpAddress:
+                    type: array
+                    items:
+                        type: string
+                    description: 实例公网IP地址
+                innerIpAddress:
+                    type: array
+                    items:
+                        type: string
+                    description: 经典网络类型实例的内网IP地址
+                vpcAttributes:
+                    $ref: '#/components/schemas/Instance_VpcAttributes'
+                eipAddress:
+                    $ref: '#/components/schemas/Instance_EipAddress'
+                dedicatedInstanceAttribute:
+                    $ref: '#/components/schemas/Instance_DedicatedInstanceAttribute'
+                cpuOptions:
+                    $ref: '#/components/schemas/Instance_CpuOptions'
+        ListRegionsResponse:
+            type: object
+            properties:
+                regions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ListRegionsResponse_Region'
+                    description: 地域信息集合
+        ListRegionsResponse_Region:
+            type: object
+            properties:
+                regionEndPoint:
+                    type: string
+                    description: 地域对应的接入地址（Endpoint）。
+                localName:
+                    type: string
+                    description: 地域名称。
+                regionId:
+                    type: string
+                    description: 地域ID。
+                status:
+                    type: string
+                    description: 集群是否售罄。可能值：  available  soldOut
+        NetworkInterface_Ipv6Set:
+            type: object
+            properties:
+                ipv6Address:
+                    type: string
+                    description: 为弹性网卡指定的IPv6地址。
+        NetworkInterface_PrivateIpSet:
+            type: object
+            properties:
+                privateIpAddress:
+                    type: string
+                    description: 实例的私网IP地址。
+                primary:
+                    type: boolean
+                    description: 是否是主私网IP地址。
+        RebootInstancesRequest:
+            type: object
+            properties:
+                accessKeyId:
+                    type: string
+                    description: 阿里云AccessKey ID
+                accessKeySecret:
+                    type: string
+                    description: 阿里云AccessKey Secret
+                endpoint:
+                    type: string
+                    description: 访问的域名
+                regionId:
+                    type: string
+                    description: 地域id
+                forceStop:
+                    type: boolean
+                    description: 是否强制重启。取值范围：  true：强制重启。相当于典型的断电操作，所有未写入存储设备的缓存数据会丢失。  false：正常重启。  默认值：false
+                batchOptimization:
+                    type: string
+                    description: 设置批量操作模式。取值范围：  AllTogether：该模式下，如果实例全部重启成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例重启失败，并返回失败信息。  SuccessFirst：该模式下，分别重启每个实例，返回结果包含每个实例的操作结果信息。  默认值：AllTogether
+                instanceIds:
+                    type: array
+                    items:
+                        type: string
+                    description: 实例ID。N的取值范围：1~100。
+                dryRun:
+                    type: boolean
+                    description: 是否只预检此次请求。取值范围： true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。 false（默认）：发送正常请求，通过检查后直接创建实例。
+        RebootInstancesResponse:
+            type: object
+            properties:
+                requestId:
+                    type: string
+                instanceResponses:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/InstanceResponse'
+                    description: 由InstanceResponse组成的数组格式，返回每个实例操作的前后状态及操作结果。
+        StartInstancesRequest:
+            type: object
+            properties:
+                accessKeyId:
+                    type: string
+                    description: 阿里云AccessKey ID
+                accessKeySecret:
+                    type: string
+                    description: 阿里云AccessKey Secret
+                endpoint:
+                    type: string
+                    description: 访问的域名
+                regionId:
+                    type: string
+                    description: 地域id
+                instanceIds:
+                    type: array
+                    items:
+                        type: string
+                    description: 实例ID, 数组长度取值范围：1~100
+                batchOptimization:
+                    type: string
+                    description: 设置批量操作模式。取值范围：    AllTogether：该模式下，如果实例全部启动成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例启动失败，并返回失败信息。    SuccessFirst：该模式下，分别启动每个实例，返回结果包含每个实例的操作结果信息。    默认值：AllTogether
+                dryRun:
+                    type: boolean
+                    description: 是否只预检此次请求。取值范围： true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。 false（默认）：发送正常请求，通过检查后直接创建实例。
+        StartInstancesResponse:
+            type: object
+            properties:
+                requestId:
+                    type: string
+                    description: 请求ID
+                instanceResponses:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/InstanceResponse'
+                    description: 由InstanceResponse组成的数组格式，返回每个实例操作的前后状态及操作结果。
+        StopInstancesRequest:
+            type: object
+            properties:
+                accessKeyId:
+                    type: string
+                    description: 阿里云AccessKey ID
+                accessKeySecret:
+                    type: string
+                    description: 阿里云AccessKey Secret
+                endpoint:
+                    type: string
+                    description: 访问的域名
+                regionId:
+                    type: string
+                    description: 地域id
+                forceStop:
+                    type: boolean
+                    description: 是否强制关机。取值范围：  true：强制关机。相当于典型的断电操作，所有未写入存储设备的缓存数据会丢失。  false：正常关机。  默认值：false
+                stoppedMode:
+                    type: string
+                    description: 停止按量付费ECS实例时，设置的停止模式。取值  StopCharging：节省停机模式。有关StopCharging生效的条件，请参见按量付费实例节省停机模式的启用条件章节。  KeepCharging：普通停机模式。实例停止后仍继续收费。  默认值：如果您在ECS控制台上开启VPC内实例节省停机模式（更多信息，请参见打开默认启用节省停机模式），并符合开启条件，则默认值为StopCharging。否则，默认值为KeepCharging。
+                batchOptimization:
+                    type: string
+                    description: 设置批量操作模式。取值范围：   AllTogether：该模式下，如果实例全部停止成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例停止失败，并返回失败信息。   SuccessFirst：该模式下，分别停止每个实例，返回结果包含每个实例的操作结果信息。   默认值：AllTogether
+                instanceIds:
+                    type: array
+                    items:
+                        type: string
+                    description: 实例ID列表
+                dryRun:
+                    type: boolean
+                    description: 是否只预检此次请求。取值范围： true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。 false（默认）：发送正常请求，通过检查后直接创建实例。
+        StopInstancesResponse:
+            type: object
+            properties:
+                requestId:
+                    type: string
+                instanceResponses:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/InstanceResponse'
+                    description: 由InstanceResponse组成的数组格式，返回每个实例操作的前后状态及操作结果。
+tags:
+    - name: Instance

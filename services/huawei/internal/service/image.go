@@ -29,24 +29,41 @@ func (service *InstanceService) ListImages(ctx context.Context, request *v1.List
 		osBit, _ := image.OsBit.MarshalJSON()
 		osType, _ := image.OsType.MarshalJSON()
 		platform, _ := image.Platform.MarshalJSON()
+		var description, maxRam, osVersion, activeAt string
+		if image.Description != nil {
+			description = *image.Description
+		}
+		var size int64
+		if image.Size != nil {
+			size = *image.Size
+		}
+		if image.MaxRam != nil {
+			maxRam = *image.MaxRam
+		}
+		if image.OsVersion != nil {
+			osVersion = *image.OsVersion
+		}
+		if image.ActiveAt != nil {
+			activeAt = *image.ActiveAt
+		}
 		listImageResponse.Images[i] = &v1.ListImagesResponse_Image{
 			ImageId:          image.Id,
 			ImageName:        image.Name,
-			ImageDescription: *image.Description,
-			ImageSize:        *image.Size,
+			ImageDescription: description,
+			ImageSize:        size,
 			ImageType:        string(imageType),
 			Visibility:       string(visibility),
 			Status:           string(status),
 			MinRam:           image.MinRam,
-			MaxRam:           *image.MaxRam,
+			MaxRam:           maxRam,
 			MinDisk:          image.MinDisk,
 			OsBit:            string(osBit),
 			Platform:         string(platform),
 			OsType:           string(osType),
-			OsVersion:        *image.OsVersion,
+			OsVersion:        osVersion,
 			CreatedAt:        image.CreatedAt,
 			UpdatedAt:        image.UpdatedAt,
-			ActiveAt:         *image.ActiveAt,
+			ActiveAt:         activeAt,
 		}
 		listImageResponse.Marker = image.Id
 	}

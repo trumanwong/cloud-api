@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.20.0
-// source: ali/api/instance/v1/instance.proto
+// source: api/instance/v1/instance.proto
 
 package v1
 
@@ -22,9 +22,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InstanceClient interface {
-	// 可使用的阿里云地域
+	// 查询可以使用的阿里云地域
 	ListRegions(ctx context.Context, in *ListRegionsRequest, opts ...grpc.CallOption) (*ListRegionsResponse, error)
-	// 选择镜像
+	// 查询可以使用的镜像资源
 	ListImages(ctx context.Context, in *ListImagesRequest, opts ...grpc.CallOption) (*ListImagesResponse, error)
 	// 选择实例规格
 	ListInstanceTypes(ctx context.Context, in *ListInstanceTypesRequest, opts ...grpc.CallOption) (*ListInstanceTypesResponse, error)
@@ -135,9 +135,9 @@ func (c *instanceClient) DeleteInstances(ctx context.Context, in *DeleteInstance
 // All implementations must embed UnimplementedInstanceServer
 // for forward compatibility
 type InstanceServer interface {
-	// 可使用的阿里云地域
+	// 查询可以使用的阿里云地域
 	ListRegions(context.Context, *ListRegionsRequest) (*ListRegionsResponse, error)
-	// 选择镜像
+	// 查询可以使用的镜像资源
 	ListImages(context.Context, *ListImagesRequest) (*ListImagesResponse, error)
 	// 选择实例规格
 	ListInstanceTypes(context.Context, *ListInstanceTypesRequest) (*ListInstanceTypesResponse, error)
@@ -407,5 +407,5 @@ var Instance_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "ali/api/instance/v1/instance.proto",
+	Metadata: "api/instance/v1/instance.proto",
 }

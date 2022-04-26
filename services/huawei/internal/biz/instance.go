@@ -15,6 +15,7 @@ type InstanceResponse interface {
 	StopInstances(context.Context, string, string, string, string, *model.BatchStopServersRequest) (*model.BatchStopServersResponse, error)
 	RebootInstances(context.Context, string, string, string, string, *model.BatchRebootServersRequest) (*model.BatchRebootServersResponse, error)
 	DeleteInstances(context.Context, string, string, string, string, *model.DeleteServersRequest) (*model.DeleteServersResponse, error)
+	ShowJob(context.Context, string, string, string, string, *model.ShowJobRequest) (*model.ShowJobResponse, error)
 }
 
 // InstanceUseCase is a Instance UseCase.
@@ -51,4 +52,8 @@ func (uc *InstanceUseCase) RebootInstances(ctx context.Context, accessKey, secre
 
 func (uc *InstanceUseCase) DeleteInstances(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.DeleteServersRequest) (*model.DeleteServersResponse, error) {
 	return uc.repo.DeleteInstances(ctx, accessKey, secretKey, regionId, projectId, request)
+}
+
+func (uc *InstanceUseCase) ShowJob(ctx context.Context, accessKey, secretKey, regionId, projectId string, request *model.ShowJobRequest) (*model.ShowJobResponse, error) {
+	return uc.repo.ShowJob(ctx, accessKey, secretKey, regionId, projectId, request)
 }
