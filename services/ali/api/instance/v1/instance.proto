@@ -89,7 +89,7 @@ message CreateInstancesRequest {
   // 是否为instance_name自动添加有序后缀（默认false）
   bool unique_suffix = 9;
   // 创建数量(1-100，默认1)
-  uint32 amount = 10;
+  int32 amount = 10;
   // 实例密码
   string password = 11;
   // 是否只预检此次请求。取值范围：
@@ -119,11 +119,11 @@ message ListInstancesRequest {
   // 实例所属的地域ID
   string region_id = 4;
   // 实例状态列表的页码，起始值1，默认值1
-  uint32 page_number = 5;
+  int32 page_number = 5;
   // 分页查询时设置的每页行数。
   //  最大值为100。
   //  默认值为10。
-  uint32 page_size = 6;
+  int32 page_size = 6;
   // 查询凭证（Token），取值为上一次API调用返回的NextToken参数值
   string next_token = 7;
   // 实例名称，支持使用通配符*进行模糊搜索。
@@ -137,11 +137,11 @@ message ListInstancesRequest {
 message ListInstancesResponse {
   string request_id = 1;
   // 实例状态列表的页码，起始值1，默认值1
-  uint32 page_number = 2;
+  int32 page_number = 2;
   // 分页查询时设置的每页行数
-  uint32 page_size = 3;
+  int32 page_size = 3;
   // 查询到的实例总数
-  uint32 total_count = 4;
+  int32 total_count = 4;
   // 本次调用返回的查询凭证值
   string next_token = 5;
   message Instance {
@@ -324,7 +324,7 @@ message ListInstancesResponse {
       // 弹性公网IP
       string ip_address = 4;
       // 弹性公网IP
-      uint32 bandwidth = 5;
+      int32 bandwidth = 5;
     }
     // 弹性公网IP绑定信息
     EipAddress eip_address = 51;
@@ -692,7 +692,7 @@ message RebootInstancesRequest {
   //  true：强制重启。相当于典型的断电操作，所有未写入存储设备的缓存数据会丢失。
   //  false：正常重启。
   //  默认值：false
-  bool force_stop = 5;
+  bool force_reboot = 5;
   // 设置批量操作模式。取值范围：
   //  AllTogether：该模式下，如果实例全部重启成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例重启失败，并返回失败信息。
   //  SuccessFirst：该模式下，分别重启每个实例，返回结果包含每个实例的操作结果信息。

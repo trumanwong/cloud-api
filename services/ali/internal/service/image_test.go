@@ -3,7 +3,6 @@ package service
 import (
 	v1 "ali/api/instance/v1"
 	"context"
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"os"
@@ -25,6 +24,5 @@ func TestInstanceService_ListImages(t *testing.T) {
 		Endpoint:        endpoint,
 		RegionId:        regionId,
 	})
-	fmt.Println(err)
 	assert.Equal(t, err, nil)
 }

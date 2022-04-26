@@ -2232,7 +2232,7 @@ func (m *RebootInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for ForceStop
+	// no validation rules for ForceReboot
 
 	// no validation rules for BatchOptimization
 

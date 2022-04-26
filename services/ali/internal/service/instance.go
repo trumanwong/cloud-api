@@ -38,19 +38,33 @@ func (service *InstanceService) CreateInstances(ctx context.Context, request *v1
 }
 
 func (service *InstanceService) ListInstances(ctx context.Context, request *v1.ListInstancesRequest) (*v1.ListInstancesResponse, error) {
+	var pageNumber, pageSize *int32
+	if request.PageNumber > 0 {
+		pageNumber = tea.Int32(request.PageNumber)
+	}
+	if request.PageSize > 0 {
+		pageSize = tea.Int32(request.PageSize)
+	}
+	var nextToken, instanceName *string
+	if len(request.NextToken) > 0 {
+		nextToken = tea.String(request.NextToken)
+	}
+	if len(request.InstanceName) > 0 {
+		instanceName = tea.String(request.InstanceName)
+	}
 	result, err := service.uc.ListInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.DescribeInstancesRequest{
 		RegionId:     tea.String(request.RegionId),
-		PageNumber:   tea.Int32(int32(request.PageNumber)),
-		PageSize:     tea.Int32(int32(request.PageSize)),
-		NextToken:    tea.String(request.NextToken),
-		InstanceName: tea.String(request.InstanceName),
+		PageNumber:   pageNumber,
+		PageSize:     pageSize,
+		NextToken:    nextToken,
+		InstanceName: instanceName,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	instances := make([]v1.ListInstancesResponse_Instance, len(result.Instances.Instance))
-	for i, instance := range result.Instances.Instance {
+	instances := make([]*v1.ListInstancesResponse_Instance, len(result.Body.Instances.Instance))
+	for i, instance := range result.Body.Instances.Instance {
 		publicIpAddress, innerIpAddress, rdmaIpAddress, securityGroupIds := make([]string, 0), make([]string, 0), make([]string, 0), make([]string, 0)
 		if instance.PublicIpAddress != nil {
 			for _, v := range instance.PublicIpAddress.IpAddress {
@@ -79,7 +93,7 @@ func (service *InstanceService) ListInstances(ctx context.Context, request *v1.L
 				IsSupportUnAssociate: *instance.EipAddress.IsSupportUnassociate,
 				InternalChargeType:   *instance.EipAddress.InternetChargeType,
 				IpAddress:            *instance.EipAddress.IpAddress,
-				Bandwidth:            uint32(*instance.EipAddress.Bandwidth),
+				Bandwidth:            *instance.EipAddress.Bandwidth,
 			}
 		}
 		var networkInterfaces []*v1.ListInstancesResponse_Instance_NetworkInterface
@@ -133,7 +147,38 @@ func (service *InstanceService) ListInstances(ctx context.Context, request *v1.L
 				}
 			}
 		}
-		instances[i] = v1.ListInstancesResponse_Instance{
+		var vpcAttributes *v1.ListInstancesResponse_Instance_VpcAttributes
+		if instance.VpcAttributes != nil {
+			var privateIpAddress []string
+			if instance.VpcAttributes.PrivateIpAddress != nil {
+				privateIpAddress = make([]string, len(instance.VpcAttributes.PrivateIpAddress.IpAddress))
+				for j, v := range instance.VpcAttributes.PrivateIpAddress.IpAddress {
+					privateIpAddress[j] = *v
+				}
+			}
+			vpcAttributes = &v1.ListInstancesResponse_Instance_VpcAttributes{
+				VpcId:            *instance.VpcAttributes.VpcId,
+				NatIpAddress:     *instance.VpcAttributes.NatIpAddress,
+				VSwitchId:        *instance.VpcAttributes.VSwitchId,
+				PrivateIpAddress: privateIpAddress,
+			}
+		}
+		var dedicatedInstanceAttribute *v1.ListInstancesResponse_Instance_DedicatedInstanceAttribute
+		if instance.DedicatedInstanceAttribute != nil {
+			dedicatedInstanceAttribute = &v1.ListInstancesResponse_Instance_DedicatedInstanceAttribute{
+				Affinity: *instance.DedicatedInstanceAttribute.Affinity,
+				Tenancy:  *instance.DedicatedInstanceAttribute.Tenancy,
+			}
+		}
+		var cpuOptions *v1.ListInstancesResponse_Instance_CpuOptions
+		if instance.CpuOptions != nil {
+			cpuOptions = &v1.ListInstancesResponse_Instance_CpuOptions{
+				Numa:          *instance.CpuOptions.Numa,
+				CoreCount:     *instance.CpuOptions.CoreCount,
+				ThreadPerCore: *instance.CpuOptions.ThreadsPerCore,
+			}
+		}
+		instances[i] = &v1.ListInstancesResponse_Instance{
 			CreationTime:               *instance.CreationTime,
 			SerialNumber:               *instance.SerialNumber,
 			Status:                     *instance.Status,
@@ -183,19 +228,19 @@ func (service *InstanceService) ListInstances(ctx context.Context, request *v1.L
 			SecurityGroupIds:           securityGroupIds,
 			PublicIpAddress:            publicIpAddress,
 			InnerIpAddress:             innerIpAddress,
-			VpcAttributes:              nil,
+			VpcAttributes:              vpcAttributes,
 			EipAddress:                 eIpAddress,
-			DedicatedInstanceAttribute: nil,
-			CpuOptions:                 nil,
+			DedicatedInstanceAttribute: dedicatedInstanceAttribute,
+			CpuOptions:                 cpuOptions,
 		}
 	}
 	listInstancesResponse := &v1.ListInstancesResponse{
-		RequestId:  *result.RequestId,
-		PageNumber: uint32(*result.PageNumber),
-		PageSize:   uint32(*result.PageSize),
-		TotalCount: uint32(*result.TotalCount),
-		NextToken:  *result.NextToken,
-		Instances:  nil,
+		RequestId:  *result.Body.RequestId,
+		PageNumber: *result.Body.PageNumber,
+		PageSize:   *result.Body.PageSize,
+		TotalCount: *result.Body.TotalCount,
+		NextToken:  *result.Body.NextToken,
+		Instances:  instances,
 	}
 
 	return listInstancesResponse, nil
@@ -206,15 +251,35 @@ func (service *InstanceService) StartInstances(ctx context.Context, request *v1.
 	for i, v := range request.InstanceIds {
 		instanceIds[i] = tea.String(v)
 	}
+	var batchOptimization *string
+	if len(request.BatchOptimization) > 0 {
+		batchOptimization = &request.BatchOptimization
+	}
 	result, err := service.uc.StartInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.StartInstancesRequest{
-		InstanceId: instanceIds,
-		DryRun:     tea.Bool(request.DryRun),
+		RegionId:          tea.String(request.RegionId),
+		InstanceId:        instanceIds,
+		DryRun:            tea.Bool(request.DryRun),
+		BatchOptimization: batchOptimization,
 	})
 	if err != nil {
 		return nil, err
 	}
+	var instanceResponses []*v1.InstanceResponse
+	if result.Body.InstanceResponses != nil {
+		instanceResponses = make([]*v1.InstanceResponse, len(result.Body.InstanceResponses.InstanceResponse))
+		for i, v := range result.Body.InstanceResponses.InstanceResponse {
+			instanceResponses[i] = &v1.InstanceResponse{
+				Code:           *v.Code,
+				Message:        *v.Message,
+				InstanceId:     *v.InstanceId,
+				CurrentStatus:  *v.CurrentStatus,
+				PreviousStatus: *v.PreviousStatus,
+			}
+		}
+	}
 	return &v1.StartInstancesResponse{
-		RequestId: *result,
+		RequestId:         *result.Body.RequestId,
+		InstanceResponses: instanceResponses,
 	}, nil
 }
 
@@ -223,15 +288,36 @@ func (service *InstanceService) StopInstances(ctx context.Context, request *v1.S
 	for i, v := range request.InstanceIds {
 		instanceIds[i] = tea.String(v)
 	}
+	var batchOptimization *string
+	if len(request.BatchOptimization) > 0 {
+		batchOptimization = &request.BatchOptimization
+	}
 	result, err := service.uc.StopInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.StopInstancesRequest{
-		InstanceId: instanceIds,
-		DryRun:     tea.Bool(request.DryRun),
+		RegionId:          tea.String(request.RegionId),
+		InstanceId:        instanceIds,
+		DryRun:            tea.Bool(request.DryRun),
+		ForceStop:         tea.Bool(request.ForceStop),
+		BatchOptimization: batchOptimization,
 	})
 	if err != nil {
 		return nil, err
 	}
+	var instanceResponses []*v1.InstanceResponse
+	if result.Body.InstanceResponses != nil {
+		instanceResponses = make([]*v1.InstanceResponse, len(result.Body.InstanceResponses.InstanceResponse))
+		for i, v := range result.Body.InstanceResponses.InstanceResponse {
+			instanceResponses[i] = &v1.InstanceResponse{
+				Code:           *v.Code,
+				Message:        *v.Message,
+				InstanceId:     *v.InstanceId,
+				CurrentStatus:  *v.CurrentStatus,
+				PreviousStatus: *v.PreviousStatus,
+			}
+		}
+	}
 	return &v1.StopInstancesResponse{
-		RequestId: *result,
+		RequestId:         *result.Body.RequestId,
+		InstanceResponses: instanceResponses,
 	}, nil
 }
 
@@ -240,15 +326,36 @@ func (service *InstanceService) RebootInstances(ctx context.Context, request *v1
 	for i, v := range request.InstanceIds {
 		instanceIds[i] = tea.String(v)
 	}
+	var batchOptimization *string
+	if len(request.BatchOptimization) > 0 {
+		batchOptimization = &request.BatchOptimization
+	}
 	result, err := service.uc.RebootInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.RebootInstancesRequest{
-		InstanceId: instanceIds,
-		DryRun:     tea.Bool(request.DryRun),
+		RegionId:          tea.String(request.RegionId),
+		InstanceId:        instanceIds,
+		DryRun:            tea.Bool(request.DryRun),
+		ForceReboot:       tea.Bool(request.ForceReboot),
+		BatchOptimization: batchOptimization,
 	})
 	if err != nil {
 		return nil, err
 	}
+	var instanceResponses []*v1.InstanceResponse
+	if result.Body.InstanceResponses != nil {
+		instanceResponses = make([]*v1.InstanceResponse, len(result.Body.InstanceResponses.InstanceResponse))
+		for i, v := range result.Body.InstanceResponses.InstanceResponse {
+			instanceResponses[i] = &v1.InstanceResponse{
+				Code:           *v.Code,
+				Message:        *v.Message,
+				InstanceId:     *v.InstanceId,
+				CurrentStatus:  *v.CurrentStatus,
+				PreviousStatus: *v.PreviousStatus,
+			}
+		}
+	}
 	return &v1.RebootInstancesResponse{
-		RequestId: *result,
+		RequestId:         *result.Body.RequestId,
+		InstanceResponses: instanceResponses,
 	}, nil
 }
 
@@ -265,6 +372,6 @@ func (service *InstanceService) DeleteInstances(ctx context.Context, request *v1
 		return nil, err
 	}
 	return &v1.DeleteInstancesResponse{
-		RequestId: *result,
+		RequestId: *result.Body.RequestId,
 	}, nil
 }

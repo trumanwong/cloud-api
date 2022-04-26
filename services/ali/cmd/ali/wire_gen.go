@@ -32,10 +32,11 @@ func wireApp(confServer *conf.Server, registry *conf.Registry, confData *conf.Da
 	imageUsecase := biz.NewImageUseCase(imageRepo, logger)
 	instanceTypeRepo := data.NewInstanceTypeRepo(dataData, logger)
 	instanceTypeUsecase := biz.NewInstanceTypeUseCase(instanceTypeRepo, logger)
-	greeterService := service.NewInstanceService(instanceUsecase, regionUsecase, imageUsecase, instanceTypeUsecase)
-	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
+	instanceService := service.NewInstanceService(instanceUsecase, regionUsecase, imageUsecase, instanceTypeUsecase)
+	grpcServer := server.NewGRPCServer(confServer, instanceService, logger)
+	httpServer := server.NewHTTPServer(confServer, instanceService, logger)
 	registrar := server.NewRegistrar(registry)
-	app := newApp(logger, grpcServer, registrar)
+	app := newApp(logger, httpServer, grpcServer, registrar)
 	return app, func() {
 		cleanup()
 	}, nil

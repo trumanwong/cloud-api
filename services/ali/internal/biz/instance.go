@@ -9,12 +9,12 @@ import (
 
 // InstanceResponse is a Instance repo.
 type InstanceResponse interface {
-	CreateInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error)
-	ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error)
-	StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstancesRequest) (*string, error)
-	StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstancesRequest) (*string, error)
-	RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstancesRequest) (*string, error)
-	DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstancesRequest) (*string, error)
+	CreateInstances(context.Context, string, string, string, *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error)
+	ListInstances(context.Context, string, string, string, *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponse, error)
+	StartInstances(context.Context, string, string, string, *ecs20140526.StartInstancesRequest) (*ecs20140526.StartInstancesResponse, error)
+	StopInstances(context.Context, string, string, string, *ecs20140526.StopInstancesRequest) (*ecs20140526.StopInstancesResponse, error)
+	RebootInstances(context.Context, string, string, string, *ecs20140526.RebootInstancesRequest) (*ecs20140526.RebootInstancesResponse, error)
+	DeleteInstances(context.Context, string, string, string, *ecs20140526.DeleteInstancesRequest) (*ecs20140526.DeleteInstancesResponse, error)
 }
 
 // InstanceUseCase is a Instance UseCase.
@@ -33,22 +33,22 @@ func (uc *InstanceUseCase) CreateInstances(ctx context.Context, accessKeyId, acc
 	return uc.repo.CreateInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
 }
 
-func (uc *InstanceUseCase) ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error) {
+func (uc *InstanceUseCase) ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponse, error) {
 	return uc.repo.ListInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
 }
 
-func (uc *InstanceUseCase) StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstancesRequest) (*string, error) {
+func (uc *InstanceUseCase) StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstancesRequest) (*ecs20140526.StartInstancesResponse, error) {
 	return uc.repo.StartInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
 }
 
-func (uc *InstanceUseCase) StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstancesRequest) (*string, error) {
+func (uc *InstanceUseCase) StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstancesRequest) (*ecs20140526.StopInstancesResponse, error) {
 	return uc.repo.StopInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
 }
 
-func (uc *InstanceUseCase) RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstancesRequest) (*string, error) {
+func (uc *InstanceUseCase) RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstancesRequest) (*ecs20140526.RebootInstancesResponse, error) {
 	return uc.repo.RebootInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
 }
 
-func (uc *InstanceUseCase) DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstancesRequest) (*string, error) {
+func (uc *InstanceUseCase) DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstancesRequest) (*ecs20140526.DeleteInstancesResponse, error) {
 	return uc.repo.DeleteInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
 }
