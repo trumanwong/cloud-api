@@ -19,10 +19,10 @@ func TestInstanceService_ListImages(t *testing.T) {
 
 	instanceClient := v1.NewInstanceClient(conn)
 	_, err = instanceClient.ListImages(context.Background(), &v1.ListImagesRequest{
-		AccessKeyId:     accessKeyId,
-		AccessKeySecret: accessKeySecret,
-		Endpoint:        endpoint,
-		RegionId:        regionId,
+		AccessKeyId:     &accessKeyId,
+		AccessKeySecret: &accessKeySecret,
+		Endpoint:        &endpoint,
+		RegionId:        &regionId,
 	})
 	assert.Equal(t, err, nil)
 }

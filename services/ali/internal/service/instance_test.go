@@ -3,6 +3,7 @@ package service
 import (
 	v1 "ali/api/instance/v1"
 	"context"
+	"github.com/alibabacloud-go/tea/tea"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"os"
@@ -16,18 +17,18 @@ func TestInstanceService_CreateInstances(t *testing.T) {
 
 	instanceClient := v1.NewInstanceClient(conn)
 	_, err = instanceClient.CreateInstances(context.Background(), &v1.CreateInstancesRequest{
-		AccessKeyId:     os.Getenv("accessKeyId"),
-		AccessKeySecret: os.Getenv("accessKeySecret"),
-		Endpoint:        os.Getenv("endpoint"),
-		RegionId:        os.Getenv("regionId"),
-		ImageId:         os.Getenv("imageId"),
-		Name:            os.Getenv("name"),
-		InstanceType:    os.Getenv("instanceType"),
-		SystemDiskSize:  os.Getenv("systemDiskSize"),
-		UniqueSuffix:    false,
-		Amount:          1,
-		Password:        os.Getenv("password"),
-		DryRun:          true,
+		AccessKeyId:     tea.String(os.Getenv("accessKeyId")),
+		AccessKeySecret: tea.String(os.Getenv("accessKeySecret")),
+		Endpoint:        tea.String(os.Getenv("endpoint")),
+		RegionId:        tea.String(os.Getenv("regionId")),
+		ImageId:         tea.String(os.Getenv("imageId")),
+		Name:            tea.String(os.Getenv("name")),
+		InstanceType:    tea.String(os.Getenv("instanceType")),
+		SystemDiskSize:  tea.String(os.Getenv("systemDiskSize")),
+		UniqueSuffix:    tea.Bool(false),
+		Amount:          tea.Int32(1),
+		Password:        tea.String(os.Getenv("password")),
+		DryRun:          tea.Bool(true),
 	})
 	assert.Equal(t, err, nil)
 }
@@ -38,15 +39,11 @@ func TestInstanceService_ListInstances(t *testing.T) {
 
 	instanceClient := v1.NewInstanceClient(conn)
 	_, err = instanceClient.ListInstances(context.Background(), &v1.ListInstancesRequest{
-		AccessKeyId:     os.Getenv("accessKeyId"),
-		AccessKeySecret: os.Getenv("accessKeySecret"),
-		Endpoint:        os.Getenv("endpoint"),
-		RegionId:        os.Getenv("regionId"),
-		PageNumber:      0,
-		PageSize:        0,
-		NextToken:       "",
-		InstanceName:    "",
-		DryRun:          true,
+		AccessKeyId:     tea.String(os.Getenv("accessKeyId")),
+		AccessKeySecret: tea.String(os.Getenv("accessKeySecret")),
+		Endpoint:        tea.String(os.Getenv("endpoint")),
+		RegionId:        tea.String(os.Getenv("regionId")),
+		DryRun:          tea.Bool(true),
 	})
 	assert.Equal(t, err, nil)
 }
@@ -58,13 +55,12 @@ func TestInstanceService_StartInstances(t *testing.T) {
 	instanceClient := v1.NewInstanceClient(conn)
 	instanceIds := strings.Split(os.Getenv("instance_ids"), ",")
 	_, err = instanceClient.StartInstances(context.Background(), &v1.StartInstancesRequest{
-		AccessKeyId:       os.Getenv("accessKeyId"),
-		AccessKeySecret:   os.Getenv("accessKeySecret"),
-		Endpoint:          os.Getenv("endpoint"),
-		RegionId:          os.Getenv("regionId"),
-		InstanceIds:       instanceIds,
-		BatchOptimization: "",
-		DryRun:            true,
+		AccessKeyId:     tea.String(os.Getenv("accessKeyId")),
+		AccessKeySecret: tea.String(os.Getenv("accessKeySecret")),
+		Endpoint:        tea.String(os.Getenv("endpoint")),
+		RegionId:        tea.String(os.Getenv("regionId")),
+		InstanceIds:     instanceIds,
+		DryRun:          tea.Bool(true),
 	})
 	assert.Equal(t, err, nil)
 }
@@ -76,15 +72,13 @@ func TestInstanceService_StopInstances(t *testing.T) {
 	instanceClient := v1.NewInstanceClient(conn)
 	instanceIds := strings.Split(os.Getenv("instance_ids"), ",")
 	_, err = instanceClient.StopInstances(context.Background(), &v1.StopInstancesRequest{
-		AccessKeyId:       os.Getenv("accessKeyId"),
-		AccessKeySecret:   os.Getenv("accessKeySecret"),
-		Endpoint:          os.Getenv("endpoint"),
-		RegionId:          os.Getenv("regionId"),
-		ForceStop:         false,
-		StoppedMode:       "",
-		BatchOptimization: "",
-		InstanceIds:       instanceIds,
-		DryRun:            true,
+		AccessKeyId:     tea.String(os.Getenv("accessKeyId")),
+		AccessKeySecret: tea.String(os.Getenv("accessKeySecret")),
+		Endpoint:        tea.String(os.Getenv("endpoint")),
+		RegionId:        tea.String(os.Getenv("regionId")),
+		ForceStop:       tea.Bool(false),
+		InstanceIds:     instanceIds,
+		DryRun:          tea.Bool(true),
 	})
 	assert.Equal(t, err, nil)
 }
@@ -96,14 +90,13 @@ func TestInstanceService_RebootInstances(t *testing.T) {
 	instanceClient := v1.NewInstanceClient(conn)
 	instanceIds := strings.Split(os.Getenv("instance_ids"), ",")
 	_, err = instanceClient.RebootInstances(context.Background(), &v1.RebootInstancesRequest{
-		AccessKeyId:       os.Getenv("accessKeyId"),
-		AccessKeySecret:   os.Getenv("accessKeySecret"),
-		Endpoint:          os.Getenv("endpoint"),
-		RegionId:          os.Getenv("regionId"),
-		ForceReboot:       false,
-		BatchOptimization: "",
-		InstanceIds:       instanceIds,
-		DryRun:            true,
+		AccessKeyId:     tea.String(os.Getenv("accessKeyId")),
+		AccessKeySecret: tea.String(os.Getenv("accessKeySecret")),
+		Endpoint:        tea.String(os.Getenv("endpoint")),
+		RegionId:        tea.String(os.Getenv("regionId")),
+		ForceReboot:     tea.Bool(false),
+		InstanceIds:     instanceIds,
+		DryRun:          tea.Bool(true),
 	})
 	assert.Equal(t, err, nil)
 }
@@ -115,14 +108,12 @@ func TestInstanceService_DeleteInstances(t *testing.T) {
 	instanceClient := v1.NewInstanceClient(conn)
 	instanceIds := strings.Split(os.Getenv("instance_ids"), ",")
 	_, err = instanceClient.DeleteInstances(context.Background(), &v1.DeleteInstancesRequest{
-		AccessKeyId:           os.Getenv("accessKeyId"),
-		AccessKeySecret:       os.Getenv("accessKeySecret"),
-		Endpoint:              os.Getenv("endpoint"),
-		RegionId:              os.Getenv("regionId"),
-		Force:                 false,
-		TerminateSubscription: false,
-		InstanceIds:           instanceIds,
-		DryRun:                true,
+		AccessKeyId:     tea.String(os.Getenv("accessKeyId")),
+		AccessKeySecret: tea.String(os.Getenv("accessKeySecret")),
+		Endpoint:        tea.String(os.Getenv("endpoint")),
+		RegionId:        tea.String(os.Getenv("regionId")),
+		InstanceIds:     instanceIds,
+		DryRun:          tea.Bool(true),
 	})
 	assert.Equal(t, err, nil)
 }

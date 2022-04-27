@@ -66,7 +66,53 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /api/instance:
+    /api/instance-types:
+        get:
+            tags:
+                - Instance
+            description: 选择实例规格
+            operationId: Instance_ListInstanceTypes
+            parameters:
+                - name: accessKeyId
+                  in: query
+                  description: 阿里云AccessKey ID
+                  schema:
+                    type: string
+                - name: accessKeySecret
+                  in: query
+                  description: 阿里云AccessKey Secret
+                  schema:
+                    type: string
+                - name: endpoint
+                  in: query
+                  description: 访问的域名
+                  schema:
+                    type: string
+                - name: maxResults
+                  in: query
+                  description: 分页查询时每页的最大条目数。最大值：1600默认值：1600
+                  schema:
+                    type: integer
+                    format: int64
+                - name: nextToken
+                  in: query
+                  description: 查询凭证（Token）。取值为上一次调用该接口返回的NextToken参数值，初次调用接口时无需设置该参数。
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListInstanceTypesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/instances:
         get:
             tags:
                 - Instance
@@ -157,113 +203,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-        delete:
-            tags:
-                - Instance
-            description: 删除实例
-            operationId: Instance_DeleteInstances
-            parameters:
-                - name: accessKeyId
-                  in: query
-                  description: 阿里云AccessKey ID
-                  schema:
-                    type: string
-                - name: accessKeySecret
-                  in: query
-                  description: 阿里云AccessKey Secret
-                  schema:
-                    type: string
-                - name: endpoint
-                  in: query
-                  description: 访问的域名
-                  schema:
-                    type: string
-                - name: regionId
-                  in: query
-                  description: 地域id
-                  schema:
-                    type: string
-                - name: force
-                  in: query
-                  description: 是否强制释放运行中（Running）的实例。  true：强制释放运行中（Running）的实例。强制释放相当于断电，实例内存以及存储中的临时数据都会被擦除，无法恢复。  false：正常释放实例，此时实例必须处于已停止（Stopped）状态。  默认值为false。
-                  schema:
-                    type: boolean
-                - name: terminateSubscription
-                  in: query
-                  description: 是否释放已到期的包年包月实例。  默认值为false。
-                  schema:
-                    type: boolean
-                - name: instanceIds
-                  in: query
-                  schema:
-                    type: array
-                    items:
-                        type: string
-                - name: dryRun
-                  in: query
-                  description: 是否只预检此次请求。取值范围： true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。 false（默认）：发送正常请求，通过检查后直接创建实例。
-                  schema:
-                    type: boolean
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/DeleteInstancesResponse'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /api/instance-types:
-        get:
-            tags:
-                - Instance
-            description: 选择实例规格
-            operationId: Instance_ListInstanceTypes
-            parameters:
-                - name: accessKeyId
-                  in: query
-                  description: 阿里云AccessKey ID
-                  schema:
-                    type: string
-                - name: accessKeySecret
-                  in: query
-                  description: 阿里云AccessKey Secret
-                  schema:
-                    type: string
-                - name: endpoint
-                  in: query
-                  description: 访问的域名
-                  schema:
-                    type: string
-                - name: maxResults
-                  in: query
-                  description: 分页查询时每页的最大条目数。最大值：1600    默认值：1600
-                  schema:
-                    type: integer
-                    format: int64
-                - name: nextToken
-                  in: query
-                  description: 查询凭证（Token）。取值为上一次调用该接口返回的NextToken参数值，初次调用接口时无需设置该参数。
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListInstanceTypesResponse'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /api/instance/reboot:
+    /api/instances/reboot:
         put:
             tags:
                 - Instance
@@ -288,7 +228,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /api/instance/start:
+    /api/instances/start:
         put:
             tags:
                 - Instance
@@ -313,7 +253,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /api/instance/stop:
+    /api/instances/stop:
         put:
             tags:
                 - Instance
@@ -332,6 +272,31 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/StopInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/instances/terminate:
+        put:
+            tags:
+                - Instance
+            description: 删除实例
+            operationId: Instance_DeleteInstances
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DeleteInstancesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteInstancesResponse'
                 default:
                     description: Default error response
                     content:
@@ -362,7 +327,7 @@ paths:
                     type: string
                 - name: instanceChargeType
                   in: query
-                  description: 实例的计费方式，更多详情，请参见计费概述。取值范围：  PrePaid：包年包月。此时，您必须确认自己的账号支持余额支付或者信用支付，否则将报错InvalidPayMethod。  PostPaid：按量付费。  默认值：PostPaid
+                  description: 实例的计费方式，更多详情，请参见计费概述。取值范围：  PrePaid：包年包月。此时，您必须确认自己的账号支持余额支付或者信用支付，否则将报错InvalidPayMethod。  PostPaid：按量付费。 默认值：PostPaid
                   schema:
                     type: string
                 - name: resourceType
@@ -429,7 +394,7 @@ components:
                     description: 实例密码
                 dryRun:
                     type: boolean
-                    description: 是否只预检此次请求。取值范围： true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。 false（默认）：发送正常请求，通过检查后直接创建实例。
+                    description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。  false（默认）：发送正常请求，通过检查后直接创建实例。
         CreateInstancesResponse:
             type: object
             properties:
@@ -448,6 +413,34 @@ components:
                     items:
                         type: string
                     description: 实例id列表
+        DeleteInstancesRequest:
+            type: object
+            properties:
+                accessKeyId:
+                    type: string
+                    description: 阿里云AccessKey ID
+                accessKeySecret:
+                    type: string
+                    description: 阿里云AccessKey Secret
+                endpoint:
+                    type: string
+                    description: 访问的域名
+                regionId:
+                    type: string
+                    description: 地域id
+                force:
+                    type: boolean
+                    description: 是否强制释放运行中（Running）的实例。  true：强制释放运行中（Running）的实例。强制释放相当于断电，实例内存以及存储中的临时数据都会被擦除，无法恢复。  false：正常释放实例，此时实例必须处于已停止（Stopped）状态。  默认值为false。
+                terminateSubscription:
+                    type: boolean
+                    description: 是否释放已到期的包年包月实例。 默认值为false。
+                instanceIds:
+                    type: array
+                    items:
+                        type: string
+                dryRun:
+                    type: boolean
+                    description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。  false（默认）：发送正常请求，通过检查后直接创建实例。
         DeleteInstancesResponse:
             type: object
             properties:
@@ -633,7 +626,7 @@ components:
                     description: 是否可以在I/O优化实例上运行。
                 imageOwnerAlias:
                     type: string
-                    description: 镜像来源。可能值：    system：阿里云提供的公共镜像。    self：您创建的自定义镜像。    others：其他阿里云用户提供的共享镜像或社区镜像。    marketplace：镜像市场提供的镜像。
+                    description: 镜像来源。可能值：  system：阿里云提供的公共镜像。  self：您创建的自定义镜像。  others：其他阿里云用户提供的共享镜像或社区镜像。  marketplace：镜像市场提供的镜像。
                 isSupportCloudInit:
                     type: boolean
                     description: 是否支持Cloud Init。
@@ -642,7 +635,7 @@ components:
                     description: 镜像版本。
                 usage:
                     type: string
-                    description: 有引用关系的资源类型。可能值：    instance：创建了一台或多台ECS实例。    none：未创建过ECS实例。
+                    description: 有引用关系的资源类型。可能值：  instance：创建了一台或多台ECS实例。  none：未创建过ECS实例。
                 isSelfShared:
                     type: string
                     description: 是否共享过该自定义镜像给其他用户。
@@ -692,7 +685,7 @@ components:
                     format: int64
                 loginAsNonRootSupported:
                     type: boolean
-                    description: 当前镜像是否支持非root用户登录。可能值：    true：支持。    false：不支持。
+                    description: 当前镜像是否支持非root用户登录。可能值：  true：支持。  false：不支持。
                 supplierName:
                     type: string
                     description: 社区镜像认证企业名称。
@@ -715,7 +708,7 @@ components:
             properties:
                 localStorageCategory:
                     type: string
-                    description: 本地盘类型。更多信息，请参见本地盘。可能值：    localhddpro：实例规格族d1ne和d1搭载的SATA HDD本地盘。    localssdpro：实例规格族i2、i2g、i1、ga1和gn5等搭载的NVMe SSD本地盘。
+                    description: 本地盘类型。更多信息，请参见本地盘。可能值：  localhddpro：实例规格族d1ne和d1搭载的SATA HDD本地盘。  localssdpro：实例规格族i2、i2g、i1、ga1和gn5等搭载的NVMe SSD本地盘。
                 primaryEniQueueNumber:
                     type: integer
                     description: 主网卡默认队列数。
@@ -730,7 +723,7 @@ components:
                     format: int64
                 instanceFamilyLevel:
                     type: string
-                    description: 实例规格族级别。可能值：    EntryLevel：入门级（共享型）。    EnterpriseLevel：企业级。    CreditEntryLevel：积分入门级。
+                    description: 实例规格族级别。可能值：  EntryLevel：入门级（共享型）。  EnterpriseLevel：企业级。  CreditEntryLevel：积分入门级。
                 instancePpsRx:
                     type: integer
                     description: 内网入方向网络收发包能力。单位：Pps
@@ -775,7 +768,7 @@ components:
                     format: int32
                 nvmeSupport:
                     type: string
-                    description: 实例规格所挂载的云盘是否支持NVMe。可能值：    required：支持。表示云盘以NVMe的方式挂载。    unsupported：不支持。表示云盘不以NVMe的方式挂载。
+                    description: 实例规格所挂载的云盘是否支持NVMe。可能值：  required：支持。表示云盘以NVMe的方式挂载。  unsupported：不支持。表示云盘不以NVMe的方式挂载。
                 diskQuantity:
                     type: integer
                     description: 支持挂载的云盘数量上限。
@@ -1083,7 +1076,7 @@ components:
                     description: 实例ID。N的取值范围：1~100。
                 dryRun:
                     type: boolean
-                    description: 是否只预检此次请求。取值范围： true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。 false（默认）：发送正常请求，通过检查后直接创建实例。
+                    description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。  false（默认）：发送正常请求，通过检查后直接创建实例。
         RebootInstancesResponse:
             type: object
             properties:
@@ -1116,10 +1109,10 @@ components:
                     description: 实例ID, 数组长度取值范围：1~100
                 batchOptimization:
                     type: string
-                    description: 设置批量操作模式。取值范围：    AllTogether：该模式下，如果实例全部启动成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例启动失败，并返回失败信息。    SuccessFirst：该模式下，分别启动每个实例，返回结果包含每个实例的操作结果信息。    默认值：AllTogether
+                    description: 设置批量操作模式。取值范围：  AllTogether：该模式下，如果实例全部启动成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例启动失败，并返回失败信息。  SuccessFirst：该模式下，分别启动每个实例，返回结果包含每个实例的操作结果信息。  默认值：AllTogether
                 dryRun:
                     type: boolean
-                    description: 是否只预检此次请求。取值范围： true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。 false（默认）：发送正常请求，通过检查后直接创建实例。
+                    description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。  false（默认）：发送正常请求，通过检查后直接创建实例。
         StartInstancesResponse:
             type: object
             properties:
@@ -1170,7 +1163,7 @@ components:
                     description: 停止按量付费ECS实例时，设置的停止模式。取值  StopCharging：节省停机模式。有关StopCharging生效的条件，请参见按量付费实例节省停机模式的启用条件章节。  KeepCharging：普通停机模式。实例停止后仍继续收费。  默认值：如果您在ECS控制台上开启VPC内实例节省停机模式（更多信息，请参见打开默认启用节省停机模式），并符合开启条件，则默认值为StopCharging。否则，默认值为KeepCharging。
                 batchOptimization:
                     type: string
-                    description: 设置批量操作模式。取值范围：   AllTogether：该模式下，如果实例全部停止成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例停止失败，并返回失败信息。   SuccessFirst：该模式下，分别停止每个实例，返回结果包含每个实例的操作结果信息。   默认值：AllTogether
+                    description: 设置批量操作模式。取值范围：  AllTogether：该模式下，如果实例全部停止成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例停止失败，并返回失败信息。  SuccessFirst：该模式下，分别停止每个实例，返回结果包含每个实例的操作结果信息。 默认值：AllTogether
                 instanceIds:
                     type: array
                     items:
@@ -1178,7 +1171,7 @@ components:
                     description: 实例ID列表
                 dryRun:
                     type: boolean
-                    description: 是否只预检此次请求。取值范围： true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。 false（默认）：发送正常请求，通过检查后直接创建实例。
+                    description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。  false（默认）：发送正常请求，通过检查后直接创建实例。
         StopInstancesResponse:
             type: object
             properties:

@@ -57,65 +57,97 @@ func (m *CreateInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-		err := CreateInstancesRequestValidationError{
-			field:  "AccessKeyId",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeyId != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+			err := CreateInstancesRequestValidationError{
+				field:  "AccessKeyId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-		err := CreateInstancesRequestValidationError{
-			field:  "AccessKeySecret",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeySecret != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
+			err := CreateInstancesRequestValidationError{
+				field:  "AccessKeySecret",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-		err := CreateInstancesRequestValidationError{
-			field:  "Endpoint",
-			reason: "value length must be at least 1 runes",
+	if m.Endpoint != nil {
+
+		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
+			err := CreateInstancesRequestValidationError{
+				field:  "Endpoint",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetRegionId()) < 1 {
-		err := CreateInstancesRequestValidationError{
-			field:  "RegionId",
-			reason: "value length must be at least 1 runes",
+	if m.RegionId != nil {
+
+		if utf8.RuneCountInString(m.GetRegionId()) < 1 {
+			err := CreateInstancesRequestValidationError{
+				field:  "RegionId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	// no validation rules for ImageId
+	if m.ImageId != nil {
+		// no validation rules for ImageId
+	}
 
-	// no validation rules for Name
+	if m.Name != nil {
+		// no validation rules for Name
+	}
 
-	// no validation rules for InstanceType
+	if m.InstanceType != nil {
+		// no validation rules for InstanceType
+	}
 
-	// no validation rules for SystemDiskSize
+	if m.SystemDiskSize != nil {
+		// no validation rules for SystemDiskSize
+	}
 
-	// no validation rules for UniqueSuffix
+	if m.UniqueSuffix != nil {
+		// no validation rules for UniqueSuffix
+	}
 
-	// no validation rules for Amount
+	if m.Amount != nil {
+		// no validation rules for Amount
+	}
 
-	// no validation rules for Password
+	if m.Password != nil {
+		// no validation rules for Password
+	}
 
-	// no validation rules for DryRun
+	if m.DryRun != nil {
+		// no validation rules for DryRun
+	}
 
 	if len(errors) > 0 {
 		return CreateInstancesRequestMultiError(errors)
@@ -219,11 +251,17 @@ func (m *CreateInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RequestId
+	if m.RequestId != nil {
+		// no validation rules for RequestId
+	}
 
-	// no validation rules for OrderId
+	if m.OrderId != nil {
+		// no validation rules for OrderId
+	}
 
-	// no validation rules for TradePrice
+	if m.TradePrice != nil {
+		// no validation rules for TradePrice
+	}
 
 	if len(errors) > 0 {
 		return CreateInstancesResponseMultiError(errors)
@@ -327,50 +365,74 @@ func (m *ListInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-		err := ListInstancesRequestValidationError{
-			field:  "AccessKeyId",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeyId != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+			err := ListInstancesRequestValidationError{
+				field:  "AccessKeyId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-		err := ListInstancesRequestValidationError{
-			field:  "AccessKeySecret",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeySecret != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
+			err := ListInstancesRequestValidationError{
+				field:  "AccessKeySecret",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-		err := ListInstancesRequestValidationError{
-			field:  "Endpoint",
-			reason: "value length must be at least 1 runes",
+	if m.Endpoint != nil {
+
+		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
+			err := ListInstancesRequestValidationError{
+				field:  "Endpoint",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	// no validation rules for RegionId
+	if m.RegionId != nil {
+		// no validation rules for RegionId
+	}
 
-	// no validation rules for PageNumber
+	if m.PageNumber != nil {
+		// no validation rules for PageNumber
+	}
 
-	// no validation rules for PageSize
+	if m.PageSize != nil {
+		// no validation rules for PageSize
+	}
 
-	// no validation rules for NextToken
+	if m.NextToken != nil {
+		// no validation rules for NextToken
+	}
 
-	// no validation rules for InstanceName
+	if m.InstanceName != nil {
+		// no validation rules for InstanceName
+	}
 
-	// no validation rules for DryRun
+	if m.DryRun != nil {
+		// no validation rules for DryRun
+	}
 
 	if len(errors) > 0 {
 		return ListInstancesRequestMultiError(errors)
@@ -474,16 +536,6 @@ func (m *ListInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RequestId
-
-	// no validation rules for PageNumber
-
-	// no validation rules for PageSize
-
-	// no validation rules for TotalCount
-
-	// no validation rules for NextToken
-
 	for idx, item := range m.GetInstances() {
 		_, _ = idx, item
 
@@ -516,6 +568,26 @@ func (m *ListInstancesResponse) validate(all bool) error {
 			}
 		}
 
+	}
+
+	if m.RequestId != nil {
+		// no validation rules for RequestId
+	}
+
+	if m.PageNumber != nil {
+		// no validation rules for PageNumber
+	}
+
+	if m.PageSize != nil {
+		// no validation rules for PageSize
+	}
+
+	if m.TotalCount != nil {
+		// no validation rules for TotalCount
+	}
+
+	if m.NextToken != nil {
+		// no validation rules for NextToken
 	}
 
 	if len(errors) > 0 {
@@ -620,44 +692,62 @@ func (m *ListRegionsRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-		err := ListRegionsRequestValidationError{
-			field:  "AccessKeyId",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeyId != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+			err := ListRegionsRequestValidationError{
+				field:  "AccessKeyId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-		err := ListRegionsRequestValidationError{
-			field:  "AccessKeySecret",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeySecret != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
+			err := ListRegionsRequestValidationError{
+				field:  "AccessKeySecret",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-		err := ListRegionsRequestValidationError{
-			field:  "Endpoint",
-			reason: "value length must be at least 1 runes",
+	if m.Endpoint != nil {
+
+		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
+			err := ListRegionsRequestValidationError{
+				field:  "Endpoint",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	// no validation rules for InstanceChargeType
+	if m.InstanceChargeType != nil {
+		// no validation rules for InstanceChargeType
+	}
 
-	// no validation rules for ResourceType
+	if m.ResourceType != nil {
+		// no validation rules for ResourceType
+	}
 
-	// no validation rules for AcceptLanguage
+	if m.AcceptLanguage != nil {
+		// no validation rules for AcceptLanguage
+	}
 
 	if len(errors) > 0 {
 		return ListRegionsRequestMultiError(errors)
@@ -897,57 +987,81 @@ func (m *ListImagesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-		err := ListImagesRequestValidationError{
-			field:  "AccessKeyId",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeyId != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+			err := ListImagesRequestValidationError{
+				field:  "AccessKeyId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-		err := ListImagesRequestValidationError{
-			field:  "AccessKeySecret",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeySecret != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
+			err := ListImagesRequestValidationError{
+				field:  "AccessKeySecret",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-		err := ListImagesRequestValidationError{
-			field:  "Endpoint",
-			reason: "value length must be at least 1 runes",
+	if m.Endpoint != nil {
+
+		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
+			err := ListImagesRequestValidationError{
+				field:  "Endpoint",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetRegionId()) < 1 {
-		err := ListImagesRequestValidationError{
-			field:  "RegionId",
-			reason: "value length must be at least 1 runes",
+	if m.RegionId != nil {
+
+		if utf8.RuneCountInString(m.GetRegionId()) < 1 {
+			err := ListImagesRequestValidationError{
+				field:  "RegionId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	// no validation rules for Status
+	if m.Status != nil {
+		// no validation rules for Status
+	}
 
-	// no validation rules for ImageId
+	if m.ImageId != nil {
+		// no validation rules for ImageId
+	}
 
-	// no validation rules for ShowExpired
+	if m.ShowExpired != nil {
+		// no validation rules for ShowExpired
+	}
 
-	// no validation rules for ImageName
+	if m.ImageName != nil {
+		// no validation rules for ImageName
+	}
 
 	if len(errors) > 0 {
 		return ListImagesRequestMultiError(errors)
@@ -1051,16 +1165,6 @@ func (m *ListImagesResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for PageSize
-
-	// no validation rules for PageNumber
-
-	// no validation rules for RequestId
-
-	// no validation rules for TotalCount
-
-	// no validation rules for RegionId
-
 	for idx, item := range m.GetImages() {
 		_, _ = idx, item
 
@@ -1093,6 +1197,26 @@ func (m *ListImagesResponse) validate(all bool) error {
 			}
 		}
 
+	}
+
+	if m.PageSize != nil {
+		// no validation rules for PageSize
+	}
+
+	if m.PageNumber != nil {
+		// no validation rules for PageNumber
+	}
+
+	if m.RequestId != nil {
+		// no validation rules for RequestId
+	}
+
+	if m.TotalCount != nil {
+		// no validation rules for TotalCount
+	}
+
+	if m.RegionId != nil {
+		// no validation rules for RegionId
 	}
 
 	if len(errors) > 0 {
@@ -1197,42 +1321,58 @@ func (m *ListInstanceTypesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-		err := ListInstanceTypesRequestValidationError{
-			field:  "AccessKeyId",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeyId != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+			err := ListInstanceTypesRequestValidationError{
+				field:  "AccessKeyId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-		err := ListInstanceTypesRequestValidationError{
-			field:  "AccessKeySecret",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeySecret != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
+			err := ListInstanceTypesRequestValidationError{
+				field:  "AccessKeySecret",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-		err := ListInstanceTypesRequestValidationError{
-			field:  "Endpoint",
-			reason: "value length must be at least 1 runes",
+	if m.Endpoint != nil {
+
+		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
+			err := ListInstanceTypesRequestValidationError{
+				field:  "Endpoint",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	// no validation rules for MaxResults
+	if m.MaxResults != nil {
+		// no validation rules for MaxResults
+	}
 
-	// no validation rules for NextToken
+	if m.NextToken != nil {
+		// no validation rules for NextToken
+	}
 
 	if len(errors) > 0 {
 		return ListInstanceTypesRequestMultiError(errors)
@@ -1336,8 +1476,6 @@ func (m *ListInstanceTypesResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RequestId
-
 	for idx, item := range m.GetInstanceTypes() {
 		_, _ = idx, item
 
@@ -1372,7 +1510,13 @@ func (m *ListInstanceTypesResponse) validate(all bool) error {
 
 	}
 
-	// no validation rules for NextToken
+	if m.RequestId != nil {
+		// no validation rules for RequestId
+	}
+
+	if m.NextToken != nil {
+		// no validation rules for NextToken
+	}
 
 	if len(errors) > 0 {
 		return ListInstanceTypesResponseMultiError(errors)
@@ -1476,50 +1620,6 @@ func (m *StartInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-		err := StartInstancesRequestValidationError{
-			field:  "AccessKeyId",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-		err := StartInstancesRequestValidationError{
-			field:  "AccessKeySecret",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-		err := StartInstancesRequestValidationError{
-			field:  "Endpoint",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetRegionId()) < 1 {
-		err := StartInstancesRequestValidationError{
-			field:  "RegionId",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if l := len(m.GetInstanceIds()); l < 1 || l > 100 {
 		err := StartInstancesRequestValidationError{
 			field:  "InstanceIds",
@@ -1531,9 +1631,73 @@ func (m *StartInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for BatchOptimization
+	if m.AccessKeyId != nil {
 
-	// no validation rules for DryRun
+		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+			err := StartInstancesRequestValidationError{
+				field:  "AccessKeyId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.AccessKeySecret != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
+			err := StartInstancesRequestValidationError{
+				field:  "AccessKeySecret",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.Endpoint != nil {
+
+		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
+			err := StartInstancesRequestValidationError{
+				field:  "Endpoint",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.RegionId != nil {
+
+		if utf8.RuneCountInString(m.GetRegionId()) < 1 {
+			err := StartInstancesRequestValidationError{
+				field:  "RegionId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.BatchOptimization != nil {
+		// no validation rules for BatchOptimization
+	}
+
+	if m.DryRun != nil {
+		// no validation rules for DryRun
+	}
 
 	if len(errors) > 0 {
 		return StartInstancesRequestMultiError(errors)
@@ -1637,15 +1801,25 @@ func (m *InstanceResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Code
+	if m.Code != nil {
+		// no validation rules for Code
+	}
 
-	// no validation rules for Message
+	if m.Message != nil {
+		// no validation rules for Message
+	}
 
-	// no validation rules for InstanceId
+	if m.InstanceId != nil {
+		// no validation rules for InstanceId
+	}
 
-	// no validation rules for CurrentStatus
+	if m.CurrentStatus != nil {
+		// no validation rules for CurrentStatus
+	}
 
-	// no validation rules for PreviousStatus
+	if m.PreviousStatus != nil {
+		// no validation rules for PreviousStatus
+	}
 
 	if len(errors) > 0 {
 		return InstanceResponseMultiError(errors)
@@ -1747,8 +1921,6 @@ func (m *StartInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RequestId
-
 	for idx, item := range m.GetInstanceResponses() {
 		_, _ = idx, item
 
@@ -1781,6 +1953,10 @@ func (m *StartInstancesResponse) validate(all bool) error {
 			}
 		}
 
+	}
+
+	if m.RequestId != nil {
+		// no validation rules for RequestId
 	}
 
 	if len(errors) > 0 {
@@ -1885,56 +2061,6 @@ func (m *StopInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-		err := StopInstancesRequestValidationError{
-			field:  "AccessKeyId",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-		err := StopInstancesRequestValidationError{
-			field:  "AccessKeySecret",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-		err := StopInstancesRequestValidationError{
-			field:  "Endpoint",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetRegionId()) < 1 {
-		err := StopInstancesRequestValidationError{
-			field:  "RegionId",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	// no validation rules for ForceStop
-
-	// no validation rules for StoppedMode
-
-	// no validation rules for BatchOptimization
-
 	if l := len(m.GetInstanceIds()); l < 1 || l > 100 {
 		err := StopInstancesRequestValidationError{
 			field:  "InstanceIds",
@@ -1946,7 +2072,81 @@ func (m *StopInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for DryRun
+	if m.AccessKeyId != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+			err := StopInstancesRequestValidationError{
+				field:  "AccessKeyId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.AccessKeySecret != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
+			err := StopInstancesRequestValidationError{
+				field:  "AccessKeySecret",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.Endpoint != nil {
+
+		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
+			err := StopInstancesRequestValidationError{
+				field:  "Endpoint",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.RegionId != nil {
+
+		if utf8.RuneCountInString(m.GetRegionId()) < 1 {
+			err := StopInstancesRequestValidationError{
+				field:  "RegionId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.ForceStop != nil {
+		// no validation rules for ForceStop
+	}
+
+	if m.StoppedMode != nil {
+		// no validation rules for StoppedMode
+	}
+
+	if m.BatchOptimization != nil {
+		// no validation rules for BatchOptimization
+	}
+
+	if m.DryRun != nil {
+		// no validation rules for DryRun
+	}
 
 	if len(errors) > 0 {
 		return StopInstancesRequestMultiError(errors)
@@ -2050,8 +2250,6 @@ func (m *StopInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RequestId
-
 	for idx, item := range m.GetInstanceResponses() {
 		_, _ = idx, item
 
@@ -2084,6 +2282,10 @@ func (m *StopInstancesResponse) validate(all bool) error {
 			}
 		}
 
+	}
+
+	if m.RequestId != nil {
+		// no validation rules for RequestId
 	}
 
 	if len(errors) > 0 {
@@ -2188,54 +2390,6 @@ func (m *RebootInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-		err := RebootInstancesRequestValidationError{
-			field:  "AccessKeyId",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-		err := RebootInstancesRequestValidationError{
-			field:  "AccessKeySecret",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-		err := RebootInstancesRequestValidationError{
-			field:  "Endpoint",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetRegionId()) < 1 {
-		err := RebootInstancesRequestValidationError{
-			field:  "RegionId",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	// no validation rules for ForceReboot
-
-	// no validation rules for BatchOptimization
-
 	if l := len(m.GetInstanceIds()); l < 1 || l > 100 {
 		err := RebootInstancesRequestValidationError{
 			field:  "InstanceIds",
@@ -2247,7 +2401,77 @@ func (m *RebootInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for DryRun
+	if m.AccessKeyId != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+			err := RebootInstancesRequestValidationError{
+				field:  "AccessKeyId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.AccessKeySecret != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
+			err := RebootInstancesRequestValidationError{
+				field:  "AccessKeySecret",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.Endpoint != nil {
+
+		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
+			err := RebootInstancesRequestValidationError{
+				field:  "Endpoint",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.RegionId != nil {
+
+		if utf8.RuneCountInString(m.GetRegionId()) < 1 {
+			err := RebootInstancesRequestValidationError{
+				field:  "RegionId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if m.ForceReboot != nil {
+		// no validation rules for ForceReboot
+	}
+
+	if m.BatchOptimization != nil {
+		// no validation rules for BatchOptimization
+	}
+
+	if m.DryRun != nil {
+		// no validation rules for DryRun
+	}
 
 	if len(errors) > 0 {
 		return RebootInstancesRequestMultiError(errors)
@@ -2351,8 +2575,6 @@ func (m *RebootInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RequestId
-
 	for idx, item := range m.GetInstanceResponses() {
 		_, _ = idx, item
 
@@ -2385,6 +2607,10 @@ func (m *RebootInstancesResponse) validate(all bool) error {
 			}
 		}
 
+	}
+
+	if m.RequestId != nil {
+		// no validation rules for RequestId
 	}
 
 	if len(errors) > 0 {
@@ -2489,55 +2715,77 @@ func (m *DeleteInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-		err := DeleteInstancesRequestValidationError{
-			field:  "AccessKeyId",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeyId != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+			err := DeleteInstancesRequestValidationError{
+				field:  "AccessKeyId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-		err := DeleteInstancesRequestValidationError{
-			field:  "AccessKeySecret",
-			reason: "value length must be at least 1 runes",
+	if m.AccessKeySecret != nil {
+
+		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
+			err := DeleteInstancesRequestValidationError{
+				field:  "AccessKeySecret",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-		err := DeleteInstancesRequestValidationError{
-			field:  "Endpoint",
-			reason: "value length must be at least 1 runes",
+	if m.Endpoint != nil {
+
+		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
+			err := DeleteInstancesRequestValidationError{
+				field:  "Endpoint",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	if utf8.RuneCountInString(m.GetRegionId()) < 1 {
-		err := DeleteInstancesRequestValidationError{
-			field:  "RegionId",
-			reason: "value length must be at least 1 runes",
+	if m.RegionId != nil {
+
+		if utf8.RuneCountInString(m.GetRegionId()) < 1 {
+			err := DeleteInstancesRequestValidationError{
+				field:  "RegionId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
+
 	}
 
-	// no validation rules for Force
+	if m.Force != nil {
+		// no validation rules for Force
+	}
 
-	// no validation rules for TerminateSubscription
+	if m.TerminateSubscription != nil {
+		// no validation rules for TerminateSubscription
+	}
 
-	// no validation rules for DryRun
+	if m.DryRun != nil {
+		// no validation rules for DryRun
+	}
 
 	if len(errors) > 0 {
 		return DeleteInstancesRequestMultiError(errors)
@@ -2641,7 +2889,9 @@ func (m *DeleteInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RequestId
+	if m.RequestId != nil {
+		// no validation rules for RequestId
+	}
 
 	if len(errors) > 0 {
 		return DeleteInstancesResponseMultiError(errors)
@@ -2744,90 +2994,6 @@ func (m *ListInstancesResponse_Instance) validate(all bool) error {
 	}
 
 	var errors []error
-
-	// no validation rules for CreationTime
-
-	// no validation rules for SerialNumber
-
-	// no validation rules for Status
-
-	// no validation rules for DeploymentSetId
-
-	// no validation rules for KeyPairName
-
-	// no validation rules for SaleCycle
-
-	// no validation rules for DeviceAvailable
-
-	// no validation rules for LocalStorageCapacity
-
-	// no validation rules for Description
-
-	// no validation rules for SpotDuration
-
-	// no validation rules for InstanceNetworkType
-
-	// no validation rules for InstanceName
-
-	// no validation rules for OsNameEn
-
-	// no validation rules for HpcClusterId
-
-	// no validation rules for Memory
-
-	// no validation rules for OsName
-
-	// no validation rules for DeploymentSetGroupNo
-
-	// no validation rules for ImageId
-
-	// no validation rules for GpuSpec
-
-	// no validation rules for AutoReleaseTime
-
-	// no validation rules for DeletionProtection
-
-	// no validation rules for StoppedMode
-
-	// no validation rules for GpuAmount
-
-	// no validation rules for HostName
-
-	// no validation rules for InstanceId
-
-	// no validation rules for InternetMaxBandwidthOut
-
-	// no validation rules for InternetMaxBandwidthIn
-
-	// no validation rules for InstanceType
-
-	// no validation rules for InstanceChargeType
-
-	// no validation rules for RegionId
-
-	// no validation rules for IoOptimized
-
-	// no validation rules for StartTime
-
-	// no validation rules for Cpu
-
-	// no validation rules for LocalStorageAmount
-
-	// no validation rules for ExpiredTime
-
-	// no validation rules for ResourceGroupId
-
-	// no validation rules for InternetChargeType
-
-	// no validation rules for ZoneId
-
-	// no validation rules for Recyclable
-
-	// no validation rules for CreditSpecification
-
-	// no validation rules for InstanceTypeFamily
-
-	// no validation rules for OsType
 
 	for idx, item := range m.GetNetworkInterfaces() {
 		_, _ = idx, item
@@ -3047,6 +3213,174 @@ func (m *ListInstancesResponse_Instance) validate(all bool) error {
 		}
 	}
 
+	if m.CreationTime != nil {
+		// no validation rules for CreationTime
+	}
+
+	if m.SerialNumber != nil {
+		// no validation rules for SerialNumber
+	}
+
+	if m.Status != nil {
+		// no validation rules for Status
+	}
+
+	if m.DeploymentSetId != nil {
+		// no validation rules for DeploymentSetId
+	}
+
+	if m.KeyPairName != nil {
+		// no validation rules for KeyPairName
+	}
+
+	if m.SaleCycle != nil {
+		// no validation rules for SaleCycle
+	}
+
+	if m.DeviceAvailable != nil {
+		// no validation rules for DeviceAvailable
+	}
+
+	if m.LocalStorageCapacity != nil {
+		// no validation rules for LocalStorageCapacity
+	}
+
+	if m.Description != nil {
+		// no validation rules for Description
+	}
+
+	if m.SpotDuration != nil {
+		// no validation rules for SpotDuration
+	}
+
+	if m.InstanceNetworkType != nil {
+		// no validation rules for InstanceNetworkType
+	}
+
+	if m.InstanceName != nil {
+		// no validation rules for InstanceName
+	}
+
+	if m.OsNameEn != nil {
+		// no validation rules for OsNameEn
+	}
+
+	if m.HpcClusterId != nil {
+		// no validation rules for HpcClusterId
+	}
+
+	if m.Memory != nil {
+		// no validation rules for Memory
+	}
+
+	if m.OsName != nil {
+		// no validation rules for OsName
+	}
+
+	if m.DeploymentSetGroupNo != nil {
+		// no validation rules for DeploymentSetGroupNo
+	}
+
+	if m.ImageId != nil {
+		// no validation rules for ImageId
+	}
+
+	if m.GpuSpec != nil {
+		// no validation rules for GpuSpec
+	}
+
+	if m.AutoReleaseTime != nil {
+		// no validation rules for AutoReleaseTime
+	}
+
+	if m.DeletionProtection != nil {
+		// no validation rules for DeletionProtection
+	}
+
+	if m.StoppedMode != nil {
+		// no validation rules for StoppedMode
+	}
+
+	if m.GpuAmount != nil {
+		// no validation rules for GpuAmount
+	}
+
+	if m.HostName != nil {
+		// no validation rules for HostName
+	}
+
+	if m.InstanceId != nil {
+		// no validation rules for InstanceId
+	}
+
+	if m.InternetMaxBandwidthOut != nil {
+		// no validation rules for InternetMaxBandwidthOut
+	}
+
+	if m.InternetMaxBandwidthIn != nil {
+		// no validation rules for InternetMaxBandwidthIn
+	}
+
+	if m.InstanceType != nil {
+		// no validation rules for InstanceType
+	}
+
+	if m.InstanceChargeType != nil {
+		// no validation rules for InstanceChargeType
+	}
+
+	if m.RegionId != nil {
+		// no validation rules for RegionId
+	}
+
+	if m.IoOptimized != nil {
+		// no validation rules for IoOptimized
+	}
+
+	if m.StartTime != nil {
+		// no validation rules for StartTime
+	}
+
+	if m.Cpu != nil {
+		// no validation rules for Cpu
+	}
+
+	if m.LocalStorageAmount != nil {
+		// no validation rules for LocalStorageAmount
+	}
+
+	if m.ExpiredTime != nil {
+		// no validation rules for ExpiredTime
+	}
+
+	if m.ResourceGroupId != nil {
+		// no validation rules for ResourceGroupId
+	}
+
+	if m.InternetChargeType != nil {
+		// no validation rules for InternetChargeType
+	}
+
+	if m.ZoneId != nil {
+		// no validation rules for ZoneId
+	}
+
+	if m.Recyclable != nil {
+		// no validation rules for Recyclable
+	}
+
+	if m.CreditSpecification != nil {
+		// no validation rules for CreditSpecification
+	}
+
+	if m.InstanceTypeFamily != nil {
+		// no validation rules for InstanceTypeFamily
+	}
+
+	if m.OsType != nil {
+		// no validation rules for OsType
+	}
+
 	if len(errors) > 0 {
 		return ListInstancesResponse_InstanceMultiError(errors)
 	}
@@ -3152,14 +3486,6 @@ func (m *ListInstancesResponse_Instance_NetworkInterface) validate(all bool) err
 
 	var errors []error
 
-	// no validation rules for Type
-
-	// no validation rules for MacAddress
-
-	// no validation rules for PrimaryIpAddress
-
-	// no validation rules for NetworkInterfaceId
-
 	for idx, item := range m.GetPrivateIpSets() {
 		_, _ = idx, item
 
@@ -3226,6 +3552,22 @@ func (m *ListInstancesResponse_Instance_NetworkInterface) validate(all bool) err
 			}
 		}
 
+	}
+
+	if m.Type != nil {
+		// no validation rules for Type
+	}
+
+	if m.MacAddress != nil {
+		// no validation rules for MacAddress
+	}
+
+	if m.PrimaryIpAddress != nil {
+		// no validation rules for PrimaryIpAddress
+	}
+
+	if m.NetworkInterfaceId != nil {
+		// no validation rules for NetworkInterfaceId
 	}
 
 	if len(errors) > 0 {
@@ -3339,9 +3681,13 @@ func (m *ListInstancesResponse_Instance_OperationLock) validate(all bool) error 
 
 	var errors []error
 
-	// no validation rules for LockMsg
+	if m.LockMsg != nil {
+		// no validation rules for LockMsg
+	}
 
-	// no validation rules for LockReason
+	if m.LockReason != nil {
+		// no validation rules for LockReason
+	}
 
 	if len(errors) > 0 {
 		return ListInstancesResponse_Instance_OperationLockMultiError(errors)
@@ -3449,9 +3795,13 @@ func (m *ListInstancesResponse_Instance_Tag) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for TagValue
+	if m.TagValue != nil {
+		// no validation rules for TagValue
+	}
 
-	// no validation rules for TagKey
+	if m.TagKey != nil {
+		// no validation rules for TagKey
+	}
 
 	if len(errors) > 0 {
 		return ListInstancesResponse_Instance_TagMultiError(errors)
@@ -3559,11 +3909,17 @@ func (m *ListInstancesResponse_Instance_VpcAttributes) validate(all bool) error 
 
 	var errors []error
 
-	// no validation rules for VpcId
+	if m.VpcId != nil {
+		// no validation rules for VpcId
+	}
 
-	// no validation rules for NatIpAddress
+	if m.NatIpAddress != nil {
+		// no validation rules for NatIpAddress
+	}
 
-	// no validation rules for VSwitchId
+	if m.VSwitchId != nil {
+		// no validation rules for VSwitchId
+	}
 
 	if len(errors) > 0 {
 		return ListInstancesResponse_Instance_VpcAttributesMultiError(errors)
@@ -3672,15 +4028,25 @@ func (m *ListInstancesResponse_Instance_EipAddress) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for AllocationId
+	if m.AllocationId != nil {
+		// no validation rules for AllocationId
+	}
 
-	// no validation rules for IsSupportUnAssociate
+	if m.IsSupportUnAssociate != nil {
+		// no validation rules for IsSupportUnAssociate
+	}
 
-	// no validation rules for InternalChargeType
+	if m.InternalChargeType != nil {
+		// no validation rules for InternalChargeType
+	}
 
-	// no validation rules for IpAddress
+	if m.IpAddress != nil {
+		// no validation rules for IpAddress
+	}
 
-	// no validation rules for Bandwidth
+	if m.Bandwidth != nil {
+		// no validation rules for Bandwidth
+	}
 
 	if len(errors) > 0 {
 		return ListInstancesResponse_Instance_EipAddressMultiError(errors)
@@ -3789,9 +4155,13 @@ func (m *ListInstancesResponse_Instance_DedicatedInstanceAttribute) validate(all
 
 	var errors []error
 
-	// no validation rules for Affinity
+	if m.Affinity != nil {
+		// no validation rules for Affinity
+	}
 
-	// no validation rules for Tenancy
+	if m.Tenancy != nil {
+		// no validation rules for Tenancy
+	}
 
 	if len(errors) > 0 {
 		return ListInstancesResponse_Instance_DedicatedInstanceAttributeMultiError(errors)
@@ -3910,11 +4280,17 @@ func (m *ListInstancesResponse_Instance_CpuOptions) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Numa
+	if m.Numa != nil {
+		// no validation rules for Numa
+	}
 
-	// no validation rules for CoreCount
+	if m.CoreCount != nil {
+		// no validation rules for CoreCount
+	}
 
-	// no validation rules for ThreadPerCore
+	if m.ThreadPerCore != nil {
+		// no validation rules for ThreadPerCore
+	}
 
 	if len(errors) > 0 {
 		return ListInstancesResponse_Instance_CpuOptionsMultiError(errors)
@@ -4023,9 +4399,13 @@ func (m *ListInstancesResponse_Instance_NetworkInterface_PrivateIpSet) validate(
 
 	var errors []error
 
-	// no validation rules for PrivateIpAddress
+	if m.PrivateIpAddress != nil {
+		// no validation rules for PrivateIpAddress
+	}
 
-	// no validation rules for Primary
+	if m.Primary != nil {
+		// no validation rules for Primary
+	}
 
 	if len(errors) > 0 {
 		return ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetMultiError(errors)
@@ -4145,7 +4525,9 @@ func (m *ListInstancesResponse_Instance_NetworkInterface_Ipv6Set) validate(all b
 
 	var errors []error
 
-	// no validation rules for Ipv6Address
+	if m.Ipv6Address != nil {
+		// no validation rules for Ipv6Address
+	}
 
 	if len(errors) > 0 {
 		return ListInstancesResponse_Instance_NetworkInterface_Ipv6SetMultiError(errors)
@@ -4262,13 +4644,21 @@ func (m *ListRegionsResponse_Region) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RegionEndPoint
+	if m.RegionEndPoint != nil {
+		// no validation rules for RegionEndPoint
+	}
 
-	// no validation rules for LocalName
+	if m.LocalName != nil {
+		// no validation rules for LocalName
+	}
 
-	// no validation rules for RegionId
+	if m.RegionId != nil {
+		// no validation rules for RegionId
+	}
 
-	// no validation rules for Status
+	if m.Status != nil {
+		// no validation rules for Status
+	}
 
 	if len(errors) > 0 {
 		return ListRegionsResponse_RegionMultiError(errors)
@@ -4372,59 +4762,113 @@ func (m *ListImagesResponse_Image) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for CreationTime
+	if m.CreationTime != nil {
+		// no validation rules for CreationTime
+	}
 
-	// no validation rules for Status
+	if m.Status != nil {
+		// no validation rules for Status
+	}
 
-	// no validation rules for ImageFamily
+	if m.ImageFamily != nil {
+		// no validation rules for ImageFamily
+	}
 
-	// no validation rules for Progress
+	if m.Progress != nil {
+		// no validation rules for Progress
+	}
 
-	// no validation rules for IsCopied
+	if m.IsCopied != nil {
+		// no validation rules for IsCopied
+	}
 
-	// no validation rules for IsSupportIoOptimized
+	if m.IsSupportIoOptimized != nil {
+		// no validation rules for IsSupportIoOptimized
+	}
 
-	// no validation rules for ImageOwnerAlias
+	if m.ImageOwnerAlias != nil {
+		// no validation rules for ImageOwnerAlias
+	}
 
-	// no validation rules for IsSupportCloudInit
+	if m.IsSupportCloudInit != nil {
+		// no validation rules for IsSupportCloudInit
+	}
 
-	// no validation rules for ImageVersion
+	if m.ImageVersion != nil {
+		// no validation rules for ImageVersion
+	}
 
-	// no validation rules for Usage
+	if m.Usage != nil {
+		// no validation rules for Usage
+	}
 
-	// no validation rules for IsSelfShared
+	if m.IsSelfShared != nil {
+		// no validation rules for IsSelfShared
+	}
 
-	// no validation rules for Description
+	if m.Description != nil {
+		// no validation rules for Description
+	}
 
-	// no validation rules for Size
+	if m.Size != nil {
+		// no validation rules for Size
+	}
 
-	// no validation rules for ResourceGroupId
+	if m.ResourceGroupId != nil {
+		// no validation rules for ResourceGroupId
+	}
 
-	// no validation rules for Platform
+	if m.Platform != nil {
+		// no validation rules for Platform
+	}
 
-	// no validation rules for OsNameEn
+	if m.OsNameEn != nil {
+		// no validation rules for OsNameEn
+	}
 
-	// no validation rules for ImageName
+	if m.ImageName != nil {
+		// no validation rules for ImageName
+	}
 
-	// no validation rules for OsName
+	if m.OsName != nil {
+		// no validation rules for OsName
+	}
 
-	// no validation rules for ImageId
+	if m.ImageId != nil {
+		// no validation rules for ImageId
+	}
 
-	// no validation rules for OsType
+	if m.OsType != nil {
+		// no validation rules for OsType
+	}
 
-	// no validation rules for IsSubscribed
+	if m.IsSubscribed != nil {
+		// no validation rules for IsSubscribed
+	}
 
-	// no validation rules for ProductCode
+	if m.ProductCode != nil {
+		// no validation rules for ProductCode
+	}
 
-	// no validation rules for Architecture
+	if m.Architecture != nil {
+		// no validation rules for Architecture
+	}
 
-	// no validation rules for IsPublic
+	if m.IsPublic != nil {
+		// no validation rules for IsPublic
+	}
 
-	// no validation rules for ImageOwnerId
+	if m.ImageOwnerId != nil {
+		// no validation rules for ImageOwnerId
+	}
 
-	// no validation rules for LoginAsNonRootSupported
+	if m.LoginAsNonRootSupported != nil {
+		// no validation rules for LoginAsNonRootSupported
+	}
 
-	// no validation rules for SupplierName
+	if m.SupplierName != nil {
+		// no validation rules for SupplierName
+	}
 
 	if len(errors) > 0 {
 		return ListImagesResponse_ImageMultiError(errors)
@@ -4530,57 +4974,109 @@ func (m *ListInstanceTypesResponse_InstanceType) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for LocalStorageCategory
+	if m.LocalStorageCategory != nil {
+		// no validation rules for LocalStorageCategory
+	}
 
-	// no validation rules for PrimaryEniQueueNumber
+	if m.PrimaryEniQueueNumber != nil {
+		// no validation rules for PrimaryEniQueueNumber
+	}
 
-	// no validation rules for MemorySize
+	if m.MemorySize != nil {
+		// no validation rules for MemorySize
+	}
 
-	// no validation rules for LocalStorageCapacity
+	if m.LocalStorageCapacity != nil {
+		// no validation rules for LocalStorageCapacity
+	}
 
-	// no validation rules for InstanceFamilyLevel
+	if m.InstanceFamilyLevel != nil {
+		// no validation rules for InstanceFamilyLevel
+	}
 
-	// no validation rules for InstancePpsRx
+	if m.InstancePpsRx != nil {
+		// no validation rules for InstancePpsRx
+	}
 
-	// no validation rules for EniIpv6AddressQuantity
+	if m.EniIpv6AddressQuantity != nil {
+		// no validation rules for EniIpv6AddressQuantity
+	}
 
-	// no validation rules for MaximumQueueNumberPerEni
+	if m.MaximumQueueNumberPerEni != nil {
+		// no validation rules for MaximumQueueNumberPerEni
+	}
 
-	// no validation rules for InstanceTypeId
+	if m.InstanceTypeId != nil {
+		// no validation rules for InstanceTypeId
+	}
 
-	// no validation rules for InstanceBandwidthRx
+	if m.InstanceBandwidthRx != nil {
+		// no validation rules for InstanceBandwidthRx
+	}
 
-	// no validation rules for SecondaryEniQueueNumber
+	if m.SecondaryEniQueueNumber != nil {
+		// no validation rules for SecondaryEniQueueNumber
+	}
 
-	// no validation rules for GpuSpec
+	if m.GpuSpec != nil {
+		// no validation rules for GpuSpec
+	}
 
-	// no validation rules for QueuePairNumber
+	if m.QueuePairNumber != nil {
+		// no validation rules for QueuePairNumber
+	}
 
-	// no validation rules for EriQuatity
+	if m.EriQuatity != nil {
+		// no validation rules for EriQuatity
+	}
 
-	// no validation rules for GpuAmount
+	if m.GpuAmount != nil {
+		// no validation rules for GpuAmount
+	}
 
-	// no validation rules for TotalEniQueueQuantity
+	if m.TotalEniQueueQuantity != nil {
+		// no validation rules for TotalEniQueueQuantity
+	}
 
-	// no validation rules for NvmeSupport
+	if m.NvmeSupport != nil {
+		// no validation rules for NvmeSupport
+	}
 
-	// no validation rules for DiskQuantity
+	if m.DiskQuantity != nil {
+		// no validation rules for DiskQuantity
+	}
 
-	// no validation rules for InitialCredit
+	if m.InitialCredit != nil {
+		// no validation rules for InitialCredit
+	}
 
-	// no validation rules for LocalStorageAmount
+	if m.LocalStorageAmount != nil {
+		// no validation rules for LocalStorageAmount
+	}
 
-	// no validation rules for BaselineCredit
+	if m.BaselineCredit != nil {
+		// no validation rules for BaselineCredit
+	}
 
-	// no validation rules for InstancePpsTx
+	if m.InstancePpsTx != nil {
+		// no validation rules for InstancePpsTx
+	}
 
-	// no validation rules for EniPrivateIpAddressQuantity
+	if m.EniPrivateIpAddressQuantity != nil {
+		// no validation rules for EniPrivateIpAddressQuantity
+	}
 
-	// no validation rules for CpuCoreCount
+	if m.CpuCoreCount != nil {
+		// no validation rules for CpuCoreCount
+	}
 
-	// no validation rules for InstanceTypeFamily
+	if m.InstanceTypeFamily != nil {
+		// no validation rules for InstanceTypeFamily
+	}
 
-	// no validation rules for EniQuantity
+	if m.EniQuantity != nil {
+		// no validation rules for EniQuantity
+	}
 
 	if len(errors) > 0 {
 		return ListInstanceTypesResponse_InstanceTypeMultiError(errors)

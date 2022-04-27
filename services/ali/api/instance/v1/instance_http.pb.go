@@ -34,12 +34,12 @@ func RegisterInstanceHTTPServer(s *http.Server, srv InstanceHTTPServer) {
 	r.GET("/api/regions", _Instance_ListRegions0_HTTP_Handler(srv))
 	r.GET("/api/images", _Instance_ListImages0_HTTP_Handler(srv))
 	r.GET("/api/instance-types", _Instance_ListInstanceTypes0_HTTP_Handler(srv))
-	r.POST("/api/instance", _Instance_CreateInstances0_HTTP_Handler(srv))
-	r.GET("/api/instance", _Instance_ListInstances0_HTTP_Handler(srv))
-	r.PUT("/api/instance/start", _Instance_StartInstances0_HTTP_Handler(srv))
-	r.PUT("/api/instance/stop", _Instance_StopInstances0_HTTP_Handler(srv))
-	r.PUT("/api/instance/reboot", _Instance_RebootInstances0_HTTP_Handler(srv))
-	r.DELETE("/api/instance", _Instance_DeleteInstances0_HTTP_Handler(srv))
+	r.POST("/api/instances", _Instance_CreateInstances0_HTTP_Handler(srv))
+	r.GET("/api/instances", _Instance_ListInstances0_HTTP_Handler(srv))
+	r.PUT("/api/instances/start", _Instance_StartInstances0_HTTP_Handler(srv))
+	r.PUT("/api/instances/stop", _Instance_StopInstances0_HTTP_Handler(srv))
+	r.PUT("/api/instances/reboot", _Instance_RebootInstances0_HTTP_Handler(srv))
+	r.PUT("/api/instances/terminate", _Instance_DeleteInstances0_HTTP_Handler(srv))
 }
 
 func _Instance_ListRegions0_HTTP_Handler(srv InstanceHTTPServer) func(ctx http.Context) error {
@@ -197,7 +197,7 @@ func _Instance_RebootInstances0_HTTP_Handler(srv InstanceHTTPServer) func(ctx ht
 func _Instance_DeleteInstances0_HTTP_Handler(srv InstanceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DeleteInstancesRequest
-		if err := ctx.BindQuery(&in); err != nil {
+		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/api.instance.v1.Instance/DeleteInstances")
@@ -235,7 +235,7 @@ func NewInstanceHTTPClient(client *http.Client) InstanceHTTPClient {
 
 func (c *InstanceHTTPClientImpl) CreateInstances(ctx context.Context, in *CreateInstancesRequest, opts ...http.CallOption) (*CreateInstancesResponse, error) {
 	var out CreateInstancesResponse
-	pattern := "/api/instance"
+	pattern := "/api/instances"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/api.instance.v1.Instance/CreateInstances"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -248,11 +248,11 @@ func (c *InstanceHTTPClientImpl) CreateInstances(ctx context.Context, in *Create
 
 func (c *InstanceHTTPClientImpl) DeleteInstances(ctx context.Context, in *DeleteInstancesRequest, opts ...http.CallOption) (*DeleteInstancesResponse, error) {
 	var out DeleteInstancesResponse
-	pattern := "/api/instance"
-	path := binding.EncodeURL(pattern, in, true)
+	pattern := "/api/instances/terminate"
+	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/api.instance.v1.Instance/DeleteInstances"))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -287,7 +287,7 @@ func (c *InstanceHTTPClientImpl) ListInstanceTypes(ctx context.Context, in *List
 
 func (c *InstanceHTTPClientImpl) ListInstances(ctx context.Context, in *ListInstancesRequest, opts ...http.CallOption) (*ListInstancesResponse, error) {
 	var out ListInstancesResponse
-	pattern := "/api/instance"
+	pattern := "/api/instances"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/api.instance.v1.Instance/ListInstances"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -313,7 +313,7 @@ func (c *InstanceHTTPClientImpl) ListRegions(ctx context.Context, in *ListRegion
 
 func (c *InstanceHTTPClientImpl) RebootInstances(ctx context.Context, in *RebootInstancesRequest, opts ...http.CallOption) (*RebootInstancesResponse, error) {
 	var out RebootInstancesResponse
-	pattern := "/api/instance/reboot"
+	pattern := "/api/instances/reboot"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/api.instance.v1.Instance/RebootInstances"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -326,7 +326,7 @@ func (c *InstanceHTTPClientImpl) RebootInstances(ctx context.Context, in *Reboot
 
 func (c *InstanceHTTPClientImpl) StartInstances(ctx context.Context, in *StartInstancesRequest, opts ...http.CallOption) (*StartInstancesResponse, error) {
 	var out StartInstancesResponse
-	pattern := "/api/instance/start"
+	pattern := "/api/instances/start"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/api.instance.v1.Instance/StartInstances"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -339,7 +339,7 @@ func (c *InstanceHTTPClientImpl) StartInstances(ctx context.Context, in *StartIn
 
 func (c *InstanceHTTPClientImpl) StopInstances(ctx context.Context, in *StopInstancesRequest, opts ...http.CallOption) (*StopInstancesResponse, error) {
 	var out StopInstancesResponse
-	pattern := "/api/instance/stop"
+	pattern := "/api/instances/stop"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/api.instance.v1.Instance/StopInstances"))
 	opts = append(opts, http.PathTemplate(pattern))

@@ -72,202 +72,202 @@ service Instance {
 
 message CreateInstancesRequest {
   // 阿里云AccessKey ID
-  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
   // 阿里云AccessKey Secret
-  string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
   // 访问的域名
-  string endpoint = 3 [(validate.rules).string.min_len = 1];
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
   // 地域id
-  string region_id = 4 [(validate.rules).string.min_len = 1];
+  optional string region_id = 4 [(validate.rules).string.min_len = 1];
   // 镜像id
-  string image_id = 5;
+  optional string image_id = 5;
   // 实例名称
-  string name = 6;
+  optional string name = 6;
   // 实例规格
-  string instance_type = 7;
+  optional string instance_type = 7;
   // 系统盘大小
-  string system_disk_size = 8;
+  optional string system_disk_size = 8;
   // 是否为instance_name自动添加有序后缀（默认false）
-  bool unique_suffix = 9;
+  optional bool unique_suffix = 9;
   // 创建数量(1-100，默认1)
-  int32 amount = 10;
+  optional int32 amount = 10;
   // 实例密码
-  string password = 11;
+  optional string password = 11;
   // 是否只预检此次请求。取值范围：
-  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
-  // false（默认）：发送正常请求，通过检查后直接创建实例。
-  bool dry_run = 12;
+  //  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  //  false（默认）：发送正常请求，通过检查后直接创建实例。
+  optional bool dry_run = 12;
 }
 
 message CreateInstancesResponse {
   // 阿里云请求id
-  string request_id = 1;
+  optional string request_id = 1;
   // 订单id，该参数只有创建包年包月ECS实例（请求参数InstanceChargeType=PrePaid）时有返回值
-  string order_id = 2;
+  optional string order_id = 2;
   // 订单成交价
-  float trade_price = 3;
+  optional float trade_price = 3;
   // 实例id列表
   repeated string instance_id_sets = 4;
 }
 
 message ListInstancesRequest {
   // 阿里云AccessKey ID
-  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
   // 阿里云AccessKey Secret
-  string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
   // 访问的域名
-  string endpoint = 3 [(validate.rules).string.min_len = 1];
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
   // 实例所属的地域ID
-  string region_id = 4;
+  optional string region_id = 4;
   // 实例状态列表的页码，起始值1，默认值1
-  int32 page_number = 5;
+  optional int32 page_number = 5;
   // 分页查询时设置的每页行数。
   //  最大值为100。
   //  默认值为10。
-  int32 page_size = 6;
+  optional int32 page_size = 6;
   // 查询凭证（Token），取值为上一次API调用返回的NextToken参数值
-  string next_token = 7;
+  optional string next_token = 7;
   // 实例名称，支持使用通配符*进行模糊搜索。
-  string instance_name = 8;
+  optional string instance_name = 8;
   // 是否只预检此次请求。取值范围：
   //  true：发送检查请求，不会查询资源状况。检查项包括AccessKey是否有效、RAM用户的授权情况和是否填写了必需参数。如果检查不通过，则返回对应错误。如果检查通过，会返回错误码DryRunOperation。
   //  false（默认值）：发送正常请求，通过检查后返回2XX HTTP状态码并直接查询资源状况。
-  bool dry_run = 9;
+  optional bool dry_run = 9;
 }
 
 message ListInstancesResponse {
-  string request_id = 1;
+  optional string request_id = 1;
   // 实例状态列表的页码，起始值1，默认值1
-  int32 page_number = 2;
+  optional int32 page_number = 2;
   // 分页查询时设置的每页行数
-  int32 page_size = 3;
+  optional int32 page_size = 3;
   // 查询到的实例总数
-  int32 total_count = 4;
+  optional int32 total_count = 4;
   // 本次调用返回的查询凭证值
-  string next_token = 5;
+  optional string next_token = 5;
   message Instance {
     // 实例创建时间。以ISO8601为标准，并使用UTC+0时间，格式为yyyy-MM-ddTHH:mmZ。
-    string creation_time = 1;
+    optional string creation_time = 1;
     // 实例序列号。
-    string serial_number = 2;
+    optional string serial_number = 2;
     // 实例状态
-    string status = 3;
+    optional string status = 3;
     // 部署集ID。
-    string deployment_set_id = 4;
+    optional string deployment_set_id = 4;
     // 密钥对名称。
-    string key_pair_name = 5;
+    optional string key_pair_name = 5;
     // 实例计费周期。
-    string sale_cycle = 6;
+    optional string sale_cycle = 6;
     // 实例是否可以挂载数据盘。
-    bool device_available = 7;
+    optional bool device_available = 7;
     // 实例挂载的本地存储容量。
-    int64 local_storage_capacity = 8;
+    optional int64 local_storage_capacity = 8;
     // 实例描述。
-    string description = 9;
+    optional string description = 9;
     // 抢占式实例的保留时长，单位为小时。可能值为0~6。
     //  保留时长2~6正在邀测中，如需开通请提交工单。
     //  值为0，则为无保护期模式。
-    int32 spot_duration = 10;
+    optional int32 spot_duration = 10;
     // 实例网络类型。可能值：
     //  classic：经典网络。
     //  vpc：专有网络VPC。
-    string instance_network_type = 11;
+    optional string instance_network_type = 11;
     // 实例名称
-    string instance_name = 12;
+    optional string instance_name = 12;
     // 实例操作系统的英文名称
-    string os_name_en = 13;
+    optional string os_name_en = 13;
     // 实例所属的HPC集群ID。
-    string hpc_cluster_id = 14;
+    optional string hpc_cluster_id = 14;
     // 内存大小，单位为MiB
-    int32 memory = 15;
+    optional int32 memory = 15;
     // 实例的操作系统名称。
-    string os_name = 16;
+    optional string os_name = 16;
     // ECS实例绑定部署集分散部署时，实例在部署集中的分组位置。
-    int32 deployment_set_group_no = 17;
+    optional int32 deployment_set_group_no = 17;
     // 实例运行的镜像ID
-    string image_id = 18;
+    optional string image_id = 18;
     // 实例规格附带的GPU类型。
-    string gpu_spec = 19;
+    optional string gpu_spec = 19;
     // 按量付费实例的自动释放时间
-    string auto_release_time = 20;
+    optional string auto_release_time = 20;
     // 实例释放保护属性，指定是否支持通过控制台或API（DeleteInstance）释放实例。
     //  true：已开启实例释放保护。
     //  false：未开启实例释放保护。
-    bool deletion_protection = 21;
+    optional bool deletion_protection = 21;
     // 实例停机后是否继续收费。可能值：
     //  KeepCharging：停机后继续收费，为您继续保留库存资源。
     //  StopCharging：停机后不收费。停机后，我们释放实例对应的资源，例如vCPU、内存和公网IP等资源。重启是否成功依赖于当前地域中是否仍有资源库存。
     //  Not-applicable：本实例不支持停机不收费功能。
-    string stopped_mode = 22;
+    optional string stopped_mode = 22;
     // 实例规格附带的GPU数量
-    int32 gpu_amount = 23;
+    optional int32 gpu_amount = 23;
     // 实例主机名。
-    string host_name = 24;
+    optional string host_name = 24;
     // 实例ID
-    string instance_id = 25;
+    optional string instance_id = 25;
     // 公网出带宽最大值，单位为Mbit/s。
-    int32 internet_max_bandwidth_out = 26;
+    optional int32 internet_max_bandwidth_out = 26;
     // 公网入带宽最大值，单位为Mbit/s。
-    int32 internet_max_bandwidth_in = 27;
+    optional int32 internet_max_bandwidth_in = 27;
     // 实例规格
-    string instance_type = 28;
+    optional string instance_type = 28;
     // 实例的计费方式。可能值：
     //  PrePaid：包年包月。
     //  PostPaid：按量付费。
-    string instance_charge_type = 29;
+    optional string instance_charge_type = 29;
     // 实例所属地域ID
-    string region_id = 30;
+    optional string region_id = 30;
     // 是否为I/O优化型实例。
-    bool io_optimized = 31;
+    optional bool io_optimized = 31;
     // 实例最近一次的启动时间。以ISO8601为标准，并使用UTC+0时间，格式为yyyy-MM-ddTHH:mmZ。
-    string start_time = 32;
+    optional string start_time = 32;
     // vCPU数
-    int32 cpu = 33;
+    optional int32 cpu = 33;
     // 实例挂载的本地存储数量
-    int32 local_storage_amount = 34;
+    optional int32 local_storage_amount = 34;
     // 过期时间。以ISO8601为标准，并使用UTC+0时间，格式为yyyy-MM-ddTHH:mmZ。
-    string expired_time = 35;
+    optional string expired_time = 35;
     // 实例所属的企业资源组ID。
-    string resource_group_id = 36;
+    optional string resource_group_id = 36;
     // 网络计费类型。可能值：
     //  PayByBandwidth：按固定带宽计费。
     //  PayByTraffic：按使用流量计费。
-    string internet_charge_type = 37;
+    optional string internet_charge_type = 37;
     // 实例所属可用区。
-    string zone_id = 38;
+    optional string zone_id = 38;
     // 实例是否可以回收。
-    bool recyclable = 39;
+    optional bool recyclable = 39;
     // 修改突发性能实例的运行模式。可能值：
     //  Standard：标准模式。
     //  Unlimited：无性能约束模式，
-    string credit_specification = 40;
+    optional string credit_specification = 40;
     // 实例规格族。
-    string instance_type_family = 41;
+    optional string instance_type_family = 41;
     // 实例的操作系统类型
-    string os_type = 42;
+    optional string os_type = 42;
     // 弹性网卡
     message NetworkInterface {
       // 弹性网卡类型。可能值：
       //  Primary：主网卡。
       //  Secondary：辅助弹性网卡。
-      string type = 1;
+      optional string type = 1;
       // 弹性网卡的MAC地址。
-      string mac_address = 2;
+      optional string mac_address = 2;
       // 弹性网卡主私有IP地址。
-      string primary_ip_address = 3;
+      optional string primary_ip_address = 3;
       // 弹性网卡的ID。
-      string network_interface_id = 4;
+      optional string network_interface_id = 4;
       message PrivateIpSet {
         // 实例的私网IP地址。
-        string private_ip_address = 1;
+        optional string private_ip_address = 1;
         // 是否是主私网IP地址。
-        bool primary = 2;
+        optional bool primary = 2;
       }
       // PrivateIpSet组成的集合。
       repeated PrivateIpSet private_ip_sets = 5;
       message Ipv6Set {
         // 为弹性网卡指定的IPv6地址。
-        string ipv6_address = 1;
+        optional string ipv6_address = 1;
       }
       // 为弹性网卡分配的IPv6地址集合。仅当请求参数AdditionalAttributes.N取值为NETWORK_PRIMARY_ENI_IP时，才会返回该参数值。
       repeated Ipv6Set ipv6_sets = 6;
@@ -276,22 +276,22 @@ message ListInstancesResponse {
     repeated NetworkInterface network_interfaces = 43;
     message OperationLock {
       // 实例被锁定的描述信息。
-      string lock_msg = 1;
+      optional string lock_msg = 1;
       // 锁定类型。可能值：
       //  financial：因欠费被锁定。
       //  security：因安全原因被锁定。
       //  Recycling：抢占式实例的待释放锁定状态。
       //  dedicatedhostfinancial：因为专有宿主机欠费导致ECS实例被锁定。
       //  refunded：因退款被锁定。
-      string lock_reason = 2;
+      optional string lock_reason = 2;
     }
     // 实例的锁定原因。
     repeated OperationLock operation_locks = 44;
     message Tag {
       // 实例的标签值。
-      string tag_value = 1;
+      optional string tag_value = 1;
       // 实例的标签键。
-      string tag_key = 2;
+      optional string tag_key = 2;
     }
     // 实例的标签集合。
     repeated Tag tags = 45;
@@ -306,26 +306,26 @@ message ListInstancesResponse {
     // 专有网络VPC属性。
     message VpcAttributes {
       // 专有网络VPC ID。
-      string vpc_id = 1;
+      optional string vpc_id = 1;
       // 云产品的IP，用于VPC云产品之间的网络互通。
-      string nat_ip_address = 2;
+      optional string nat_ip_address = 2;
       // 虚拟交换机ID。
-      string v_switch_id = 3;
+      optional string v_switch_id = 3;
       // 私有IP地址。
       repeated string private_ip_address = 4;
     }
     VpcAttributes vpc_attributes = 50;
     message EipAddress {
       // 弹性公网IP的ID
-      string allocation_id = 1;
+      optional string allocation_id = 1;
       // 是否可以解绑弹性公网IP
-      bool is_support_un_associate = 2;
+      optional bool is_support_un_associate = 2;
       // 弹性公网IP的计费方式
-      string internal_charge_type = 3;
+      optional string internal_charge_type = 3;
       // 弹性公网IP
-      string ip_address = 4;
+      optional string ip_address = 4;
       // 弹性公网IP
-      int32 bandwidth = 5;
+      optional int32 bandwidth = 5;
     }
     // 弹性公网IP绑定信息
     EipAddress eip_address = 51;
@@ -333,22 +333,22 @@ message ListInstancesResponse {
       // 专有宿主机实例是否与专有宿主机关联。可能值：
       //  default：专有宿主机实例不与专有宿主机关联。停机不收费实例重启后，可能会放置在自动资源部署池中的其它专有宿主机上。
       //  host：专有宿主机实例与专有宿主机关联。停机不收费实例重启后，仍放置在原专有宿主机上。
-      string affinity = 1;
+      optional string affinity = 1;
       // 实例的宿主机类型是否为专有宿主机。可能值：
       //  default：实例的宿主机类型不是专有宿主机。
       //  host：实例的宿主机类型为专有宿主机。
-      string tenancy = 2;
+      optional string tenancy = 2;
     }
     // 专有宿主机实例的属性。
     DedicatedInstanceAttribute dedicatedInstanceAttribute = 52;
     // CPU配置详情。
     message CpuOptions {
       // 分配的线程数。可能值为2。
-      string numa = 1;
+      optional string numa = 1;
       // 物理CPU核心数。
-      int32 core_count = 2;
+      optional int32 core_count = 2;
       // CPU线程数。
-      int32 thread_per_core = 3;
+      optional int32 thread_per_core = 3;
     }
     CpuOptions cpu_options = 53;
   }
@@ -358,43 +358,43 @@ message ListInstancesResponse {
 
 message ListRegionsRequest {
   // 阿里云AccessKey ID
-  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
   // 阿里云AccessKey Secret
-  string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
   // 访问的域名
-  string endpoint = 3 [(validate.rules).string.min_len = 1];
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
   // 实例的计费方式，更多详情，请参见计费概述。取值范围：
   //  PrePaid：包年包月。此时，您必须确认自己的账号支持余额支付或者信用支付，否则将报错InvalidPayMethod。
   //  PostPaid：按量付费。
-  //  默认值：PostPaid
-  string instance_charge_type = 4;
+  // 默认值：PostPaid
+  optional string instance_charge_type = 4;
   // 资源类型。取值范围：
   //  instance：ECS实例
   //  disk：磁盘
   //  reservedinstance：预留实例券
   //  scu：存储容量单位包
   //  默认值：instance
-  string resource_type = 5;
+  optional string resource_type = 5;
   // 根据汉语、英语和日语筛选返回结果。更多详情，请参见RFC7231。取值范围：
   //  zh-CN：中文
   //  en-US：英文
   //  ja：日文
   //  默认值：zh-CN
-  string accept_language = 6;
+  optional string accept_language = 6;
 }
 
 message ListRegionsResponse {
   message Region {
     // 地域对应的接入地址（Endpoint）。
-    string region_end_point = 1;
+    optional string region_end_point = 1;
     // 地域名称。
-    string local_name = 2;
+    optional string local_name = 2;
     // 地域ID。
-    string region_id = 3;
+    optional string region_id = 3;
     // 集群是否售罄。可能值：
     //  available
     //  soldOut
-    string status = 4;
+    optional string status = 4;
   }
   // 地域信息集合
   repeated Region regions = 1;
@@ -402,13 +402,13 @@ message ListRegionsResponse {
 
 message ListImagesRequest {
   // 阿里云AccessKey ID
-  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
   // 阿里云AccessKey Secret
-  string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
   // 访问的域名
-  string endpoint = 3 [(validate.rules).string.min_len = 1];
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
   // 地域id
-  string region_id = 4 [(validate.rules).string.min_len = 1];
+  optional string region_id = 4 [(validate.rules).string.min_len = 1];
   // 查询某种状态下的镜像。取值范围：
   //  Creating：镜像正在创建中。
   //  Waiting：多任务排队中。
@@ -417,100 +417,100 @@ message ListImagesRequest {
   //  CreateFailed：创建失败的镜像。
   //  Deprecated：已弃用的镜像。
   //  支持同时取多个值，值之间以半角逗号（,）隔开。
-  string status = 5;
+  optional string status = 5;
   // 镜像ID。
-  string image_id = 6;
+  optional string image_id = 6;
   // 订阅型镜像是否已经超过使用期限。
-  bool show_expired = 7;
+  optional bool show_expired = 7;
   // 镜像名称
-  string image_name = 8;
+  optional string image_name = 8;
 }
 
 message ListImagesResponse {
   // 当前分页包含多少条目。
-  int32 page_size = 1;
+  optional int32 page_size = 1;
   // 当前页码。
-  int32 page_number = 2;
+  optional int32 page_number = 2;
   // 请求ID。
-  string request_id = 3;
+  optional string request_id = 3;
   // 镜像总数
-  int32 total_count = 4;
+  optional int32 total_count = 4;
   // 镜像所属地域ID。
-  string region_id = 5;
+  optional string region_id = 5;
   message Image {
     // 镜像的创建时间
-    string creation_time = 1;
+    optional string creation_time = 1;
     // 镜像的状态。可能值：
     //  UnAvailable：不可用
     //  Available：可用
     //  Creating：创建中
     //  CreateFailed：创建失败
-    string status = 2;
+    optional string status = 2;
     // 镜像族系名称
-    string image_family = 3;
+    optional string image_family = 3;
     // 镜像完成的进度，单位为百分比。
-    string progress = 4;
+    optional string progress = 4;
     // 是否是拷贝的镜像。
-    bool is_copied = 5;
+    optional bool is_copied = 5;
     // 是否可以在I/O优化实例上运行。
-    bool is_support_io_optimized = 6;
+    optional bool is_support_io_optimized = 6;
     // 镜像来源。可能值：
-    //    system：阿里云提供的公共镜像。
-    //    self：您创建的自定义镜像。
-    //    others：其他阿里云用户提供的共享镜像或社区镜像。
-    //    marketplace：镜像市场提供的镜像。
-    string image_owner_alias = 7;
+    //  system：阿里云提供的公共镜像。
+    //  self：您创建的自定义镜像。
+    //  others：其他阿里云用户提供的共享镜像或社区镜像。
+    //  marketplace：镜像市场提供的镜像。
+    optional string image_owner_alias = 7;
     // 是否支持Cloud Init。
-    bool is_support_cloud_init = 8;
+    optional bool is_support_cloud_init = 8;
     // 镜像版本。
-    string image_version = 9;
+    optional string image_version = 9;
     // 有引用关系的资源类型。可能值：
-    //    instance：创建了一台或多台ECS实例。
-    //    none：未创建过ECS实例。
-    string usage = 10;
+    //  instance：创建了一台或多台ECS实例。
+    //  none：未创建过ECS实例。
+    optional string usage = 10;
     // 是否共享过该自定义镜像给其他用户。
-    string is_self_shared = 11;
+    optional string is_self_shared = 11;
     // 描述信息。
-    string description = 12;
+    optional string description = 12;
     // 镜像大小，单位：GiB。
-    int32 size = 13;
+    optional int32 size = 13;
     // 镜像所在的企业资源组ID。
-    string resource_group_id = 14;
+    optional string resource_group_id = 14;
     // 操作系统平台。
-    string platform = 15;
+    optional string platform = 15;
     // 操作系统的英文显示名称。
-    string os_name_en = 16;
+    optional string os_name_en = 16;
     // 镜像的名称。
-    string image_name = 17;
+    optional string image_name = 17;
     // 操作系统的中文显示名称。
-    string os_name = 18;
+    optional string os_name = 18;
     // 镜像ID。
-    string image_id = 19;
+    optional string image_id = 19;
     // 操作系统类型。可能值：
     //  windows。
     //  linux。
-    string os_type = 20;
+    optional string os_type = 20;
     // 是否订阅了该镜像的商品码对应的镜像商品的服务条款。
-    bool is_subscribed = 21;
+    optional bool is_subscribed = 21;
     // 镜像市场的镜像商品标示。
-    string product_code = 22;
+    optional string product_code = 22;
     // 镜像系统架构类型。可能值：
     //  i386。
     //  x86_64。
     //  arm64。
-    string architecture = 23;
+    optional string architecture = 23;
     // 是否为公开镜像。公开镜像包括阿里云提供的公共镜像以及您已发布为社区镜像的自定义镜像。可能值：
     //  true：公开镜像。
     //  false：非公开镜像。
-    bool is_public = 24;
+    optional bool is_public = 24;
     // 镜像所属的阿里云账号ID。该参数仅在查询共享镜像以及社区镜像时生效。
-    int64 image_owner_id = 25;
+    optional int64 image_owner_id = 25;
     // 当前镜像是否支持非root用户登录。可能值：
-    //    true：支持。
-    //    false：不支持。
-    bool login_as_non_root_supported = 26;
+    //  true：支持。
+    //  false：不支持。
+    optional bool login_as_non_root_supported = 26;
     // 社区镜像认证企业名称。
-    string supplier_name = 27;
+    optional string supplier_name = 27;
   }
   repeated Image images = 6;
 
@@ -518,226 +518,226 @@ message ListImagesResponse {
 
 message ListInstanceTypesRequest {
   // 阿里云AccessKey ID
-  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
   // 阿里云AccessKey Secret
-  string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
   // 访问的域名
-  string endpoint = 3 [(validate.rules).string.min_len = 1];
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
   // 分页查询时每页的最大条目数。最大值：1600
-  //    默认值：1600
-  int64 max_results = 4;
+  //默认值：1600
+  optional int64 max_results = 4;
   // 查询凭证（Token）。取值为上一次调用该接口返回的NextToken参数值，初次调用接口时无需设置该参数。
-  string next_token = 5;
+  optional string next_token = 5;
 }
 
 message ListInstanceTypesResponse {
   message InstanceType {
     // 本地盘类型。更多信息，请参见本地盘。可能值：
-    //    localhddpro：实例规格族d1ne和d1搭载的SATA HDD本地盘。
-    //    localssdpro：实例规格族i2、i2g、i1、ga1和gn5等搭载的NVMe SSD本地盘。
-    string local_storage_category = 1;
+    //  localhddpro：实例规格族d1ne和d1搭载的SATA HDD本地盘。
+    //  localssdpro：实例规格族i2、i2g、i1、ga1和gn5等搭载的NVMe SSD本地盘。
+    optional string local_storage_category = 1;
     // 主网卡默认队列数。
-    int32 primary_eni_queue_number = 2;
+    optional int32 primary_eni_queue_number = 2;
     // 内存大小。单位：GiB
-    float memory_size = 3;
+    optional float memory_size = 3;
     // 实例挂载的本地盘的单盘容量。单位：GiB
-    int64 local_storage_capacity = 4;
+    optional int64 local_storage_capacity = 4;
     // 实例规格族级别。可能值：
-    //    EntryLevel：入门级（共享型）。
-    //    EnterpriseLevel：企业级。
-    //    CreditEntryLevel：积分入门级。
-    string instance_family_level = 5;
+    //  EntryLevel：入门级（共享型）。
+    //  EnterpriseLevel：企业级。
+    //  CreditEntryLevel：积分入门级。
+    optional string instance_family_level = 5;
     // 内网入方向网络收发包能力。单位：Pps
-    int64 instance_pps_rx = 6;
+    optional int64 instance_pps_rx = 6;
     // 单块弹性网卡的IPv6地址上限。
-    int32 eni_ipv6_address_quantity = 7;
+    optional int32 eni_ipv6_address_quantity = 7;
     // 单块弹性网卡最大队列数。
-    int32 maximum_queue_number_per_eni = 8;
+    optional int32 maximum_queue_number_per_eni = 8;
     // 实例规格ID。
-    string instance_type_id = 9;
+    optional string instance_type_id = 9;
     // 内网入方向带宽限制。单位：kbit/s
-    int32 instance_bandwidth_rx = 10;
+    optional int32 instance_bandwidth_rx = 10;
     // 辅助弹性网卡默认队列数。
-    int32 secondary_eni_queue_number = 11;
+    optional int32 secondary_eni_queue_number = 11;
     // GPU类型。
-    string gpu_spec = 12;
+    optional string gpu_spec = 12;
     // 内网出方向带宽限制。单位：kbit/s
-    int32 queue_pair_number = 13;
+    optional int32 queue_pair_number = 13;
     // 弹性RDMA网卡（ERI）数量。
-    int32 eri_quatity = 14;
+    optional int32 eri_quatity = 14;
     // GPU数量。
-    int32 gpu_amount = 15;
+    optional int32 gpu_amount = 15;
     // 实例规格允许修改的弹性网卡队列数总配额。
-    int32 total_eni_queue_quantity = 16;
+    optional int32 total_eni_queue_quantity = 16;
     // 实例规格所挂载的云盘是否支持NVMe。可能值：
-    //    required：支持。表示云盘以NVMe的方式挂载。
-    //    unsupported：不支持。表示云盘不以NVMe的方式挂载。
-    string nvme_support = 17;
+    //  required：支持。表示云盘以NVMe的方式挂载。
+    //  unsupported：不支持。表示云盘不以NVMe的方式挂载。
+    optional string nvme_support = 17;
     // 支持挂载的云盘数量上限。
-    int32 disk_quantity = 18;
+    optional int32 disk_quantity = 18;
     // 突发性能实例t5、t6的初始vCPU积分值。
-    int32 initial_credit = 19;
+    optional int32 initial_credit = 19;
     // 实例挂载的本地盘的数量。
-    int32 local_storage_amount = 20;
+    optional int32 local_storage_amount = 20;
     // 突发性能实例t5、t6的基准vCPU计算性能（所有vCPU之和）。
-    int32 baseline_credit = 21;
+    optional int32 baseline_credit = 21;
     // 内网出方向网络收发包能力。单位：Pps
-    int64 instance_pps_tx = 22;
+    optional int64 instance_pps_tx = 22;
     // 单块弹性网卡的私有IP地址上限。
-    int32 eni_private_ip_address_quantity = 23;
+    optional int32 eni_private_ip_address_quantity = 23;
     // vCPU内核数目。
-    int32 cpu_core_count = 24;
+    optional int32 cpu_core_count = 24;
     // 实例规格族。
-    string instance_type_family = 25;
+    optional string instance_type_family = 25;
     // 支持挂载的弹性网卡上限。
-    int32 eni_quantity = 26;
+    optional int32 eni_quantity = 26;
   }
   // 请求ID。
-  string request_id = 1;
+  optional string request_id = 1;
   // 实例规格集合。
   repeated InstanceType instance_types = 2;
   // 本次调用返回的查询凭证（Token）。
-  string next_token = 3;
+  optional string next_token = 3;
 }
 
 message StartInstancesRequest {
   // 阿里云AccessKey ID
-  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
   // 阿里云AccessKey Secret
-  string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
   // 访问的域名
-  string endpoint = 3 [(validate.rules).string.min_len = 1];
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
   // 地域id
-  string region_id = 4 [(validate.rules).string.min_len = 1];
+  optional string region_id = 4 [(validate.rules).string.min_len = 1];
   // 实例ID, 数组长度取值范围：1~100
   repeated string instance_ids = 5 [(validate.rules).repeated = {min_items: 1, max_items: 100}];
-  //  设置批量操作模式。取值范围：
-  //    AllTogether：该模式下，如果实例全部启动成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例启动失败，并返回失败信息。
-  //    SuccessFirst：该模式下，分别启动每个实例，返回结果包含每个实例的操作结果信息。
-  //    默认值：AllTogether
-  string batch_optimization = 6;
+  // 设置批量操作模式。取值范围：
+  //  AllTogether：该模式下，如果实例全部启动成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例启动失败，并返回失败信息。
+  //  SuccessFirst：该模式下，分别启动每个实例，返回结果包含每个实例的操作结果信息。
+  //  默认值：AllTogether
+  optional string batch_optimization = 6;
   // 是否只预检此次请求。取值范围：
-  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
-  // false（默认）：发送正常请求，通过检查后直接创建实例。
-  bool dry_run = 7;
+  //  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  //  false（默认）：发送正常请求，通过检查后直接创建实例。
+  optional bool dry_run = 7;
 }
 
 message InstanceResponse {
   // 实例操作结果错误码。返回值200为成功
-  string code = 1;
+  optional string code = 1;
   // 实例操作返回错误信息。返回值success为成功
-  string message = 2;
+  optional string message = 2;
   // 实例ID
-  string instance_id = 3;
+  optional string instance_id = 3;
   // 实例当前状态
-  string current_status = 4;
+  optional string current_status = 4;
   // 操作前实例的状态
-  string previous_status = 5;
+  optional string previous_status = 5;
 }
 
 message StartInstancesResponse {
   // 请求ID
-  string request_id = 1;
+  optional string request_id = 1;
   // 由InstanceResponse组成的数组格式，返回每个实例操作的前后状态及操作结果。
   repeated InstanceResponse instance_responses = 2;
 }
 
 message StopInstancesRequest {
   // 阿里云AccessKey ID
-  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
   // 阿里云AccessKey Secret
-  string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
   // 访问的域名
-  string endpoint = 3 [(validate.rules).string.min_len = 1];
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
   // 地域id
-  string region_id = 4 [(validate.rules).string.min_len = 1];
+  optional string region_id = 4 [(validate.rules).string.min_len = 1];
   // 是否强制关机。取值范围：
   //  true：强制关机。相当于典型的断电操作，所有未写入存储设备的缓存数据会丢失。
   //  false：正常关机。
   //  默认值：false
-  bool force_stop = 5;
+  optional bool force_stop = 5;
   // 停止按量付费ECS实例时，设置的停止模式。取值
   //  StopCharging：节省停机模式。有关StopCharging生效的条件，请参见按量付费实例节省停机模式的启用条件章节。
   //  KeepCharging：普通停机模式。实例停止后仍继续收费。
   //  默认值：如果您在ECS控制台上开启VPC内实例节省停机模式（更多信息，请参见打开默认启用节省停机模式），并符合开启条件，则默认值为StopCharging。否则，默认值为KeepCharging。
-  string stopped_mode = 6;
+  optional string stopped_mode = 6;
   // 设置批量操作模式。取值范围：
-  //   AllTogether：该模式下，如果实例全部停止成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例停止失败，并返回失败信息。
-  //   SuccessFirst：该模式下，分别停止每个实例，返回结果包含每个实例的操作结果信息。
-  //   默认值：AllTogether
-  string batch_optimization = 7;
+  //  AllTogether：该模式下，如果实例全部停止成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例停止失败，并返回失败信息。
+  //  SuccessFirst：该模式下，分别停止每个实例，返回结果包含每个实例的操作结果信息。
+  // 默认值：AllTogether
+  optional string batch_optimization = 7;
   // 实例ID列表
   repeated string instance_ids = 8 [(validate.rules).repeated = {min_items: 1, max_items: 100}];
   // 是否只预检此次请求。取值范围：
-  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
-  // false（默认）：发送正常请求，通过检查后直接创建实例。
-  bool dry_run = 9;
+  //  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  //  false（默认）：发送正常请求，通过检查后直接创建实例。
+  optional bool dry_run = 9;
 }
 
 message StopInstancesResponse {
-  string request_id = 1;
+  optional string request_id = 1;
   // 由InstanceResponse组成的数组格式，返回每个实例操作的前后状态及操作结果。
   repeated InstanceResponse instance_responses = 2;
 }
 
 message RebootInstancesRequest {
   // 阿里云AccessKey ID
-  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
   // 阿里云AccessKey Secret
-  string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
   // 访问的域名
-  string endpoint = 3 [(validate.rules).string.min_len = 1];
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
   // 地域id
-  string region_id = 4 [(validate.rules).string.min_len = 1];
+  optional string region_id = 4 [(validate.rules).string.min_len = 1];
   // 是否强制重启。取值范围：
   //  true：强制重启。相当于典型的断电操作，所有未写入存储设备的缓存数据会丢失。
   //  false：正常重启。
   //  默认值：false
-  bool force_reboot = 5;
+  optional bool force_reboot = 5;
   // 设置批量操作模式。取值范围：
   //  AllTogether：该模式下，如果实例全部重启成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例重启失败，并返回失败信息。
   //  SuccessFirst：该模式下，分别重启每个实例，返回结果包含每个实例的操作结果信息。
   //  默认值：AllTogether
-  string batch_optimization = 6;
+  optional string batch_optimization = 6;
   // 实例ID。N的取值范围：1~100。
   repeated string instance_ids = 7 [(validate.rules).repeated = {min_items: 1, max_items: 100}];
   // 是否只预检此次请求。取值范围：
-  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
-  // false（默认）：发送正常请求，通过检查后直接创建实例。
-  bool dry_run = 8;
+  //  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  //  false（默认）：发送正常请求，通过检查后直接创建实例。
+  optional bool dry_run = 8;
 }
 
 message RebootInstancesResponse {
-  string request_id = 1;
+  optional string request_id = 1;
   // 由InstanceResponse组成的数组格式，返回每个实例操作的前后状态及操作结果。
   repeated InstanceResponse instance_responses = 2;
 }
 
 message DeleteInstancesRequest {
   // 阿里云AccessKey ID
-  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
   // 阿里云AccessKey Secret
-  string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
   // 访问的域名
-  string endpoint = 3 [(validate.rules).string.min_len = 1];
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
   // 地域id
-  string region_id = 4 [(validate.rules).string.min_len = 1];
+  optional string region_id = 4 [(validate.rules).string.min_len = 1];
   // 是否强制释放运行中（Running）的实例。
   //  true：强制释放运行中（Running）的实例。强制释放相当于断电，实例内存以及存储中的临时数据都会被擦除，无法恢复。
   //  false：正常释放实例，此时实例必须处于已停止（Stopped）状态。
   //  默认值为false。
-  bool force = 5;
+  optional bool force = 5;
   // 是否释放已到期的包年包月实例。
-  //  默认值为false。
-  bool terminate_subscription = 6;
+  // 默认值为false。
+  optional bool terminate_subscription = 6;
   repeated string instance_ids = 7;
   // 是否只预检此次请求。取值范围：
-  // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
-  // false（默认）：发送正常请求，通过检查后直接创建实例。
-  bool dry_run = 8;
+  //  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  //  false（默认）：发送正常请求，通过检查后直接创建实例。
+  optional bool dry_run = 8;
 }
 
 message DeleteInstancesResponse {
   // 请求ID。
-  string request_id = 1;
+  optional string request_id = 1;
 }

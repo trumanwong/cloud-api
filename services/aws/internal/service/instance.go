@@ -13,10 +13,6 @@ func (service *InstanceService) CreateInstance(ctx context.Context, request *v1.
 	result, err := service.uc.Create(ctx, request.AccessKeyId, request.SecretKey, request.Region, &ec2.RunInstancesInput{
 		ImageId:      aws.String(request.ImageId),
 		InstanceType: types.InstanceType(request.InstanceType),
-		CpuOptions: &types.CpuOptionsRequest{
-			CoreCount:      aws.Int32(request.CpuCoreCount),
-			ThreadsPerCore: aws.Int32(request.ThreadsPerCore),
-		},
 		BlockDeviceMappings: []types.BlockDeviceMapping{
 			{
 				DeviceName: aws.String("/dev/sdh"),
