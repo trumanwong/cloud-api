@@ -21,7 +21,7 @@ func NewInstanceRepo(data *Data, logger log.Logger) biz.InstanceRepo {
 }
 
 func (i instanceRepo) CreateInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.RunInstancesRequest) (*cvm.RunInstancesResponse, error) {
-	client, err := NewCvmClient(secretId, secretKey, region)
+	client, err := getCvmClient(secretId, secretKey, region)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (i instanceRepo) CreateInstances(ctx context.Context, secretId, secretKey, 
 }
 
 func (i instanceRepo) ListInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.DescribeInstancesRequest) (*cvm.DescribeInstancesResponse, error) {
-	client, err := NewCvmClient(secretId, secretKey, region)
+	client, err := getCvmClient(secretId, secretKey, region)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (i instanceRepo) ListInstances(ctx context.Context, secretId, secretKey, re
 }
 
 func (i instanceRepo) StartInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.StartInstancesRequest) (*cvm.StartInstancesResponse, error) {
-	client, err := NewCvmClient(secretId, secretKey, region)
+	client, err := getCvmClient(secretId, secretKey, region)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (i instanceRepo) StartInstances(ctx context.Context, secretId, secretKey, r
 }
 
 func (i instanceRepo) StopInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.StopInstancesRequest) (*cvm.StopInstancesResponse, error) {
-	client, err := NewCvmClient(secretId, secretKey, region)
+	client, err := getCvmClient(secretId, secretKey, region)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (i instanceRepo) StopInstances(ctx context.Context, secretId, secretKey, re
 }
 
 func (i instanceRepo) RebootInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.RebootInstancesRequest) (*cvm.RebootInstancesResponse, error) {
-	client, err := NewCvmClient(secretId, secretKey, region)
+	client, err := getCvmClient(secretId, secretKey, region)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (i instanceRepo) RebootInstances(ctx context.Context, secretId, secretKey, 
 }
 
 func (i instanceRepo) DeleteInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.TerminateInstancesRequest) (*cvm.TerminateInstancesResponse, error) {
-	client, err := NewCvmClient(secretId, secretKey, region)
+	client, err := getCvmClient(secretId, secretKey, region)
 	if err != nil {
 		return nil, err
 	}

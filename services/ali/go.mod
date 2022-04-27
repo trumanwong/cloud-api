@@ -12,6 +12,9 @@ require (
 	github.com/google/wire v0.5.0
 	github.com/hashicorp/consul/api v1.12.0
 	github.com/stretchr/testify v1.7.1
+	go.opentelemetry.io/otel v1.6.3
+	go.opentelemetry.io/otel/exporters/jaeger v1.6.3
+	go.opentelemetry.io/otel/sdk v1.6.3
 	google.golang.org/genproto v0.0.0-20220222213610-43724f9ea8cf
 	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.27.1
@@ -52,9 +55,6 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/tjfoc/gmsm v1.3.2 // indirect
-	go.opentelemetry.io/otel v1.6.3 // indirect
-	go.opentelemetry.io/otel/exporters/jaeger v1.6.3 // indirect
-	go.opentelemetry.io/otel/sdk v1.6.3 // indirect
 	go.opentelemetry.io/otel/trace v1.6.3 // indirect
 	golang.org/x/net v0.0.0-20210410081132-afb366fc7cd1 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect

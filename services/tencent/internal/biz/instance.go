@@ -9,12 +9,12 @@ import (
 
 // InstanceRepo is a Instance repo.
 type InstanceRepo interface {
-	CreateInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.RunInstancesRequest) (*cvm.RunInstancesResponse, error)
-	ListInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.DescribeInstancesRequest) (*cvm.DescribeInstancesResponse, error)
-	StartInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.StartInstancesRequest) (*cvm.StartInstancesResponse, error)
-	StopInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.StopInstancesRequest) (*cvm.StopInstancesResponse, error)
-	RebootInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.RebootInstancesRequest) (*cvm.RebootInstancesResponse, error)
-	DeleteInstances(ctx context.Context, secretId, secretKey, region string, request *cvm.TerminateInstancesRequest) (*cvm.TerminateInstancesResponse, error)
+	CreateInstances(context.Context, string, string, string, *cvm.RunInstancesRequest) (*cvm.RunInstancesResponse, error)
+	ListInstances(context.Context, string, string, string, *cvm.DescribeInstancesRequest) (*cvm.DescribeInstancesResponse, error)
+	StartInstances(context.Context, string, string, string, *cvm.StartInstancesRequest) (*cvm.StartInstancesResponse, error)
+	StopInstances(context.Context, string, string, string, *cvm.StopInstancesRequest) (*cvm.StopInstancesResponse, error)
+	RebootInstances(context.Context, string, string, string, *cvm.RebootInstancesRequest) (*cvm.RebootInstancesResponse, error)
+	DeleteInstances(context.Context, string, string, string, *cvm.TerminateInstancesRequest) (*cvm.TerminateInstancesResponse, error)
 }
 
 // InstanceUseCase is a Instance usecase.

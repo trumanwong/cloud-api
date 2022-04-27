@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.20.0
-// source: services/tencent/api/instance/v1/instance.proto
+// source: api/instance/v1/instance.proto
 
 package v1
 
@@ -23,11 +23,11 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InstanceClient interface {
 	// 可使用的地域
-	ListRegion(ctx context.Context, in *ListRegionRequest, opts ...grpc.CallOption) (*ListRegionResponse, error)
+	ListRegions(ctx context.Context, in *ListRegionsRequest, opts ...grpc.CallOption) (*ListRegionsResponse, error)
 	// 选择镜像
-	ListImage(ctx context.Context, in *ListImageRequest, opts ...grpc.CallOption) (*ListImageResponse, error)
+	ListImages(ctx context.Context, in *ListImagesRequest, opts ...grpc.CallOption) (*ListImagesResponse, error)
 	// 选择实例规格
-	ListInstanceType(ctx context.Context, in *ListInstanceTypeRequest, opts ...grpc.CallOption) (*ListInstanceTypeResponse, error)
+	ListInstanceTypes(ctx context.Context, in *ListInstanceTypesRequest, opts ...grpc.CallOption) (*ListInstanceTypesResponse, error)
 	// 创建实例
 	CreateInstances(ctx context.Context, in *CreateInstancesRequest, opts ...grpc.CallOption) (*CreateInstancesResponse, error)
 	// 实例列表
@@ -50,27 +50,27 @@ func NewInstanceClient(cc grpc.ClientConnInterface) InstanceClient {
 	return &instanceClient{cc}
 }
 
-func (c *instanceClient) ListRegion(ctx context.Context, in *ListRegionRequest, opts ...grpc.CallOption) (*ListRegionResponse, error) {
-	out := new(ListRegionResponse)
-	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListRegion", in, out, opts...)
+func (c *instanceClient) ListRegions(ctx context.Context, in *ListRegionsRequest, opts ...grpc.CallOption) (*ListRegionsResponse, error) {
+	out := new(ListRegionsResponse)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListRegions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *instanceClient) ListImage(ctx context.Context, in *ListImageRequest, opts ...grpc.CallOption) (*ListImageResponse, error) {
-	out := new(ListImageResponse)
-	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListImage", in, out, opts...)
+func (c *instanceClient) ListImages(ctx context.Context, in *ListImagesRequest, opts ...grpc.CallOption) (*ListImagesResponse, error) {
+	out := new(ListImagesResponse)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListImages", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *instanceClient) ListInstanceType(ctx context.Context, in *ListInstanceTypeRequest, opts ...grpc.CallOption) (*ListInstanceTypeResponse, error) {
-	out := new(ListInstanceTypeResponse)
-	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListInstanceType", in, out, opts...)
+func (c *instanceClient) ListInstanceTypes(ctx context.Context, in *ListInstanceTypesRequest, opts ...grpc.CallOption) (*ListInstanceTypesResponse, error) {
+	out := new(ListInstanceTypesResponse)
+	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListInstanceTypes", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -136,11 +136,11 @@ func (c *instanceClient) DeleteInstances(ctx context.Context, in *DeleteInstance
 // for forward compatibility
 type InstanceServer interface {
 	// 可使用的地域
-	ListRegion(context.Context, *ListRegionRequest) (*ListRegionResponse, error)
+	ListRegions(context.Context, *ListRegionsRequest) (*ListRegionsResponse, error)
 	// 选择镜像
-	ListImage(context.Context, *ListImageRequest) (*ListImageResponse, error)
+	ListImages(context.Context, *ListImagesRequest) (*ListImagesResponse, error)
 	// 选择实例规格
-	ListInstanceType(context.Context, *ListInstanceTypeRequest) (*ListInstanceTypeResponse, error)
+	ListInstanceTypes(context.Context, *ListInstanceTypesRequest) (*ListInstanceTypesResponse, error)
 	// 创建实例
 	CreateInstances(context.Context, *CreateInstancesRequest) (*CreateInstancesResponse, error)
 	// 实例列表
@@ -160,14 +160,14 @@ type InstanceServer interface {
 type UnimplementedInstanceServer struct {
 }
 
-func (UnimplementedInstanceServer) ListRegion(context.Context, *ListRegionRequest) (*ListRegionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListRegion not implemented")
+func (UnimplementedInstanceServer) ListRegions(context.Context, *ListRegionsRequest) (*ListRegionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListRegions not implemented")
 }
-func (UnimplementedInstanceServer) ListImage(context.Context, *ListImageRequest) (*ListImageResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListImage not implemented")
+func (UnimplementedInstanceServer) ListImages(context.Context, *ListImagesRequest) (*ListImagesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListImages not implemented")
 }
-func (UnimplementedInstanceServer) ListInstanceType(context.Context, *ListInstanceTypeRequest) (*ListInstanceTypeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListInstanceType not implemented")
+func (UnimplementedInstanceServer) ListInstanceTypes(context.Context, *ListInstanceTypesRequest) (*ListInstanceTypesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListInstanceTypes not implemented")
 }
 func (UnimplementedInstanceServer) CreateInstances(context.Context, *CreateInstancesRequest) (*CreateInstancesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateInstances not implemented")
@@ -200,56 +200,56 @@ func RegisterInstanceServer(s grpc.ServiceRegistrar, srv InstanceServer) {
 	s.RegisterService(&Instance_ServiceDesc, srv)
 }
 
-func _Instance_ListRegion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListRegionRequest)
+func _Instance_ListRegions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRegionsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InstanceServer).ListRegion(ctx, in)
+		return srv.(InstanceServer).ListRegions(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.instance.v1.Instance/ListRegion",
+		FullMethod: "/api.instance.v1.Instance/ListRegions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstanceServer).ListRegion(ctx, req.(*ListRegionRequest))
+		return srv.(InstanceServer).ListRegions(ctx, req.(*ListRegionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Instance_ListImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListImageRequest)
+func _Instance_ListImages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListImagesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InstanceServer).ListImage(ctx, in)
+		return srv.(InstanceServer).ListImages(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.instance.v1.Instance/ListImage",
+		FullMethod: "/api.instance.v1.Instance/ListImages",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstanceServer).ListImage(ctx, req.(*ListImageRequest))
+		return srv.(InstanceServer).ListImages(ctx, req.(*ListImagesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Instance_ListInstanceType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListInstanceTypeRequest)
+func _Instance_ListInstanceTypes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListInstanceTypesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InstanceServer).ListInstanceType(ctx, in)
+		return srv.(InstanceServer).ListInstanceTypes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.instance.v1.Instance/ListInstanceType",
+		FullMethod: "/api.instance.v1.Instance/ListInstanceTypes",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstanceServer).ListInstanceType(ctx, req.(*ListInstanceTypeRequest))
+		return srv.(InstanceServer).ListInstanceTypes(ctx, req.(*ListInstanceTypesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -370,16 +370,16 @@ var Instance_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*InstanceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ListRegion",
-			Handler:    _Instance_ListRegion_Handler,
+			MethodName: "ListRegions",
+			Handler:    _Instance_ListRegions_Handler,
 		},
 		{
-			MethodName: "ListImage",
-			Handler:    _Instance_ListImage_Handler,
+			MethodName: "ListImages",
+			Handler:    _Instance_ListImages_Handler,
 		},
 		{
-			MethodName: "ListInstanceType",
-			Handler:    _Instance_ListInstanceType_Handler,
+			MethodName: "ListInstanceTypes",
+			Handler:    _Instance_ListInstanceTypes_Handler,
 		},
 		{
 			MethodName: "CreateInstances",
@@ -407,5 +407,5 @@ var Instance_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "services/tencent/api/instance/v1/instance.proto",
+	Metadata: "api/instance/v1/instance.proto",
 }

@@ -20,8 +20,8 @@ func NewInstanceTypeRepo(data *Data, logger log.Logger) biz.InstanceTypeResponse
 	}
 }
 
-func (r *instanceTypeResponse) ListAll(ctx context.Context, secretId, secretKey, region string, request *cvm.DescribeInstanceTypeConfigsRequest) (*cvm.DescribeInstanceTypeConfigsResponse, error) {
-	client, err := NewCvmClient(secretId, secretKey, region)
+func (r *instanceTypeResponse) ListInstanceTypes(ctx context.Context, secretId, secretKey, region string, request *cvm.DescribeInstanceTypeConfigsRequest) (*cvm.DescribeInstanceTypeConfigsResponse, error) {
+	client, err := getCvmClient(secretId, secretKey, region)
 	if err != nil {
 		return nil, err
 	}

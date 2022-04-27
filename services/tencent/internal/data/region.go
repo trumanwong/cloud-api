@@ -20,8 +20,8 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	}
 }
 
-func (r *regionResponse) ListAll(ctx context.Context, secretId, secretKey string, request *cvm.DescribeRegionsRequest) (*cvm.DescribeRegionsResponse, error) {
-	client, err := NewCvmClient(secretId, secretKey, "")
+func (r *regionResponse) ListRegions(ctx context.Context, secretId, secretKey string, request *cvm.DescribeRegionsRequest) (*cvm.DescribeRegionsResponse, error) {
+	client, err := getCvmClient(secretId, secretKey, "")
 	if err != nil {
 		return nil, err
 	}

@@ -10,7 +10,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewGreeterRepo)
+var ProviderSet = wire.NewSet(NewData, NewInstanceRepo, NewRegionRepo, NewImageRepo, NewInstanceTypeRepo)
 
 // Data .
 type Data struct {
@@ -25,7 +25,7 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	return &Data{}, cleanup, nil
 }
 
-func NewCvmClient(secretId, secretKey, region string) (*cvm.Client, error) {
+func getCvmClient(secretId, secretKey, region string) (*cvm.Client, error) {
 	credential := common.NewCredential(secretId, secretKey)
 	cpf := profile.NewClientProfile()
 	cpf.HttpProfile.Endpoint = "cvm.tencentcloudapi.com"

@@ -7,7 +7,7 @@ import (
 )
 
 type InstanceTypeResponse interface {
-	ListAll(ctx context.Context, secretId, secretKey, region string, request *cvm.DescribeInstanceTypeConfigsRequest) (*cvm.DescribeInstanceTypeConfigsResponse, error)
+	ListInstanceTypes(context.Context, string, string, string, *cvm.DescribeInstanceTypeConfigsRequest) (*cvm.DescribeInstanceTypeConfigsResponse, error)
 }
 
 // InstanceTypeUseCase is Image Region UseCase.
@@ -21,7 +21,7 @@ func NewInstanceTypeUseCase(repo InstanceTypeResponse, logger log.Logger) *Insta
 	return &InstanceTypeUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// ListAll List All InstanceType
-func (uc *InstanceTypeUseCase) ListAll(ctx context.Context, secretId, secretKey, region string, request *cvm.DescribeInstanceTypeConfigsRequest) (*cvm.DescribeInstanceTypeConfigsResponse, error) {
-	return uc.repo.ListAll(ctx, secretId, secretKey, region, request)
+// ListInstanceTypes List All InstanceType
+func (uc *InstanceTypeUseCase) ListInstanceTypes(ctx context.Context, secretId, secretKey, region string, request *cvm.DescribeInstanceTypeConfigsRequest) (*cvm.DescribeInstanceTypeConfigsResponse, error) {
+	return uc.repo.ListInstanceTypes(ctx, secretId, secretKey, region, request)
 }

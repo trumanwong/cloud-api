@@ -30,41 +30,42 @@ service Instance {
   // 创建实例
   rpc CreateInstances (CreateInstancesRequest) returns (CreateInstancesResponse) {
     option (google.api.http) = {
-      post: "/api/instance",
+      post: "/api/instances",
       body: "*"
     };
   };
   // 实例列表
   rpc ListInstances (ListInstancesRequest) returns (ListInstancesResponse) {
     option (google.api.http) = {
-      get: "/api/instance"
+      get: "/api/instances"
     };
   };
   // 开机
   rpc StartInstances(StartInstancesRequest) returns (StartInstancesResponse) {
     option (google.api.http) = {
-      put: "/api/instance/start",
+      put: "/api/instances/start",
       body: "*"
     };
   };
   // 关机
   rpc StopInstances(StopInstancesRequest) returns (StopInstancesResponse) {
     option (google.api.http) = {
-      put: "/api/instance/stop",
+      put: "/api/instances/stop",
       body: "*"
     };
   };
   // 重启
   rpc RebootInstances(RebootInstancesRequest) returns (RebootInstancesResponse) {
     option (google.api.http) = {
-      put: "/api/instance/reboot",
+      put: "/api/instances/reboot",
       body: "*"
     };
   };
   // 删除实例
   rpc DeleteInstances(DeleteInstancesRequest) returns (DeleteInstancesResponse) {
     option (google.api.http) = {
-      delete: "/api/instance"
+      put: "/api/instances/terminate",
+      body: "*"
     };
   };
 }

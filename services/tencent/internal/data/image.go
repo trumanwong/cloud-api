@@ -20,8 +20,8 @@ func NewImageRepo(data *Data, logger log.Logger) biz.ImageResponse {
 	}
 }
 
-func (r *imageResponse) ListAll(ctx context.Context, secretId, secretKey, region string, request *cvm.DescribeImagesRequest) (*cvm.DescribeImagesResponse, error) {
-	client, err := NewCvmClient(secretId, secretKey, region)
+func (r *imageResponse) ListImages(ctx context.Context, secretId, secretKey, region string, request *cvm.DescribeImagesRequest) (*cvm.DescribeImagesResponse, error) {
+	client, err := getCvmClient(secretId, secretKey, region)
 	if err != nil {
 		return nil, err
 	}
