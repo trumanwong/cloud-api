@@ -10,7 +10,7 @@ paths:
         get:
             tags:
                 - Instance
-            description: 查询可以使用的镜像资源
+            description: List gets the list of Images in the subscription. Use nextLink property in the response to get the next page of Images. Do this till nextLink is null to fetch all the Images.
             operationId: Instance_ListImages
             parameters:
                 - name: tenantID
@@ -36,12 +36,45 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListImagesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instance-types:
         get:
             tags:
                 - Instance
-            description: 选择实例规格
+            description: List gets the list of Microsoft.Compute SKUs available for your Subscription.
             operationId: Instance_ListInstanceTypes
+            parameters:
+                - name: tenantID
+                  in: query
+                  schema:
+                    type: string
+                - name: clientID
+                  in: query
+                  schema:
+                    type: string
+                - name: clientSecret
+                  in: query
+                  schema:
+                    type: string
+                - name: subscriptionId
+                  in: query
+                  schema:
+                    type: string
+                - name: filter
+                  in: query
+                  description: the filter to apply on the operation. Only **location** filter is supported currently.
+                  schema:
+                    type: string
+                - name: includeExtendedLocations
+                  in: query
+                  description: to Include Extended Locations information or not in the response.
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK
@@ -49,60 +82,45 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListInstanceTypesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instances:
         get:
             tags:
                 - Instance
-            description: 实例列表
+            description: lists all of the virtual machines in the specified resource group.
             operationId: Instance_ListInstances
             parameters:
-                - name: accessKeyId
+                - name: tenantID
                   in: query
-                  description: 阿里云AccessKey ID
                   schema:
                     type: string
-                - name: accessKeySecret
+                - name: clientID
                   in: query
-                  description: 阿里云AccessKey Secret
                   schema:
                     type: string
-                - name: endpoint
+                - name: clientSecret
                   in: query
-                  description: 访问的域名
                   schema:
                     type: string
-                - name: regionId
+                - name: subscriptionId
                   in: query
-                  description: 实例所属的地域ID
                   schema:
                     type: string
-                - name: pageNumber
+                - name: resourceGroupName
                   in: query
-                  description: 实例状态列表的页码，起始值1，默认值1
-                  schema:
-                    type: integer
-                    format: int32
-                - name: pageSize
-                  in: query
-                  description: 分页查询时设置的每页行数。  最大值为100。  默认值为10。
-                  schema:
-                    type: integer
-                    format: int32
-                - name: nextToken
-                  in: query
-                  description: 查询凭证（Token），取值为上一次API调用返回的NextToken参数值
+                  description: the name of the resource group.
                   schema:
                     type: string
-                - name: instanceName
+                - name: filter
                   in: query
-                  description: 实例名称，支持使用通配符*进行模糊搜索。
+                  description: the system query option to filter VMs returned in the response. Allowed value is 'virtualMachineScaleSet/id' eq /subscriptions/{subId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachineScaleSets/{vmssName}'
                   schema:
                     type: string
-                - name: dryRun
-                  in: query
-                  description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会查询资源状况。检查项包括AccessKey是否有效、RAM用户的授权情况和是否填写了必需参数。如果检查不通过，则返回对应错误。如果检查通过，会返回错误码DryRunOperation。  false（默认值）：发送正常请求，通过检查后返回2XX HTTP状态码并直接查询资源状况。
-                  schema:
-                    type: boolean
             responses:
                 "200":
                     description: OK
@@ -110,6 +128,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         post:
             tags:
                 - Instance
@@ -128,11 +152,17 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/CreateInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instances/reboot:
         put:
             tags:
                 - Instance
-            description: 重启
+            description: the operation to restart a virtual machine.
             operationId: Instance_RebootInstances
             requestBody:
                 content:
@@ -147,11 +177,17 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/RebootInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instances/start:
         put:
             tags:
                 - Instance
-            description: 开机
+            description: the operation to start a virtual machine.
             operationId: Instance_StartInstances
             requestBody:
                 content:
@@ -166,11 +202,17 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/StartInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instances/stop:
         put:
             tags:
                 - Instance
-            description: 关机
+            description: the operation to power off (stop) a virtual machine. The virtual machine can be restarted with the same
             operationId: Instance_StopInstances
             requestBody:
                 content:
@@ -185,11 +227,17 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/StopInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instances/terminate:
         put:
             tags:
                 - Instance
-            description: 删除实例
+            description: the operation to delete a virtual machine.
             operationId: Instance_DeleteInstances
             requestBody:
                 content:
@@ -204,6 +252,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/DeleteInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/regions:
         get:
             tags:
@@ -225,10 +279,12 @@ paths:
                     type: string
                 - name: subscriptionId
                   in: query
+                  description: the ID of the target subscription.
                   schema:
                     type: string
                 - name: includeExtendedLocations
                   in: query
+                  description: whether to include extended locations.
                   schema:
                     type: boolean
             responses:
@@ -238,218 +294,264 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListRegionsResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
 components:
     schemas:
-        Any:
-            type: object
-            properties:
-                typeUrl:
-                    type: string
-                    description: 'A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one "/" character. The last segment of the URL''s path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading "." is not accepted). In practice, teams usually precompile into the binary all types that they expect it to use in the context of Any. However, for URLs which use the scheme `http`, `https`, or no scheme, one can optionally set up a type server that maps type URLs to message definitions as follows: * If no scheme is provided, `https` is assumed. * An HTTP GET on the URL must yield a [google.protobuf.Type][]   value in binary format, or produce an error. * Applications are allowed to cache lookup results based on the   URL, or have them precompiled into a binary to avoid any   lookup. Therefore, binary compatibility needs to be preserved   on changes to types. (Use versioned type names to manage   breaking changes.) Note: this functionality is not currently available in the official protobuf release, and it is not used for type URLs beginning with type.googleapis.com. Schemes other than `http`, `https` (or the empty scheme) might be used with implementation specific semantics.'
-                value:
-                    type: string
-                    description: Must be a valid serialized protocol buffer of the above specified type.
-                    format: bytes
-            description: '`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message. Protobuf library provides support to pack/unpack Any values in the form of utility functions or additional generated methods of the Any type. Example 1: Pack and unpack a message in C++.     Foo foo = ...;     Any any;     any.PackFrom(foo);     ...     if (any.UnpackTo(&foo)) {       ...     } Example 2: Pack and unpack a message in Java.     Foo foo = ...;     Any any = Any.pack(foo);     ...     if (any.is(Foo.class)) {       foo = any.unpack(Foo.class);     } Example 3: Pack and unpack a message in Python.     foo = Foo(...)     any = Any()     any.Pack(foo)     ...     if any.Is(Foo.DESCRIPTOR):       any.Unpack(foo)       ... Example 4: Pack and unpack a message in Go      foo := &pb.Foo{...}      any, err := anypb.New(foo)      if err != nil {        ...      }      ...      foo := &pb.Foo{}      if err := any.UnmarshalTo(foo); err != nil {        ...      } The pack methods provided by protobuf library will by default use ''type.googleapis.com/full.type.name'' as the type URL and the unpack methods only use the fully qualified type name after the last ''/'' in the type URL, for example "foo.bar.com/x/y.z" will yield type name "y.z". JSON The JSON representation of an `Any` value uses the regular representation of the deserialized, embedded message, with an additional field `@type` which contains the type URL. Example:     package google.profile;     message Person {       string first_name = 1;       string last_name = 2;     }     {       "@type": "type.googleapis.com/google.profile.Person",       "firstName": <string>,       "lastName": <string>     } If the embedded message type is well-known and has a custom JSON representation, that representation will be embedded adding a field `value` which holds the custom JSON in addition to the `@type` field. Example (for message [google.protobuf.Duration][]):     {       "@type": "type.googleapis.com/google.protobuf.Duration",       "value": "1.212s"     }'
         CreateInstancesRequest:
             type: object
             properties:
-                accessKeyId:
+                tenantID:
                     type: string
-                    description: 阿里云AccessKey ID
-                accessKeySecret:
+                clientID:
                     type: string
-                    description: 阿里云AccessKey Secret
-                endpoint:
+                clientSecret:
                     type: string
-                    description: 访问的域名
-                regionId:
+                subscriptionId:
                     type: string
-                    description: 地域id
-                imageId:
+                resourceGroupName:
                     type: string
-                    description: 镜像id
-                name:
+                    description: the name of the resource group.
+                vmName:
                     type: string
-                    description: 实例名称
-                instanceType:
+                    description: the name of the virtual machine.
+                hardwareProfile:
+                    $ref: '#/components/schemas/CreateInstancesRequest_HardwareProfile'
+                storageProfile:
+                    $ref: '#/components/schemas/CreateInstancesRequest_StorageProfile'
+                osProfile:
+                    $ref: '#/components/schemas/CreateInstancesRequest_OsProfile'
+        CreateInstancesRequest_HardwareProfile:
+            type: object
+            properties:
+                vmSize:
                     type: string
-                    description: 实例规格
-                systemDiskSize:
+                    description: 'VMSize - Specifies the size of the virtual machine. <br><br> The enum data type is currently deprecated and will be removed by December 23rd 2023. <br><br> Recommended way to get the list of available sizes is using these APIs: <br><br> [List all available virtual machine sizes in an availability set](https://docs.microsoft.com/rest/api/compute/availabilitysets/listavailablesizes) <br><br> [List all available virtual machine sizes in a region]( https://docs.microsoft.com/rest/api/compute/resourceskus/list) <br><br> [List all available virtual machine sizes for resizing](https://docs.microsoft.com/rest/api/compute/virtualmachines/listavailablesizes). For more information about virtual machine sizes, see [Sizes for virtual machines](https://docs.microsoft.com/azure/virtual-machines/sizes). <br><br> The available VM sizes depend on region and availability set. Possible values include: ''VirtualMachineSizeTypesBasicA0'', ''VirtualMachineSizeTypesBasicA1'', ''VirtualMachineSizeTypesBasicA2'', ''VirtualMachineSizeTypesBasicA3'', ''VirtualMachineSizeTypesBasicA4'', ''VirtualMachineSizeTypesStandardA0'', ''VirtualMachineSizeTypesStandardA1'', ''VirtualMachineSizeTypesStandardA2'', ''VirtualMachineSizeTypesStandardA3'', ''VirtualMachineSizeTypesStandardA4'', ''VirtualMachineSizeTypesStandardA5'', ''VirtualMachineSizeTypesStandardA6'', ''VirtualMachineSizeTypesStandardA7'', ''VirtualMachineSizeTypesStandardA8'', ''VirtualMachineSizeTypesStandardA9'', ''VirtualMachineSizeTypesStandardA10'', ''VirtualMachineSizeTypesStandardA11'', ''VirtualMachineSizeTypesStandardA1V2'', ''VirtualMachineSizeTypesStandardA2V2'', ''VirtualMachineSizeTypesStandardA4V2'', ''VirtualMachineSizeTypesStandardA8V2'', ''VirtualMachineSizeTypesStandardA2mV2'', ''VirtualMachineSizeTypesStandardA4mV2'', ''VirtualMachineSizeTypesStandardA8mV2'', ''VirtualMachineSizeTypesStandardB1s'', ''VirtualMachineSizeTypesStandardB1ms'', ''VirtualMachineSizeTypesStandardB2s'', ''VirtualMachineSizeTypesStandardB2ms'', ''VirtualMachineSizeTypesStandardB4ms'', ''VirtualMachineSizeTypesStandardB8ms'', ''VirtualMachineSizeTypesStandardD1'', ''VirtualMachineSizeTypesStandardD2'', ''VirtualMachineSizeTypesStandardD3'', ''VirtualMachineSizeTypesStandardD4'', ''VirtualMachineSizeTypesStandardD11'', ''VirtualMachineSizeTypesStandardD12'', ''VirtualMachineSizeTypesStandardD13'', ''VirtualMachineSizeTypesStandardD14'', ''VirtualMachineSizeTypesStandardD1V2'', ''VirtualMachineSizeTypesStandardD2V2'', ''VirtualMachineSizeTypesStandardD3V2'', ''VirtualMachineSizeTypesStandardD4V2'', ''VirtualMachineSizeTypesStandardD5V2'', ''VirtualMachineSizeTypesStandardD2V3'', ''VirtualMachineSizeTypesStandardD4V3'', ''VirtualMachineSizeTypesStandardD8V3'', ''VirtualMachineSizeTypesStandardD16V3'', ''VirtualMachineSizeTypesStandardD32V3'', ''VirtualMachineSizeTypesStandardD64V3'', ''VirtualMachineSizeTypesStandardD2sV3'', ''VirtualMachineSizeTypesStandardD4sV3'', ''VirtualMachineSizeTypesStandardD8sV3'', ''VirtualMachineSizeTypesStandardD16sV3'', ''VirtualMachineSizeTypesStandardD32sV3'', ''VirtualMachineSizeTypesStandardD64sV3'', ''VirtualMachineSizeTypesStandardD11V2'', ''VirtualMachineSizeTypesStandardD12V2'', ''VirtualMachineSizeTypesStandardD13V2'', ''VirtualMachineSizeTypesStandardD14V2'', ''VirtualMachineSizeTypesStandardD15V2'', ''VirtualMachineSizeTypesStandardDS1'', ''VirtualMachineSizeTypesStandardDS2'', ''VirtualMachineSizeTypesStandardDS3'', ''VirtualMachineSizeTypesStandardDS4'', ''VirtualMachineSizeTypesStandardDS11'', ''VirtualMachineSizeTypesStandardDS12'', ''VirtualMachineSizeTypesStandardDS13'', ''VirtualMachineSizeTypesStandardDS14'', ''VirtualMachineSizeTypesStandardDS1V2'', ''VirtualMachineSizeTypesStandardDS2V2'', ''VirtualMachineSizeTypesStandardDS3V2'', ''VirtualMachineSizeTypesStandardDS4V2'', ''VirtualMachineSizeTypesStandardDS5V2'', ''VirtualMachineSizeTypesStandardDS11V2'', ''VirtualMachineSizeTypesStandardDS12V2'', ''VirtualMachineSizeTypesStandardDS13V2'', ''VirtualMachineSizeTypesStandardDS14V2'', ''VirtualMachineSizeTypesStandardDS15V2'', ''VirtualMachineSizeTypesStandardDS134V2'', ''VirtualMachineSizeTypesStandardDS132V2'', ''VirtualMachineSizeTypesStandardDS148V2'', ''VirtualMachineSizeTypesStandardDS144V2'', ''VirtualMachineSizeTypesStandardE2V3'', ''VirtualMachineSizeTypesStandardE4V3'', ''VirtualMachineSizeTypesStandardE8V3'', ''VirtualMachineSizeTypesStandardE16V3'', ''VirtualMachineSizeTypesStandardE32V3'', ''VirtualMachineSizeTypesStandardE64V3'', ''VirtualMachineSizeTypesStandardE2sV3'', ''VirtualMachineSizeTypesStandardE4sV3'', ''VirtualMachineSizeTypesStandardE8sV3'', ''VirtualMachineSizeTypesStandardE16sV3'', ''VirtualMachineSizeTypesStandardE32sV3'', ''VirtualMachineSizeTypesStandardE64sV3'', ''VirtualMachineSizeTypesStandardE3216V3'', ''VirtualMachineSizeTypesStandardE328sV3'', ''VirtualMachineSizeTypesStandardE6432sV3'', ''VirtualMachineSizeTypesStandardE6416sV3'', ''VirtualMachineSizeTypesStandardF1'', ''VirtualMachineSizeTypesStandardF2'', ''VirtualMachineSizeTypesStandardF4'', ''VirtualMachineSizeTypesStandardF8'', ''VirtualMachineSizeTypesStandardF16'', ''VirtualMachineSizeTypesStandardF1s'', ''VirtualMachineSizeTypesStandardF2s'', ''VirtualMachineSizeTypesStandardF4s'', ''VirtualMachineSizeTypesStandardF8s'', ''VirtualMachineSizeTypesStandardF16s'', ''VirtualMachineSizeTypesStandardF2sV2'', ''VirtualMachineSizeTypesStandardF4sV2'', ''VirtualMachineSizeTypesStandardF8sV2'', ''VirtualMachineSizeTypesStandardF16sV2'', ''VirtualMachineSizeTypesStandardF32sV2'', ''VirtualMachineSizeTypesStandardF64sV2'', ''VirtualMachineSizeTypesStandardF72sV2'', ''VirtualMachineSizeTypesStandardG1'', ''VirtualMachineSizeTypesStandardG2'', ''VirtualMachineSizeTypesStandardG3'', ''VirtualMachineSizeTypesStandardG4'', ''VirtualMachineSizeTypesStandardG5'', ''VirtualMachineSizeTypesStandardGS1'', ''VirtualMachineSizeTypesStandardGS2'', ''VirtualMachineSizeTypesStandardGS3'', ''VirtualMachineSizeTypesStandardGS4'', ''VirtualMachineSizeTypesStandardGS5'', ''VirtualMachineSizeTypesStandardGS48'', ''VirtualMachineSizeTypesStandardGS44'', ''VirtualMachineSizeTypesStandardGS516'', ''VirtualMachineSizeTypesStandardGS58'', ''VirtualMachineSizeTypesStandardH8'', ''VirtualMachineSizeTypesStandardH16'', ''VirtualMachineSizeTypesStandardH8m'', ''VirtualMachineSizeTypesStandardH16m'', ''VirtualMachineSizeTypesStandardH16r'', ''VirtualMachineSizeTypesStandardH16mr'', ''VirtualMachineSizeTypesStandardL4s'', ''VirtualMachineSizeTypesStandardL8s'', ''VirtualMachineSizeTypesStandardL16s'', ''VirtualMachineSizeTypesStandardL32s'', ''VirtualMachineSizeTypesStandardM64s'', ''VirtualMachineSizeTypesStandardM64ms'', ''VirtualMachineSizeTypesStandardM128s'', ''VirtualMachineSizeTypesStandardM128ms'', ''VirtualMachineSizeTypesStandardM6432ms'', ''VirtualMachineSizeTypesStandardM6416ms'', ''VirtualMachineSizeTypesStandardM12864ms'', ''VirtualMachineSizeTypesStandardM12832ms'', ''VirtualMachineSizeTypesStandardNC6'', ''VirtualMachineSizeTypesStandardNC12'', ''VirtualMachineSizeTypesStandardNC24'', ''VirtualMachineSizeTypesStandardNC24r'', ''VirtualMachineSizeTypesStandardNC6sV2'', ''VirtualMachineSizeTypesStandardNC12sV2'', ''VirtualMachineSizeTypesStandardNC24sV2'', ''VirtualMachineSizeTypesStandardNC24rsV2'', ''VirtualMachineSizeTypesStandardNC6sV3'', ''VirtualMachineSizeTypesStandardNC12sV3'', ''VirtualMachineSizeTypesStandardNC24sV3'', ''VirtualMachineSizeTypesStandardNC24rsV3'', ''VirtualMachineSizeTypesStandardND6s'', ''VirtualMachineSizeTypesStandardND12s'', ''VirtualMachineSizeTypesStandardND24s'', ''VirtualMachineSizeTypesStandardND24rs'', ''VirtualMachineSizeTypesStandardNV6'', ''VirtualMachineSizeTypesStandardNV12'', ''VirtualMachineSizeTypesStandardNV24'''
+        CreateInstancesRequest_OsProfile:
+            type: object
+            properties:
+                adminUsername:
                     type: string
-                    description: 系统盘大小
-                uniqueSuffix:
-                    type: boolean
-                    description: 是否为instance_name自动添加有序后缀（默认false）
-                amount:
-                    type: integer
-                    description: 创建数量(1-100，默认1)
-                    format: int32
-                password:
+                    description: AdminUsername - Specifies the name of the administrator account. <br><br> This property cannot be updated after the VM is created. <br><br> **Windows-only restriction:** Cannot end in "." <br><br> **Disallowed values:** "administrator", "admin", "user", "user1", "test", "user2", "test1", "user3", "admin1", "1", "123", "a", "actuser", "adm", "admin2", "aspnet", "backup", "console", "david", "guest", "john", "owner", "root", "server", "sql", "support", "support_388945a0", "sys", "test2", "test3", "user4", "user5". <br><br> **Minimum-length (Linux):** 1  character <br><br> **Max-length (Linux):** 64 characters <br><br> **Max-length (Windows):** 20 characters.
+                adminPassword:
                     type: string
-                    description: 实例密码
-                dryRun:
-                    type: boolean
-                    description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。  false（默认）：发送正常请求，通过检查后直接创建实例。
+                    description: AdminPassword - Specifies the password of the administrator account. <br><br> **Minimum-length (Windows):** 8 characters <br><br> **Minimum-length (Linux):** 6 characters <br><br> **Max-length (Windows):** 123 characters <br><br> **Max-length (Linux):** 72 characters <br><br> **Complexity requirements:** 3 out of 4 conditions below need to be fulfilled <br> Has lower characters <br>Has upper characters <br> Has a digit <br> Has a special character (Regex match [\W_]) <br><br> **Disallowed values:** "abc@123", "P@$$w0rd", "P@ssw0rd", "P@ssword123", "Pa$$word", "pass@word1", "Password!", "Password1", "Password22", "iloveyou!" <br><br> For resetting the password, see [How to reset the Remote Desktop service or its login password in a Windows VM](https://docs.microsoft.com/troubleshoot/azure/virtual-machines/reset-rdp) <br><br> For resetting root password, see [Manage users, SSH, and check or repair disks on Azure Linux VMs using the VMAccess Extension](https://docs.microsoft.com/troubleshoot/azure/virtual-machines/troubleshoot-ssh-connection)
+        CreateInstancesRequest_StorageProfile:
+            type: object
+            properties:
+                imageReference:
+                    $ref: '#/components/schemas/StorageProfile_ImageReference'
+                osDisk:
+                    $ref: '#/components/schemas/StorageProfile_OSDisk'
+                dataDisks:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/StorageProfile_DataDisk'
+                    description: DataDisks - Specifies the parameters that are used to add a data disk to a virtual machine. <br><br> For more information about disks, see [About disks and VHDs for Azure virtual machines](https://docs.microsoft.com/azure/virtual-machines/managed-disks-overview).
+            description: StorageProfile specifies the storage settings for the virtual machine disks.
         CreateInstancesResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         DeleteInstancesRequest:
             type: object
             properties:
-                accessKeyId:
+                tenantID:
                     type: string
-                    description: 阿里云AccessKey ID
-                accessKeySecret:
+                clientID:
                     type: string
-                    description: 阿里云AccessKey Secret
-                endpoint:
+                clientSecret:
                     type: string
-                    description: 访问的域名
-                regionId:
+                subscriptionId:
                     type: string
-                    description: 地域id
-                force:
+                resourceGroupName:
+                    type: string
+                    description: the name of the resource group.
+                vmName:
+                    type: string
+                    description: the name of the virtual machine.
+                forceDeletion:
                     type: boolean
-                    description: 是否强制释放运行中（Running）的实例。  true：强制释放运行中（Running）的实例。强制释放相当于断电，实例内存以及存储中的临时数据都会被擦除，无法恢复。  false：正常释放实例，此时实例必须处于已停止（Stopped）状态。  默认值为false。
-                terminateSubscription:
-                    type: boolean
-                    description: 是否释放已到期的包年包月实例。 默认值为false。
-                instanceIds:
-                    type: array
-                    items:
-                        type: string
-                dryRun:
-                    type: boolean
-                    description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。  false（默认）：发送正常请求，通过检查后直接创建实例。
+                    description: optional parameter to force delete virtual machines.
         DeleteInstancesResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
         ListImagesResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ListInstanceTypesResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ListInstancesResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ListRegionsResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         RebootInstancesRequest:
             type: object
             properties:
-                accessKeyId:
+                tenantID:
                     type: string
-                    description: 阿里云AccessKey ID
-                accessKeySecret:
+                clientID:
                     type: string
-                    description: 阿里云AccessKey Secret
-                endpoint:
+                clientSecret:
                     type: string
-                    description: 访问的域名
-                regionId:
+                subscriptionId:
                     type: string
-                    description: 地域id
-                forceReboot:
-                    type: boolean
-                    description: 是否强制重启。取值范围：  true：强制重启。相当于典型的断电操作，所有未写入存储设备的缓存数据会丢失。  false：正常重启。  默认值：false
-                batchOptimization:
+                resourceGroupName:
                     type: string
-                    description: 设置批量操作模式。取值范围：  AllTogether：该模式下，如果实例全部重启成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例重启失败，并返回失败信息。  SuccessFirst：该模式下，分别重启每个实例，返回结果包含每个实例的操作结果信息。  默认值：AllTogether
-                instanceIds:
-                    type: array
-                    items:
-                        type: string
-                    description: 实例ID。N的取值范围：1~100。
-                dryRun:
-                    type: boolean
-                    description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。  false（默认）：发送正常请求，通过检查后直接创建实例。
+                    description: the name of the resource group.
+                vmName:
+                    type: string
+                    description: the name of the virtual machine.
         RebootInstancesResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         StartInstancesRequest:
             type: object
             properties:
-                accessKeyId:
+                tenantID:
                     type: string
-                    description: 阿里云AccessKey ID
-                accessKeySecret:
+                clientID:
                     type: string
-                    description: 阿里云AccessKey Secret
-                endpoint:
+                clientSecret:
                     type: string
-                    description: 访问的域名
-                regionId:
+                subscriptionId:
                     type: string
-                    description: 地域id
-                instanceIds:
-                    type: array
-                    items:
-                        type: string
-                    description: 实例ID, 数组长度取值范围：1~100
-                batchOptimization:
+                resourceGroupName:
                     type: string
-                    description: 设置批量操作模式。取值范围：  AllTogether：该模式下，如果实例全部启动成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例启动失败，并返回失败信息。  SuccessFirst：该模式下，分别启动每个实例，返回结果包含每个实例的操作结果信息。  默认值：AllTogether
-                dryRun:
-                    type: boolean
-                    description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。  false（默认）：发送正常请求，通过检查后直接创建实例。
+                    description: the name of the resource group.
+                vmName:
+                    type: string
+                    description: the name of the virtual machine.
         StartInstancesResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
         StopInstancesRequest:
             type: object
             properties:
-                accessKeyId:
+                tenantID:
                     type: string
-                    description: 阿里云AccessKey ID
-                accessKeySecret:
+                clientID:
                     type: string
-                    description: 阿里云AccessKey Secret
-                endpoint:
+                clientSecret:
                     type: string
-                    description: 访问的域名
-                regionId:
+                subscriptionId:
                     type: string
-                    description: 地域id
-                forceStop:
+                resourceGroupName:
+                    type: string
+                    description: the name of the resource group.
+                vmName:
+                    type: string
+                    description: the name of the virtual machine.
+                skipShutdown:
                     type: boolean
-                    description: 是否强制关机。取值范围：  true：强制关机。相当于典型的断电操作，所有未写入存储设备的缓存数据会丢失。  false：正常关机。  默认值：false
-                stoppedMode:
-                    type: string
-                    description: 停止按量付费ECS实例时，设置的停止模式。取值  StopCharging：节省停机模式。有关StopCharging生效的条件，请参见按量付费实例节省停机模式的启用条件章节。  KeepCharging：普通停机模式。实例停止后仍继续收费。  默认值：如果您在ECS控制台上开启VPC内实例节省停机模式（更多信息，请参见打开默认启用节省停机模式），并符合开启条件，则默认值为StopCharging。否则，默认值为KeepCharging。
-                batchOptimization:
-                    type: string
-                    description: 设置批量操作模式。取值范围：  AllTogether：该模式下，如果实例全部停止成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例停止失败，并返回失败信息。  SuccessFirst：该模式下，分别停止每个实例，返回结果包含每个实例的操作结果信息。 默认值：AllTogether
-                instanceIds:
-                    type: array
-                    items:
-                        type: string
-                    description: 实例ID列表
-                dryRun:
-                    type: boolean
-                    description: 是否只预检此次请求。取值范围：  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。  false（默认）：发送正常请求，通过检查后直接创建实例。
+                    description: the parameter to request non-graceful VM shutdown. True value for this flag indicates non-graceful shutdown whereas false indicates otherwise. Default value for this flag is false if not specified
         StopInstancesResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
+        StorageProfile_DataDisk:
+            type: object
+            properties:
+                lun:
+                    type: integer
+                    description: Lun - Specifies the logical unit number of the data disk. This value is used to identify data disks within the VM and therefore must be unique for each data disk attached to a VM.
+                    format: int32
+                name:
+                    type: string
+                    description: Name - The disk name.
+                diskSizeGb:
+                    type: integer
+                    description: DiskSizeGB - Specifies the size of an empty data disk in gigabytes. This element can be used to overwrite the size of the disk in a virtual machine image. <br><br> This value cannot be larger than 1023 GB
+                    format: int32
+            description: DataDisk describes a data disk.
+        StorageProfile_ImageReference:
+            type: object
+            properties:
+                publisher:
+                    type: string
+                    description: Publisher - The image publisher.
+                offer:
+                    type: string
+                    description: Offer - Specifies the offer of the platform image or marketplace image used to create the virtual machine.
+                sku:
+                    type: string
+                    description: Sku - The image SKU.
+                version:
+                    type: string
+                    description: Version - Specifies the version of the platform image or marketplace image used to create the virtual machine. The allowed formats are Major.Minor.Build or 'latest'. Major, Minor, and Build are decimal numbers. Specify 'latest' to use the latest version of an image available at deploy time. Even if you use 'latest', the VM image will not automatically update after deploy time even if a new version becomes available. Please do not use field 'version' for gallery image deployment, gallery image should always use 'id' field for deployment, to use 'latest' version of gallery image, just set '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/galleries/{galleryName}/images/{imageName}' in the 'id' field without version input.
+                exactVersion:
+                    type: string
+                    description: ExactVersion - READ-ONLY; Specifies in decimal numbers, the version of platform image or marketplace image used to create the virtual machine. This readonly field differs from 'version', only if the value specified in 'version' field is 'latest'.
+                sharedGalleryImageId:
+                    type: string
+                    description: SharedGalleryImageID - Specified the shared gallery image unique id for vm deployment. This can be fetched from shared gallery image GET call.
+                communityGalleryImageId:
+                    type: string
+                    description: CommunityGalleryImageID - Specified the community gallery image unique id for vm deployment. This can be fetched from community gallery image GET call.
+                id:
+                    type: string
+                    description: ID - Resource Id
+            description: 'ImageReference specifies information about the image to use. You can specify information about platform images, marketplace images, or virtual machine images. This element is required when you want to use a platform image, marketplace image, or virtual machine image, but is not used in other creation operations. NOTE: Image reference publisher and offer can only be set when you create the scale set.'
+        StorageProfile_OSDisk:
+            type: object
+            properties:
+                osType:
+                    type: string
+                    description: 'OsType - This property allows you to specify the type of the OS that is included in the disk if creating a VM from user-image or a specialized VHD. <br><br> Possible values are: <br><br> **Windows** <br><br> **Linux**. Possible values include: ''OperatingSystemTypesWindows'', ''OperatingSystemTypesLinux'''
+                name:
+                    type: string
+                    description: Name - The disk name.
+                diskSizeGb:
+                    type: integer
+                    description: DiskSizeGB - Specifies the size of an empty data disk in gigabytes. This element can be used to overwrite the size of the disk in a virtual machine image. <br><br> This value cannot be larger than 1023 GB
+                    format: int32
+            description: OSDisk specifies information about the operating system disk used by the virtual machine. For more information about disks, see [About disks and VHDs for Azure virtual machines](https://docs.microsoft.com/azure/virtual-machines/managed-disks-overview).
 tags:
     - name: Instance

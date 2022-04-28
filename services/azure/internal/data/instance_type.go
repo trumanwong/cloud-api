@@ -20,6 +20,14 @@ func NewInstanceTypeRepo(data *Data, logger log.Logger) biz.InstanceTypeResponse
 	}
 }
 
-func (r *instanceTypeResponse) ListInstanceType(ctx context.Context) (*biz.ListInstanceTypesResponse, error) {
-	return &biz.ListInstanceTypesResponse{InstanceTypes: compute.PossibleVirtualMachineSizeTypesValues()}, nil
+func (r *instanceTypeResponse) ListInstanceTypes(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId, filter, includeExtendedLocations string) (*compute.ResourceSkusResultPage, error) {
+	client, err := getResourceSkusClient(tenantID, clientID, clientSecret, subscriptionId)
+	if err != nil {
+		return nil, err
+	}
+	result, err := client.List(ctx, filter, includeExtendedLocations)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
 }

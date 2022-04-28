@@ -24,21 +24,21 @@ const _ = grpc.SupportPackageIsVersion7
 type InstanceClient interface {
 	// ListLocations this operation provides all the locations that are available for resource providers; however, each resource provider may support a subset of this list.
 	ListRegions(ctx context.Context, in *ListRegionsRequest, opts ...grpc.CallOption) (*ListRegionsResponse, error)
-	// 查询可以使用的镜像资源
+	// List gets the list of Images in the subscription. Use nextLink property in the response to get the next page of Images. Do this till nextLink is null to fetch all the Images.
 	ListImages(ctx context.Context, in *ListImagesRequest, opts ...grpc.CallOption) (*ListImagesResponse, error)
-	// 选择实例规格
+	// List gets the list of Microsoft.Compute SKUs available for your Subscription.
 	ListInstanceTypes(ctx context.Context, in *ListInstanceTypesRequest, opts ...grpc.CallOption) (*ListInstanceTypesResponse, error)
 	// 创建实例
 	CreateInstances(ctx context.Context, in *CreateInstancesRequest, opts ...grpc.CallOption) (*CreateInstancesResponse, error)
-	// 实例列表
+	// lists all of the virtual machines in the specified resource group.
 	ListInstances(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error)
-	// 开机
+	// the operation to start a virtual machine.
 	StartInstances(ctx context.Context, in *StartInstancesRequest, opts ...grpc.CallOption) (*StartInstancesResponse, error)
-	// 关机
+	// the operation to power off (stop) a virtual machine. The virtual machine can be restarted with the same
 	StopInstances(ctx context.Context, in *StopInstancesRequest, opts ...grpc.CallOption) (*StopInstancesResponse, error)
-	// 重启
+	// the operation to restart a virtual machine.
 	RebootInstances(ctx context.Context, in *RebootInstancesRequest, opts ...grpc.CallOption) (*RebootInstancesResponse, error)
-	// 删除实例
+	// the operation to delete a virtual machine.
 	DeleteInstances(ctx context.Context, in *DeleteInstancesRequest, opts ...grpc.CallOption) (*DeleteInstancesResponse, error)
 }
 
@@ -137,21 +137,21 @@ func (c *instanceClient) DeleteInstances(ctx context.Context, in *DeleteInstance
 type InstanceServer interface {
 	// ListLocations this operation provides all the locations that are available for resource providers; however, each resource provider may support a subset of this list.
 	ListRegions(context.Context, *ListRegionsRequest) (*ListRegionsResponse, error)
-	// 查询可以使用的镜像资源
+	// List gets the list of Images in the subscription. Use nextLink property in the response to get the next page of Images. Do this till nextLink is null to fetch all the Images.
 	ListImages(context.Context, *ListImagesRequest) (*ListImagesResponse, error)
-	// 选择实例规格
+	// List gets the list of Microsoft.Compute SKUs available for your Subscription.
 	ListInstanceTypes(context.Context, *ListInstanceTypesRequest) (*ListInstanceTypesResponse, error)
 	// 创建实例
 	CreateInstances(context.Context, *CreateInstancesRequest) (*CreateInstancesResponse, error)
-	// 实例列表
+	// lists all of the virtual machines in the specified resource group.
 	ListInstances(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error)
-	// 开机
+	// the operation to start a virtual machine.
 	StartInstances(context.Context, *StartInstancesRequest) (*StartInstancesResponse, error)
-	// 关机
+	// the operation to power off (stop) a virtual machine. The virtual machine can be restarted with the same
 	StopInstances(context.Context, *StopInstancesRequest) (*StopInstancesResponse, error)
-	// 重启
+	// the operation to restart a virtual machine.
 	RebootInstances(context.Context, *RebootInstancesRequest) (*RebootInstancesResponse, error)
-	// 删除实例
+	// the operation to delete a virtual machine.
 	DeleteInstances(context.Context, *DeleteInstancesRequest) (*DeleteInstancesResponse, error)
 	mustEmbedUnimplementedInstanceServer()
 }

@@ -6,12 +6,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
-type ListInstanceTypesResponse struct {
-	InstanceTypes []compute.VirtualMachineSizeTypes `json:"instance_types"`
-}
-
 type InstanceTypeResponse interface {
-	ListInstanceType(context.Context) (*ListInstanceTypesResponse, error)
+	ListInstanceTypes(context.Context, string, string, string, string, string, string) (*compute.ResourceSkusResultPage, error)
 }
 
 // InstanceTypeUseCase is a InstanceType UseCase.
@@ -25,7 +21,7 @@ func NewInstanceTypeUseCase(repo InstanceTypeResponse, logger log.Logger) *Insta
 	return &InstanceTypeUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// ListInstanceType List All InstanceTypes
-func (uc *InstanceTypeUseCase) ListInstanceType(ctx context.Context) (*ListInstanceTypesResponse, error) {
-	return uc.repo.ListInstanceType(ctx)
+// ListInstanceTypes List All InstanceTypes
+func (uc *InstanceTypeUseCase) ListInstanceTypes(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId, location, includeExtendedLocations string) (*compute.ResourceSkusResultPage, error) {
+	return uc.repo.ListInstanceTypes(ctx, tenantID, clientID, clientSecret, subscriptionId, location, includeExtendedLocations)
 }

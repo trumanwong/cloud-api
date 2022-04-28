@@ -615,6 +615,54 @@ func (m *ListInstanceTypesRequest) validate(all bool) error {
 
 	var errors []error
 
+	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+		err := ListInstanceTypesRequestValidationError{
+			field:  "TenantID",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+		err := ListInstanceTypesRequestValidationError{
+			field:  "ClientID",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetClientSecret()) < 1 {
+		err := ListInstanceTypesRequestValidationError{
+			field:  "ClientSecret",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetSubscriptionId()) < 1 {
+		err := ListInstanceTypesRequestValidationError{
+			field:  "SubscriptionId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for Filter
+
+	// no validation rules for IncludeExtendedLocations
+
 	if len(errors) > 0 {
 		return ListInstanceTypesRequestMultiError(errors)
 	}
@@ -848,96 +896,148 @@ func (m *CreateInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if m.AccessKeyId != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-			err := CreateInstancesRequestValidationError{
-				field:  "AccessKeyId",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+		err := CreateInstancesRequestValidationError{
+			field:  "TenantID",
+			reason: "value length must be at least 1 runes",
 		}
-
-	}
-
-	if m.AccessKeySecret != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-			err := CreateInstancesRequestValidationError{
-				field:  "AccessKeySecret",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+		if !all {
+			return err
 		}
-
+		errors = append(errors, err)
 	}
 
-	if m.Endpoint != nil {
-
-		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-			err := CreateInstancesRequestValidationError{
-				field:  "Endpoint",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+		err := CreateInstancesRequestValidationError{
+			field:  "ClientID",
+			reason: "value length must be at least 1 runes",
 		}
-
-	}
-
-	if m.RegionId != nil {
-
-		if utf8.RuneCountInString(m.GetRegionId()) < 1 {
-			err := CreateInstancesRequestValidationError{
-				field:  "RegionId",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+		if !all {
+			return err
 		}
-
+		errors = append(errors, err)
 	}
 
-	if m.ImageId != nil {
-		// no validation rules for ImageId
+	if utf8.RuneCountInString(m.GetClientSecret()) < 1 {
+		err := CreateInstancesRequestValidationError{
+			field:  "ClientSecret",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.Name != nil {
-		// no validation rules for Name
+	if utf8.RuneCountInString(m.GetSubscriptionId()) < 1 {
+		err := CreateInstancesRequestValidationError{
+			field:  "SubscriptionId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.InstanceType != nil {
-		// no validation rules for InstanceType
+	if utf8.RuneCountInString(m.GetResourceGroupName()) < 1 {
+		err := CreateInstancesRequestValidationError{
+			field:  "ResourceGroupName",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.SystemDiskSize != nil {
-		// no validation rules for SystemDiskSize
+	// no validation rules for VmName
+
+	if all {
+		switch v := interface{}(m.GetHardwareProfile()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateInstancesRequestValidationError{
+					field:  "HardwareProfile",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateInstancesRequestValidationError{
+					field:  "HardwareProfile",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetHardwareProfile()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateInstancesRequestValidationError{
+				field:  "HardwareProfile",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
-	if m.UniqueSuffix != nil {
-		// no validation rules for UniqueSuffix
+	if all {
+		switch v := interface{}(m.GetStorageProfile()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateInstancesRequestValidationError{
+					field:  "StorageProfile",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateInstancesRequestValidationError{
+					field:  "StorageProfile",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetStorageProfile()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateInstancesRequestValidationError{
+				field:  "StorageProfile",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
-	if m.Amount != nil {
-		// no validation rules for Amount
-	}
-
-	if m.Password != nil {
-		// no validation rules for Password
-	}
-
-	if m.DryRun != nil {
-		// no validation rules for DryRun
+	if all {
+		switch v := interface{}(m.GetOsProfile()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateInstancesRequestValidationError{
+					field:  "OsProfile",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateInstancesRequestValidationError{
+					field:  "OsProfile",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOsProfile()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateInstancesRequestValidationError{
+				field:  "OsProfile",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -1173,74 +1273,53 @@ func (m *ListInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if m.AccessKeyId != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-			err := ListInstancesRequestValidationError{
-				field:  "AccessKeyId",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+		err := ListInstancesRequestValidationError{
+			field:  "TenantID",
+			reason: "value length must be at least 1 runes",
 		}
-
-	}
-
-	if m.AccessKeySecret != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-			err := ListInstancesRequestValidationError{
-				field:  "AccessKeySecret",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+		if !all {
+			return err
 		}
-
+		errors = append(errors, err)
 	}
 
-	if m.Endpoint != nil {
-
-		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-			err := ListInstancesRequestValidationError{
-				field:  "Endpoint",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+		err := ListInstancesRequestValidationError{
+			field:  "ClientID",
+			reason: "value length must be at least 1 runes",
 		}
-
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.RegionId != nil {
-		// no validation rules for RegionId
+	if utf8.RuneCountInString(m.GetClientSecret()) < 1 {
+		err := ListInstancesRequestValidationError{
+			field:  "ClientSecret",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.PageNumber != nil {
-		// no validation rules for PageNumber
+	if utf8.RuneCountInString(m.GetSubscriptionId()) < 1 {
+		err := ListInstancesRequestValidationError{
+			field:  "SubscriptionId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.PageSize != nil {
-		// no validation rules for PageSize
-	}
+	// no validation rules for ResourceGroupName
 
-	if m.NextToken != nil {
-		// no validation rules for NextToken
-	}
-
-	if m.InstanceName != nil {
-		// no validation rules for InstanceName
-	}
-
-	if m.DryRun != nil {
-		// no validation rules for DryRun
-	}
+	// no validation rules for Filter
 
 	if len(errors) > 0 {
 		return ListInstancesRequestMultiError(errors)
@@ -1475,10 +1554,10 @@ func (m *StartInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := len(m.GetInstanceIds()); l < 1 || l > 100 {
+	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
 		err := StartInstancesRequestValidationError{
-			field:  "InstanceIds",
-			reason: "value must contain between 1 and 100 items, inclusive",
+			field:  "TenantID",
+			reason: "value length must be at least 1 runes",
 		}
 		if !all {
 			return err
@@ -1486,73 +1565,42 @@ func (m *StartInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.AccessKeyId != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-			err := StartInstancesRequestValidationError{
-				field:  "AccessKeyId",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+		err := StartInstancesRequestValidationError{
+			field:  "ClientID",
+			reason: "value length must be at least 1 runes",
 		}
-
-	}
-
-	if m.AccessKeySecret != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-			err := StartInstancesRequestValidationError{
-				field:  "AccessKeySecret",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+		if !all {
+			return err
 		}
-
+		errors = append(errors, err)
 	}
 
-	if m.Endpoint != nil {
-
-		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-			err := StartInstancesRequestValidationError{
-				field:  "Endpoint",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetClientSecret()) < 1 {
+		err := StartInstancesRequestValidationError{
+			field:  "ClientSecret",
+			reason: "value length must be at least 1 runes",
 		}
-
-	}
-
-	if m.RegionId != nil {
-
-		if utf8.RuneCountInString(m.GetRegionId()) < 1 {
-			err := StartInstancesRequestValidationError{
-				field:  "RegionId",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+		if !all {
+			return err
 		}
-
+		errors = append(errors, err)
 	}
 
-	if m.BatchOptimization != nil {
-		// no validation rules for BatchOptimization
+	if utf8.RuneCountInString(m.GetSubscriptionId()) < 1 {
+		err := StartInstancesRequestValidationError{
+			field:  "SubscriptionId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.DryRun != nil {
-		// no validation rules for DryRun
-	}
+	// no validation rules for ResourceGroupName
+
+	// no validation rules for VmName
 
 	if len(errors) > 0 {
 		return StartInstancesRequestMultiError(errors)
@@ -1787,10 +1835,10 @@ func (m *StopInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := len(m.GetInstanceIds()); l < 1 || l > 100 {
+	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
 		err := StopInstancesRequestValidationError{
-			field:  "InstanceIds",
-			reason: "value must contain between 1 and 100 items, inclusive",
+			field:  "TenantID",
+			reason: "value length must be at least 1 runes",
 		}
 		if !all {
 			return err
@@ -1798,80 +1846,45 @@ func (m *StopInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.AccessKeyId != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-			err := StopInstancesRequestValidationError{
-				field:  "AccessKeyId",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+		err := StopInstancesRequestValidationError{
+			field:  "ClientID",
+			reason: "value length must be at least 1 runes",
 		}
-
-	}
-
-	if m.AccessKeySecret != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-			err := StopInstancesRequestValidationError{
-				field:  "AccessKeySecret",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+		if !all {
+			return err
 		}
-
+		errors = append(errors, err)
 	}
 
-	if m.Endpoint != nil {
-
-		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-			err := StopInstancesRequestValidationError{
-				field:  "Endpoint",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetClientSecret()) < 1 {
+		err := StopInstancesRequestValidationError{
+			field:  "ClientSecret",
+			reason: "value length must be at least 1 runes",
 		}
-
-	}
-
-	if m.RegionId != nil {
-
-		if utf8.RuneCountInString(m.GetRegionId()) < 1 {
-			err := StopInstancesRequestValidationError{
-				field:  "RegionId",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+		if !all {
+			return err
 		}
-
+		errors = append(errors, err)
 	}
 
-	if m.ForceStop != nil {
-		// no validation rules for ForceStop
+	if utf8.RuneCountInString(m.GetSubscriptionId()) < 1 {
+		err := StopInstancesRequestValidationError{
+			field:  "SubscriptionId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.StoppedMode != nil {
-		// no validation rules for StoppedMode
-	}
+	// no validation rules for ResourceGroupName
 
-	if m.BatchOptimization != nil {
-		// no validation rules for BatchOptimization
-	}
+	// no validation rules for VmName
 
-	if m.DryRun != nil {
-		// no validation rules for DryRun
+	if m.SkipShutdown != nil {
+		// no validation rules for SkipShutdown
 	}
 
 	if len(errors) > 0 {
@@ -2107,10 +2120,10 @@ func (m *RebootInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := len(m.GetInstanceIds()); l < 1 || l > 100 {
+	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
 		err := RebootInstancesRequestValidationError{
-			field:  "InstanceIds",
-			reason: "value must contain between 1 and 100 items, inclusive",
+			field:  "TenantID",
+			reason: "value length must be at least 1 runes",
 		}
 		if !all {
 			return err
@@ -2118,77 +2131,42 @@ func (m *RebootInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.AccessKeyId != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-			err := RebootInstancesRequestValidationError{
-				field:  "AccessKeyId",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+		err := RebootInstancesRequestValidationError{
+			field:  "ClientID",
+			reason: "value length must be at least 1 runes",
 		}
-
-	}
-
-	if m.AccessKeySecret != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-			err := RebootInstancesRequestValidationError{
-				field:  "AccessKeySecret",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+		if !all {
+			return err
 		}
-
+		errors = append(errors, err)
 	}
 
-	if m.Endpoint != nil {
-
-		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-			err := RebootInstancesRequestValidationError{
-				field:  "Endpoint",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetClientSecret()) < 1 {
+		err := RebootInstancesRequestValidationError{
+			field:  "ClientSecret",
+			reason: "value length must be at least 1 runes",
 		}
-
-	}
-
-	if m.RegionId != nil {
-
-		if utf8.RuneCountInString(m.GetRegionId()) < 1 {
-			err := RebootInstancesRequestValidationError{
-				field:  "RegionId",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+		if !all {
+			return err
 		}
-
+		errors = append(errors, err)
 	}
 
-	if m.ForceReboot != nil {
-		// no validation rules for ForceReboot
+	if utf8.RuneCountInString(m.GetSubscriptionId()) < 1 {
+		err := RebootInstancesRequestValidationError{
+			field:  "SubscriptionId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.BatchOptimization != nil {
-		// no validation rules for BatchOptimization
-	}
+	// no validation rules for ResourceGroupName
 
-	if m.DryRun != nil {
-		// no validation rules for DryRun
-	}
+	// no validation rules for VmName
 
 	if len(errors) > 0 {
 		return RebootInstancesRequestMultiError(errors)
@@ -2423,76 +2401,56 @@ func (m *DeleteInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if m.AccessKeyId != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
-			err := DeleteInstancesRequestValidationError{
-				field:  "AccessKeyId",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+		err := DeleteInstancesRequestValidationError{
+			field:  "TenantID",
+			reason: "value length must be at least 1 runes",
 		}
-
-	}
-
-	if m.AccessKeySecret != nil {
-
-		if utf8.RuneCountInString(m.GetAccessKeySecret()) < 1 {
-			err := DeleteInstancesRequestValidationError{
-				field:  "AccessKeySecret",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+		if !all {
+			return err
 		}
-
+		errors = append(errors, err)
 	}
 
-	if m.Endpoint != nil {
-
-		if utf8.RuneCountInString(m.GetEndpoint()) < 1 {
-			err := DeleteInstancesRequestValidationError{
-				field:  "Endpoint",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+		err := DeleteInstancesRequestValidationError{
+			field:  "ClientID",
+			reason: "value length must be at least 1 runes",
 		}
-
-	}
-
-	if m.RegionId != nil {
-
-		if utf8.RuneCountInString(m.GetRegionId()) < 1 {
-			err := DeleteInstancesRequestValidationError{
-				field:  "RegionId",
-				reason: "value length must be at least 1 runes",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+		if !all {
+			return err
 		}
-
+		errors = append(errors, err)
 	}
 
-	if m.Force != nil {
-		// no validation rules for Force
+	if utf8.RuneCountInString(m.GetClientSecret()) < 1 {
+		err := DeleteInstancesRequestValidationError{
+			field:  "ClientSecret",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.TerminateSubscription != nil {
-		// no validation rules for TerminateSubscription
+	if utf8.RuneCountInString(m.GetSubscriptionId()) < 1 {
+		err := DeleteInstancesRequestValidationError{
+			field:  "SubscriptionId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.DryRun != nil {
-		// no validation rules for DryRun
+	// no validation rules for ResourceGroupName
+
+	// no validation rules for VmName
+
+	if m.ForceDeletion != nil {
+		// no validation rules for ForceDeletion
 	}
 
 	if len(errors) > 0 {
@@ -2705,3 +2663,805 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteInstancesResponseValidationError{}
+
+// Validate checks the field values on CreateInstancesRequest_HardwareProfile
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
+func (m *CreateInstancesRequest_HardwareProfile) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// CreateInstancesRequest_HardwareProfile with the rules defined in the proto
+// definition for this message. If any rules are violated, the result is a
+// list of violation errors wrapped in
+// CreateInstancesRequest_HardwareProfileMultiError, or nil if none found.
+func (m *CreateInstancesRequest_HardwareProfile) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateInstancesRequest_HardwareProfile) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for VmSize
+
+	if len(errors) > 0 {
+		return CreateInstancesRequest_HardwareProfileMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateInstancesRequest_HardwareProfileMultiError is an error wrapping
+// multiple validation errors returned by
+// CreateInstancesRequest_HardwareProfile.ValidateAll() if the designated
+// constraints aren't met.
+type CreateInstancesRequest_HardwareProfileMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateInstancesRequest_HardwareProfileMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateInstancesRequest_HardwareProfileMultiError) AllErrors() []error { return m }
+
+// CreateInstancesRequest_HardwareProfileValidationError is the validation
+// error returned by CreateInstancesRequest_HardwareProfile.Validate if the
+// designated constraints aren't met.
+type CreateInstancesRequest_HardwareProfileValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateInstancesRequest_HardwareProfileValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateInstancesRequest_HardwareProfileValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateInstancesRequest_HardwareProfileValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateInstancesRequest_HardwareProfileValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateInstancesRequest_HardwareProfileValidationError) ErrorName() string {
+	return "CreateInstancesRequest_HardwareProfileValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateInstancesRequest_HardwareProfileValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateInstancesRequest_HardwareProfile.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateInstancesRequest_HardwareProfileValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateInstancesRequest_HardwareProfileValidationError{}
+
+// Validate checks the field values on CreateInstancesRequest_StorageProfile
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
+func (m *CreateInstancesRequest_StorageProfile) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateInstancesRequest_StorageProfile
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// CreateInstancesRequest_StorageProfileMultiError, or nil if none found.
+func (m *CreateInstancesRequest_StorageProfile) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateInstancesRequest_StorageProfile) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetImageReference()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateInstancesRequest_StorageProfileValidationError{
+					field:  "ImageReference",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateInstancesRequest_StorageProfileValidationError{
+					field:  "ImageReference",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetImageReference()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateInstancesRequest_StorageProfileValidationError{
+				field:  "ImageReference",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetOsDisk()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateInstancesRequest_StorageProfileValidationError{
+					field:  "OsDisk",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateInstancesRequest_StorageProfileValidationError{
+					field:  "OsDisk",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOsDisk()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateInstancesRequest_StorageProfileValidationError{
+				field:  "OsDisk",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetDataDisks() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CreateInstancesRequest_StorageProfileValidationError{
+						field:  fmt.Sprintf("DataDisks[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CreateInstancesRequest_StorageProfileValidationError{
+						field:  fmt.Sprintf("DataDisks[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return CreateInstancesRequest_StorageProfileValidationError{
+					field:  fmt.Sprintf("DataDisks[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return CreateInstancesRequest_StorageProfileMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateInstancesRequest_StorageProfileMultiError is an error wrapping
+// multiple validation errors returned by
+// CreateInstancesRequest_StorageProfile.ValidateAll() if the designated
+// constraints aren't met.
+type CreateInstancesRequest_StorageProfileMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateInstancesRequest_StorageProfileMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateInstancesRequest_StorageProfileMultiError) AllErrors() []error { return m }
+
+// CreateInstancesRequest_StorageProfileValidationError is the validation error
+// returned by CreateInstancesRequest_StorageProfile.Validate if the
+// designated constraints aren't met.
+type CreateInstancesRequest_StorageProfileValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateInstancesRequest_StorageProfileValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateInstancesRequest_StorageProfileValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateInstancesRequest_StorageProfileValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateInstancesRequest_StorageProfileValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateInstancesRequest_StorageProfileValidationError) ErrorName() string {
+	return "CreateInstancesRequest_StorageProfileValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateInstancesRequest_StorageProfileValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateInstancesRequest_StorageProfile.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateInstancesRequest_StorageProfileValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateInstancesRequest_StorageProfileValidationError{}
+
+// Validate checks the field values on CreateInstancesRequest_OsProfile with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *CreateInstancesRequest_OsProfile) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateInstancesRequest_OsProfile with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// CreateInstancesRequest_OsProfileMultiError, or nil if none found.
+func (m *CreateInstancesRequest_OsProfile) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateInstancesRequest_OsProfile) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.AdminUsername != nil {
+		// no validation rules for AdminUsername
+	}
+
+	if m.AdminPassword != nil {
+		// no validation rules for AdminPassword
+	}
+
+	if len(errors) > 0 {
+		return CreateInstancesRequest_OsProfileMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateInstancesRequest_OsProfileMultiError is an error wrapping multiple
+// validation errors returned by
+// CreateInstancesRequest_OsProfile.ValidateAll() if the designated
+// constraints aren't met.
+type CreateInstancesRequest_OsProfileMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateInstancesRequest_OsProfileMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateInstancesRequest_OsProfileMultiError) AllErrors() []error { return m }
+
+// CreateInstancesRequest_OsProfileValidationError is the validation error
+// returned by CreateInstancesRequest_OsProfile.Validate if the designated
+// constraints aren't met.
+type CreateInstancesRequest_OsProfileValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateInstancesRequest_OsProfileValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateInstancesRequest_OsProfileValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateInstancesRequest_OsProfileValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateInstancesRequest_OsProfileValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateInstancesRequest_OsProfileValidationError) ErrorName() string {
+	return "CreateInstancesRequest_OsProfileValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateInstancesRequest_OsProfileValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateInstancesRequest_OsProfile.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateInstancesRequest_OsProfileValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateInstancesRequest_OsProfileValidationError{}
+
+// Validate checks the field values on
+// CreateInstancesRequest_StorageProfile_ImageReference with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *CreateInstancesRequest_StorageProfile_ImageReference) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// CreateInstancesRequest_StorageProfile_ImageReference with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in
+// CreateInstancesRequest_StorageProfile_ImageReferenceMultiError, or nil if
+// none found.
+func (m *CreateInstancesRequest_StorageProfile_ImageReference) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateInstancesRequest_StorageProfile_ImageReference) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.Publisher != nil {
+		// no validation rules for Publisher
+	}
+
+	if m.Offer != nil {
+		// no validation rules for Offer
+	}
+
+	if m.Sku != nil {
+		// no validation rules for Sku
+	}
+
+	if m.Version != nil {
+		// no validation rules for Version
+	}
+
+	if m.ExactVersion != nil {
+		// no validation rules for ExactVersion
+	}
+
+	if m.SharedGalleryImageId != nil {
+		// no validation rules for SharedGalleryImageId
+	}
+
+	if m.CommunityGalleryImageId != nil {
+		// no validation rules for CommunityGalleryImageId
+	}
+
+	if m.Id != nil {
+		// no validation rules for Id
+	}
+
+	if len(errors) > 0 {
+		return CreateInstancesRequest_StorageProfile_ImageReferenceMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateInstancesRequest_StorageProfile_ImageReferenceMultiError is an error
+// wrapping multiple validation errors returned by
+// CreateInstancesRequest_StorageProfile_ImageReference.ValidateAll() if the
+// designated constraints aren't met.
+type CreateInstancesRequest_StorageProfile_ImageReferenceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateInstancesRequest_StorageProfile_ImageReferenceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateInstancesRequest_StorageProfile_ImageReferenceMultiError) AllErrors() []error { return m }
+
+// CreateInstancesRequest_StorageProfile_ImageReferenceValidationError is the
+// validation error returned by
+// CreateInstancesRequest_StorageProfile_ImageReference.Validate if the
+// designated constraints aren't met.
+type CreateInstancesRequest_StorageProfile_ImageReferenceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateInstancesRequest_StorageProfile_ImageReferenceValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e CreateInstancesRequest_StorageProfile_ImageReferenceValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e CreateInstancesRequest_StorageProfile_ImageReferenceValidationError) Cause() error {
+	return e.cause
+}
+
+// Key function returns key value.
+func (e CreateInstancesRequest_StorageProfile_ImageReferenceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateInstancesRequest_StorageProfile_ImageReferenceValidationError) ErrorName() string {
+	return "CreateInstancesRequest_StorageProfile_ImageReferenceValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateInstancesRequest_StorageProfile_ImageReferenceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateInstancesRequest_StorageProfile_ImageReference.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateInstancesRequest_StorageProfile_ImageReferenceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateInstancesRequest_StorageProfile_ImageReferenceValidationError{}
+
+// Validate checks the field values on
+// CreateInstancesRequest_StorageProfile_OSDisk with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *CreateInstancesRequest_StorageProfile_OSDisk) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// CreateInstancesRequest_StorageProfile_OSDisk with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in
+// CreateInstancesRequest_StorageProfile_OSDiskMultiError, or nil if none found.
+func (m *CreateInstancesRequest_StorageProfile_OSDisk) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateInstancesRequest_StorageProfile_OSDisk) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for OsType
+
+	if m.Name != nil {
+		// no validation rules for Name
+	}
+
+	if m.DiskSizeGb != nil {
+		// no validation rules for DiskSizeGb
+	}
+
+	if len(errors) > 0 {
+		return CreateInstancesRequest_StorageProfile_OSDiskMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateInstancesRequest_StorageProfile_OSDiskMultiError is an error wrapping
+// multiple validation errors returned by
+// CreateInstancesRequest_StorageProfile_OSDisk.ValidateAll() if the
+// designated constraints aren't met.
+type CreateInstancesRequest_StorageProfile_OSDiskMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateInstancesRequest_StorageProfile_OSDiskMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateInstancesRequest_StorageProfile_OSDiskMultiError) AllErrors() []error { return m }
+
+// CreateInstancesRequest_StorageProfile_OSDiskValidationError is the
+// validation error returned by
+// CreateInstancesRequest_StorageProfile_OSDisk.Validate if the designated
+// constraints aren't met.
+type CreateInstancesRequest_StorageProfile_OSDiskValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateInstancesRequest_StorageProfile_OSDiskValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateInstancesRequest_StorageProfile_OSDiskValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateInstancesRequest_StorageProfile_OSDiskValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateInstancesRequest_StorageProfile_OSDiskValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateInstancesRequest_StorageProfile_OSDiskValidationError) ErrorName() string {
+	return "CreateInstancesRequest_StorageProfile_OSDiskValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateInstancesRequest_StorageProfile_OSDiskValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateInstancesRequest_StorageProfile_OSDisk.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateInstancesRequest_StorageProfile_OSDiskValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateInstancesRequest_StorageProfile_OSDiskValidationError{}
+
+// Validate checks the field values on
+// CreateInstancesRequest_StorageProfile_DataDisk with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *CreateInstancesRequest_StorageProfile_DataDisk) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// CreateInstancesRequest_StorageProfile_DataDisk with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in
+// CreateInstancesRequest_StorageProfile_DataDiskMultiError, or nil if none found.
+func (m *CreateInstancesRequest_StorageProfile_DataDisk) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateInstancesRequest_StorageProfile_DataDisk) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.Lun != nil {
+		// no validation rules for Lun
+	}
+
+	if m.Name != nil {
+		// no validation rules for Name
+	}
+
+	if m.DiskSizeGb != nil {
+		// no validation rules for DiskSizeGb
+	}
+
+	if len(errors) > 0 {
+		return CreateInstancesRequest_StorageProfile_DataDiskMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateInstancesRequest_StorageProfile_DataDiskMultiError is an error
+// wrapping multiple validation errors returned by
+// CreateInstancesRequest_StorageProfile_DataDisk.ValidateAll() if the
+// designated constraints aren't met.
+type CreateInstancesRequest_StorageProfile_DataDiskMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateInstancesRequest_StorageProfile_DataDiskMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateInstancesRequest_StorageProfile_DataDiskMultiError) AllErrors() []error { return m }
+
+// CreateInstancesRequest_StorageProfile_DataDiskValidationError is the
+// validation error returned by
+// CreateInstancesRequest_StorageProfile_DataDisk.Validate if the designated
+// constraints aren't met.
+type CreateInstancesRequest_StorageProfile_DataDiskValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateInstancesRequest_StorageProfile_DataDiskValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateInstancesRequest_StorageProfile_DataDiskValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e CreateInstancesRequest_StorageProfile_DataDiskValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateInstancesRequest_StorageProfile_DataDiskValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateInstancesRequest_StorageProfile_DataDiskValidationError) ErrorName() string {
+	return "CreateInstancesRequest_StorageProfile_DataDiskValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateInstancesRequest_StorageProfile_DataDiskValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateInstancesRequest_StorageProfile_DataDisk.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateInstancesRequest_StorageProfile_DataDiskValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateInstancesRequest_StorageProfile_DataDiskValidationError{}

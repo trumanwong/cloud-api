@@ -94,3 +94,13 @@ func getSubscriptionsClient(tenantID, clientID, clientSecret string) (*subscript
 	client.Authorizer = authorizer
 	return &client, nil
 }
+
+func getResourceSkusClient(tenantID, clientID, clientSecret, subscriptionId string) (*compute.ResourceSkusClient, error) {
+	client := compute.NewResourceSkusClient(subscriptionId)
+	authorizer, err := getAuthorizerForResource(tenantID, clientID, clientSecret)
+	if err != nil {
+		return nil, err
+	}
+	client.Authorizer = authorizer
+	return &client, nil
+}
