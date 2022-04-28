@@ -2,12 +2,16 @@ package biz
 
 import (
 	"context"
-	"github.com/Azure/azure-sdk-for-go/profiles/latest/resources/mgmt/subscriptions"
+	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2021-12-01/compute"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+type ListInstanceTypesResponse struct {
+	InstanceTypes []compute.VirtualMachineSizeTypes `json:"instance_types"`
+}
+
 type InstanceTypeResponse interface {
-	ListInstanceType(context.Context, string, string, string, string, bool) (*[]subscriptions.Location, error)
+	ListInstanceType(context.Context) (*ListInstanceTypesResponse, error)
 }
 
 // InstanceTypeUseCase is a InstanceType UseCase.
@@ -21,7 +25,7 @@ func NewInstanceTypeUseCase(repo InstanceTypeResponse, logger log.Logger) *Insta
 	return &InstanceTypeUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// ListInstanceType List All Regions
-func (uc *InstanceTypeUseCase) ListInstanceType(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string, includeExtendedLocations bool) (*[]subscriptions.Location, error) {
-	return uc.repo.ListInstanceType(ctx, tenantID, clientID, clientSecret, subscriptionId, includeExtendedLocations)
+// ListInstanceType List All InstanceTypes
+func (uc *InstanceTypeUseCase) ListInstanceType(ctx context.Context) (*ListInstanceTypesResponse, error) {
+	return uc.repo.ListInstanceType(ctx)
 }

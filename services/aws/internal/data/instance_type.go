@@ -20,7 +20,7 @@ func NewInstanceTypeRepo(data *Data, logger log.Logger) biz.InstanceTypeResponse
 	}
 }
 
-func (r *instanceTypeResponse) ListAll(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.DescribeInstanceTypesInput) (*ec2.DescribeInstanceTypesOutput, error) {
+func (r *instanceTypeResponse) ListInstanceTypes(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.DescribeInstanceTypesInput) (*ec2.DescribeInstanceTypesOutput, error) {
 	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,

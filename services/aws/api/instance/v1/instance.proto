@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package api.instance.v1;
 import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
 import "validate/validate.proto";
 
 option go_package = "aws/api/instance/v1;v1";
@@ -10,59 +11,59 @@ option java_package = "api.instance.v1";
 
 service Instance {
   // Describes the Regions that are enabled for your account, or all Regions.
-  rpc ListRegions (ListRegionRequest) returns (ListRegionResponse) {
+  rpc ListRegions (ListRegionsRequest) returns (ListRegionsResponse) {
     option (google.api.http) = {
       get: "/api/regions"
     };
   };
-  // 选择镜像
-  rpc ListImages (ListImageRequest) returns (ListImageResponse) {
+  // Describes the specified images (AMIs, AKIs, and ARIs) available to you or all of the images available to you.
+  rpc ListImages (ListImagesRequest) returns (ListImagesResponse) {
     option (google.api.http) = {
       get: "/api/images"
     };
   };
   // 选择实例规格
-  rpc ListInstanceTypes(ListInstanceTypeRequest) returns (ListInstanceTypeResponse) {
+  rpc ListInstanceTypes(ListInstanceTypesRequest) returns (ListInstanceTypesResponse) {
     option (google.api.http) = {
       get: "/api/instance-types"
     };
   };
   // 创建实例
-  rpc CreateInstances (CreateInstanceRequest) returns (CreateInstanceResponse) {
+  rpc CreateInstances (CreateInstancesRequest) returns (CreateInstancesResponse) {
     option (google.api.http) = {
       post: "/api/instances",
       body: "*"
     };
   };
   // 实例列表
-  rpc ListInstances (ListInstanceRequest) returns (ListInstanceResponse) {
+  rpc ListInstances (ListInstancesRequest) returns (ListInstancesResponse) {
     option (google.api.http) = {
       get: "/api/instances"
     };
   };
   // 开机
-  rpc StartInstances(StartInstanceRequest) returns (StartInstanceResponse) {
+  rpc StartInstances(StartInstancesRequest) returns (StartInstancesResponse) {
     option (google.api.http) = {
       put: "/api/instances/start",
       body: "*"
     };
   };
   // 关机
-  rpc StopInstances(StopInstanceRequest) returns (StopInstanceResponse) {
+  rpc StopInstances(StopInstancesRequest) returns (StopInstancesResponse) {
     option (google.api.http) = {
       put: "/api/instances/stop",
       body: "*"
     };
   };
   // 重启
-  rpc RebootInstances(RebootInstanceRequest) returns (RebootInstanceResponse) {
+  rpc RebootInstances(RebootInstancesRequest) returns (RebootInstancesResponse) {
     option (google.api.http) = {
       put: "/api/instances/reboot",
       body: "*"
     };
   };
   // 删除实例
-  rpc DeleteInstances(DeleteInstanceRequest) returns (DeleteInstanceResponse) {
+  rpc DeleteInstances(DeleteInstancesRequest) returns (DeleteInstancesResponse) {
     option (google.api.http) = {
       put: "/api/instances/terminate",
       body: "*"
@@ -70,7 +71,7 @@ service Instance {
   };
 }
 
-message CreateInstanceRequest {
+message CreateInstancesRequest {
   // AWS Access key ID
   string access_key_id = 1 [(validate.rules).string.min_len = 1];
   // AWS Secret Access Key
@@ -79,170 +80,64 @@ message CreateInstanceRequest {
   string region = 3 [(validate.rules).string.min_len = 1];
   // The ID of the AMI. An AMI ID is required to launch an instance and must be specified here or in a launch template.
   string image_id = 4 [(validate.rules).string.min_len = 1];
-  // The instance type. For more information, see Instance types
-  // (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html) in the
-  // Amazon EC2 User Guide. Default: m1.small
+  // The instance type. For more information, see Instance types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html) in the Amazon EC2 User Guide. Default: m1.small
   string instance_type = 5;
-  // Describes a block device mapping, which defines the EBS volumes and instance
-  // store volumes to attach to an instance at launch.
+  // Describes a block device mapping, which defines the EBS volumes and instance store volumes to attach to an instance at launch.
   message BlockDeviceMapping {
     // The device name (for example, /dev/sdh or xvdh).
     optional string device_name = 1;
     // Describes a block device for an EBS volume.
     message EbsBlockDevice {
-      // Indicates whether the EBS volume is deleted on instance termination. For more
-      // information, see Preserving Amazon EBS volumes on instance termination
-      // (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html#preserving-volumes-on-termination)
-      // in the Amazon EC2 User Guide.
+      // Indicates whether the EBS volume is deleted on instance termination. For more information, see Preserving Amazon EBS volumes on instance termination (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html#preserving-volumes-on-termination) in the Amazon EC2 User Guide.
       optional bool delete_on_termination = 1;
-      // Indicates whether the encryption state of an EBS volume is changed while being
-      // restored from a backing snapshot. The effect of setting the encryption state to
-      // true depends on the volume origin (new or from a snapshot), starting encryption
-      // state, ownership, and whether encryption by default is enabled. For more
-      // information, see Amazon EBS encryption
-      // (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-parameters)
-      // in the Amazon EC2 User Guide. In no case can you remove encryption from an
-      // encrypted volume. Encrypted volumes can only be attached to instances that
-      // support Amazon EBS encryption. For more information, see Supported instance
-      // types
-      // (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances).
-      // This parameter is not returned by DescribeImageAttribute
-      // (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeImageAttribute.html).
+      // Indicates whether the encryption state of an EBS volume is changed while being restored from a backing snapshot. The effect of setting the encryption state to true depends on the volume origin (new or from a snapshot), starting encryption state, ownership, and whether encryption by default is enabled. For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-parameters) in the Amazon EC2 User Guide. In no case can you remove encryption from an encrypted volume. Encrypted volumes can only be attached to instances that support Amazon EBS encryption. For more information, see Supported instance types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances). This parameter is not returned by DescribeImageAttribute (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeImageAttribute.html).
       optional bool encrypted = 2;
-      // The number of I/O operations per second (IOPS). For gp3, io1, and io2 volumes,
-      // this represents the number of IOPS that are provisioned for the volume. For gp2
-      // volumes, this represents the baseline performance of the volume and the rate at
-      // which the volume accumulates I/O credits for bursting. The following are the
-      // supported values for each volume type:
-      //
+      // The number of I/O operations per second (IOPS). For gp3, io1, and io2 volumes, this represents the number of IOPS that are provisioned for the volume. For gp2 volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. The following are the supported values for each volume type:
       // * gp3: 3,000-16,000 IOPS
-      //
       // * io1:
       // 100-64,000 IOPS
-      //
       // * io2: 100-64,000 IOPS
-      //
-      // For io1 and io2 volumes, we guarantee
-      // 64,000 IOPS only for Instances built on the Nitro System
-      // (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances).
-      // Other instance families guarantee performance up to 32,000 IOPS. This parameter
-      // is required for io1 and io2 volumes. The default for gp3 volumes is 3,000 IOPS.
-      // This parameter is not supported for gp2, st1, sc1, or standard volumes.
+      // For io1 and io2 volumes, we guarantee 64,000 IOPS only for Instances built on the Nitro System (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances). Other instance families guarantee performance up to 32,000 IOPS. This parameter is required for io1 and io2 volumes. The default for gp3 volumes is 3,000 IOPS. This parameter is not supported for gp2, st1, sc1, or standard volumes.
       optional int32 iops = 3;
-
-      // Identifier (key ID, key alias, ID ARN, or alias ARN) for a customer managed CMK
-      // under which the EBS volume is encrypted. This parameter is only supported on
-      // BlockDeviceMapping objects called by RunInstances
-      // (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html),
-      // RequestSpotFleet
-      // (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotFleet.html),
-      // and RequestSpotInstances
-      // (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotInstances.html).
+      // Identifier (key ID, key alias, ID ARN, or alias ARN) for a customer managed CMK under which the EBS volume is encrypted. This parameter is only supported on BlockDeviceMapping objects called by RunInstances (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html), RequestSpotFleet (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotFleet.html), and RequestSpotInstances (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotInstances.html).
       optional string kms_key_id = 4;
-
-      // The ARN of the Outpost on which the snapshot is stored. This parameter is only
-      // supported on BlockDeviceMapping objects called by  CreateImage
-      // (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateImage.html).
+      // The ARN of the Outpost on which the snapshot is stored. This parameter is only supported on BlockDeviceMapping objects called by  CreateImage (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateImage.html).
       optional string outpost_arn = 5;
-
       // The ID of the snapshot.
       optional string snapshot_id = 6;
-
-      // The throughput that the volume supports, in MiB/s. This parameter is valid only
-      // for gp3 volumes. Valid Range: Minimum value of 125. Maximum value of 1000.
+      // The throughput that the volume supports, in MiB/s. This parameter is valid only for gp3 volumes. Valid Range: Minimum value of 125. Maximum value of 1000.
       optional int32 throughput = 7;
 
-      // The size of the volume, in GiBs. You must specify either a snapshot ID or a
-      // volume size. If you specify a snapshot, the default is the snapshot size. You
-      // can specify a volume size that is equal to or larger than the snapshot size. The
-      // following are the supported volumes sizes for each volume type:
-      //
-      // * gp2 and
-      // gp3:1-16,384
-      //
+      // The size of the volume, in GiBs. You must specify either a snapshot ID or a volume size. If you specify a snapshot, the default is the snapshot size. You can specify a volume size that is equal to or larger than the snapshot size. The following are the supported volumes sizes for each volume type:
+      // * gp2 and gp3:1-16,384
       // * io1 and io2: 4-16,384
-      //
       // * st1 and sc1: 125-16,384
-      //
-      // * standard:
-      // 1-1,024
+      // * standard: 1-1,024
       optional int32 volume_size = 8;
-
-      // The volume type. For more information, see Amazon EBS volume types
-      // (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html) in the
-      // Amazon EC2 User Guide. If the volume type is io1 or io2, you must specify the
-      // IOPS that the volume supports.
-      enum VolumeType {
-        VolumeTypeStandard = 0;
-        VolumeTypeIo1 = 1;
-        VolumeTypeIo2 = 2;
-        VolumeTypeGp2 = 3;
-        VolumeTypeSc1 = 4;
-        VolumeTypeSt1 = 5;
-        VolumeTypeGp3 = 6;
-      }
-      VolumeType volume_type = 9;
+      // The volume type. For more information, see Amazon EBS volume types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html) in the Amazon EC2 User Guide. If the volume type is io1 or io2, you must specify the IOPS that the volume supports.
+      string volume_type = 9;
     }
-    // Parameters used to automatically set up EBS volumes when the instance is
-    // launched.
+    // Parameters used to automatically set up EBS volumes when the instance is launched.
     EbsBlockDevice ebs = 2;
-    // To omit the device from the block device mapping, specify an empty string. When
-    // this property is specified, the device is removed from the block device mapping
-    // regardless of the assigned value.
+    // To omit the device from the block device mapping, specify an empty string. When this property is specified, the device is removed from the block device mapping regardless of the assigned value.
     optional string no_device = 3;
-    // The virtual device name (ephemeralN). Instance store volumes are numbered
-    // starting from 0. An instance type with 2 available instance store volumes can
-    // specify mappings for ephemeral0 and ephemeral1. The number of available instance
-    // store volumes depends on the instance type. After you connect to the instance,
-    // you must mount the volume. NVMe instance store volumes are automatically
-    // enumerated and assigned a device name. Including them in your block device
-    // mapping has no effect. Constraints: For M3 instances, you must specify instance
-    // store volumes in the block device mapping for the instance. When you launch an
-    // M3 instance, we ignore any instance store volumes specified in the block device
-    // mapping for the AMI.
+    // The virtual device name (ephemeralN). Instance store volumes are numbered starting from 0. An instance type with 2 available instance store volumes can specify mappings for ephemeral0 and ephemeral1. The number of available instance store volumes depends on the instance type. After you connect to the instance, you must mount the volume. NVMe instance store volumes are automatically enumerated and assigned a device name. Including them in your block device mapping has no effect. Constraints: For M3 instances, you must specify instance store volumes in the block device mapping for the instance. When you launch an M3 instance, we ignore any instance store volumes specified in the block device mapping for the AMI.
     optional string virtual_name = 4;
   }
-  // The maximum number of instances to launch. If you specify more instances than
-  // Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches the
-  // largest possible number of instances above MinCount. Constraints: Between 1 and
-  // the maximum number you're allowed for the specified instance type. For more
-  // information about the default limits, and how to request an increase, see How
-  // many instances can I run in Amazon EC2
-  // (http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2) in
-  // the Amazon EC2 FAQ.
-  //
-  // This member is required.
-  optional int32 max_count = 6;
-  // The minimum number of instances to launch. If you specify a minimum that is more
-  // instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2
-  // launches no instances. Constraints: Between 1 and the maximum number you're
-  // allowed for the specified instance type. For more information about the default
-  // limits, and how to request an increase, see How many instances can I run in
-  // Amazon EC2
-  // (http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2) in
-  // the Amazon EC2 General FAQ.
-  //
-  // This member is required.
-  optional int32 min_count = 7;
-  // Checks whether you have the required permissions for the action, without
-  // actually making the request, and provides an error response. If you have the
-  // required permissions, the error response is DryRunOperation. Otherwise, it is
-  // UnauthorizedOperation.
-  optional bool dry_run = 8;
+  repeated BlockDeviceMapping block_device_mapping = 6;
+  // The maximum number of instances to launch. If you specify more instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches the largest possible number of instances above MinCount. Constraints: Between 1 and the maximum number you're allowed for the specified instance type. For more information about the default limits, and how to request an increase, see How many instances can I run in Amazon EC2 (http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2) in the Amazon EC2 FAQ. This member is required.
+  optional int32 max_count = 7;
+  // The minimum number of instances to launch. If you specify a minimum that is more instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches no instances. Constraints: Between 1 and the maximum number you're allowed for the specified instance type. For more information about the default limits, and how to request an increase, see How many instances can I run in Amazon EC2 (http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2) in the Amazon EC2 General FAQ. This member is required.
+  optional int32 min_count = 8;
+  // Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.
+  optional bool dry_run = 9;
 }
 
-message CreateInstanceResponse {
-  // The instances.
-  repeated InstanceObj instances = 1;
-  // The ID of the AWS account that owns the reservation.
-  optional string owner_id = 2;
-  // The ID of the requester that launched the instances on your behalf (for example, AWS Management Console or Auto Scaling).
-  string requester_id = 3;
-  // The ID of the reservation.
-  string reservation_id = 4;
+message CreateInstancesResponse {
+  google.protobuf.Any data = 1;
 }
 
-message ListInstanceRequest {
+message ListInstancesRequest {
   // AWS Access key ID
   string access_key_id = 1 [(validate.rules).string.min_len = 1];
   // AWS Secret Access Key
@@ -253,432 +148,107 @@ message ListInstanceRequest {
   optional int32 max_results = 4;
   // The token to request the next page of results.
   optional string next_token = 5;
-  // Checks whether you have the required permissions for the action, without
-  // actually making the request, and provides an error response. If you have the
-  // required permissions, the error response is DryRunOperation. Otherwise, it is
-  // UnauthorizedOperation.
+  // Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.
   optional bool dry_run = 6;
 }
 
-message GroupIdentifier {
-  string group_id = 1;
-  string group_name = 2;
+message ListInstancesResponse {
+  google.protobuf.Any data = 1;
 }
 
-message InstanceObj {
-  // The AMI launch index, which can be used to find this instance in the launch group.
-  int32 ami_launch_index = 1;
-  // The architecture of the image.
-  // Valid Values: i386 | x86_64 | arm64 | x86_64_mac
-  string architecture = 2;
-  // The boot mode of the instance. For more information, see Boot modes in the Amazon EC2 User Guide.
-  string boot_mode = 3;
-  message CpuOptions {
-    // The number of CPU cores for the instance.
-    int32 core_count = 1;
-    // The number of threads per CPU core.
-    int32 threads_per_count = 2;
-  }
-  // The CPU options for the instance.
-  CpuOptions cpu_options = 4;
-  // Indicates whether the instance is optimized for Amazon EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.
-  bool ebs_optimized = 5;
-  // Specifies whether enhanced networking with ENA is enabled.
-  bool ena_support = 6;
-  // The hypervisor type of the instance. The value xen is used for both Xen and Nitro hypervisors.
-  // Valid Values: ovm | xen
-  string hypervisor = 7;
-  // The ID of the AMI used to launch the instance.
-  string image_id = 8;
-  // The ID of the instance.
-  string instance_id = 9;
-  // Indicates whether this is a Spot Instance or a Scheduled Instance.
-  // Valid Values: spot | scheduled
-  string instance_lifecycle = 10;
-  // The current state of the instance.
-  InstanceState instance_state = 11;
-  // The instance type.
-  string instance_type = 12;
-  // The public IPv4 address, or the Carrier IP address assigned to the instance, if applicable.
-  string ipv4_address = 13;
-  // The IPv6 address assigned to the instance.
-  string ipv6_address = 14;
-  // The kernel associated with this instance, if applicable.
-  string kernel_id = 15;
-  // The name of the key pair, if this instance was launched with an associated key pair.
-  string key_name = 16;
-  // The time the instance was launched.
-  string launch_time = 17;
-  // The monitoring for the instance.
-  message Monitoring {
-    // Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.
-    string state = 1;
-  }
-  // The monitoring for the instance.
-  Monitoring monitoring = 18;
-  // The value is Windows for Windows instances; otherwise blank.
-  string platform = 19;
-  // The platform details value for the instance. For more information, see AMI billing information fields in the Amazon EC2 User Guide.
-  string platform_details = 20;
-  // (IPv4 only) The private DNS hostname name assigned to the instance. This DNS hostname can only be used inside the Amazon EC2 network. This name is not available until the instance enters the running state.
-  string private_dns_name = 21;
-  message PrivateDnsNameOptionsResponse {
-    // Indicates whether to respond to DNS queries for instance hostnames with DNS AAAA records.
-    bool enable_resource_name_dns_aaaa_record = 1;
-    // Indicates whether to respond to DNS queries for instance hostnames with DNS A records.
-    bool enable_resource_name_dns_a_record = 2;
-    // The type of hostname to assign to an instance.
-    // Valid Values: ip-name | resource-name
-    string hostname_type = 3;
-  }
-  // The options for the instance hostname.
-  PrivateDnsNameOptionsResponse privateDnsNameOptionsResponse = 22;
-  // The private IPv4 address assigned to the instance.
-  string privateIpAddress = 23;
-  // The RAM disk associated with this instance, if applicable.
-  string ramdisk_id = 24;
-  // The device name of the root device volume (for example, /dev/sda1).
-  string root_device_name = 25;
-  // The root device type used by the AMI. The AMI can use an EBS volume or an instance store volume.
-  string root_device_type = 26;
+message ListRegionsRequest {
+  // AWS Access key ID
+  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // AWS Secret Access Key
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
 }
 
-message ListInstanceResponse {
-  // The token to use to retrieve the next page of results. This value is null when there are no more results to return.
-  string next_token = 1;
-  message Reservation {
-    // [EC2-Classic only] The security groups.
-    repeated GroupIdentifier group_set = 1;
-    // The instances.
-    repeated InstanceObj instancesSet = 2;
-    // The ID of the AWS account that owns the reservation.
-    string owner_id = 3;
-    // The ID of the requester that launched the instances on your behalf (for example, AWS Management Console or Auto Scaling).
-    string requester_id = 4;
-    // The ID of the reservation.
-    string reservation_id = 5;
-  }
-  // Information about the reservations.
-  repeated Reservation reservation_set = 2;
+message ListRegionsResponse {
+  google.protobuf.Any data = 1;
 }
 
-message ListRegionRequest {
-  string access_key_id = 1;
-  string secret_key = 2;
+message ListImagesRequest {
+  // AWS Access key ID
+  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // AWS Secret Access Key
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // Region is the region to send requests to.
+  string region = 3 [(validate.rules).string.min_len = 1];
 }
 
-message ListRegionResponse {
-  message Region {
-    string opt_in_status = 1;
-    string region_end_point = 2;
-    string region_name = 3;
-  }
-  repeated Region regions = 1;
+message ListImagesResponse {
+  google.protobuf.Any data = 1;
 }
 
-message ListImageRequest {
-  string access_key_id = 1;
-  string secret_key = 2;
-  string region = 3;
-}
-
-message ListImageResponse {
-  message Image {
-    // The architecture of the image.
-    // Valid Values: i386 | x86_64 | arm64 | x86_64_mac
-    string architecture = 1;
-    // The boot mode of the image
-    // Valid Values: legacy-bios | uefi
-    string boot_mode = 2;
-    // The date and time the image was created.
-    string creation_date = 3;
-    // The date and time to deprecate the AMI, in UTC, in the following format: YYYY-MM-DDTHH:MM:SSZ.
-    string deprecation_time = 4;
-    // The description of the AMI that was provided during image creation.
-    string description = 5;
-    // Specifies whether enhanced networking with ENA is enabled.
-    bool ena_support = 6;
-    // The hypervisor type of the image.
-    // Valid Values: ovm | xen
-    string hypervisor = 7;
-    // The ID of the AMI.
-    string image_id = 8;
-    // The location of the AMI.
-    string image_location = 9;
-    // The AWS account alias (for example, amazon, self) or the AWS account ID of the AMI owner.
-    string image_owner_alias = 10;
-    // The ID of the AWS account that owns the image.
-    string image_owner_id = 11;
-    // The current state of the AMI. If the state is available, the image is successfully registered and can be used to launch an instance.
-    // Valid Values: pending | available | invalid | deregistered | transient | failed | error
-    string image_state = 12;
-    // The type of image.
-    // Valid Values: machine | kernel | ramdisk
-    string image_type = 13;
-    // Indicates whether the image has public launch permissions. The value is true if this image has public launch permissions or false if it has only implicit and explicit launch permissions.
-    bool is_public = 14;
-    // The kernel associated with the image, if any. Only applicable for machine images.
-    string kernel_id = 15;
-    // The name of the AMI that was provided during image creation.
-    string name = 16;
-    // This value is set to windows for Windows AMIs; otherwise, it is blank.
-    // Valid Values: Windows
-    string platform = 17;
-    // The platform details associated with the billing code of the AMI.
-    string platform_detail = 18;
-  }
-  repeated Image images = 1;
-}
-
-message ListInstanceTypeRequest {
-  string access_key_id = 1;
-  string secret_key = 2;
-  string region = 3;
-  // The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the next token value.
-  // Valid Range: Minimum value of 5. Maximum value of 100.
-  int32 max_results = 4;
+message ListInstanceTypesRequest {
+  // AWS Access key ID
+  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // AWS Secret Access Key
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // Region is the region to send requests to.
+  string region = 3 [(validate.rules).string.min_len = 1];
+  // The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the next token value. Valid Range: Minimum value of 5. Maximum value of 100.
+  optional int32 max_results = 4;
   // The token to retrieve the next page of results.
-  string next_token = 5;
+  optional string next_token = 5;
 }
 
-message ListInstanceTypeResponse {
-  message InstanceType {
-    // Indicates whether auto recovery is supported.
-    bool auto_recovery_supported = 1;
-    // Indicates whether the instance is a bare metal instance type.
-    bool bare_metal = 2;
-    // Indicates whether the instance type is a burstable performance instance type.
-    bool burstable_performance_supported = 3;
-    // Indicates whether the instance type is current generation.
-    bool current_generation = 4;
-    // Indicates whether Dedicated Hosts are supported on the instance type.
-    bool dedicated_hosts_supported = 5;
-    message GpuInfo {
-      message GpuDeviceInfo {
-        // The number of GPUs for the instance type.
-        int32 count = 1;
-        // The manufacturer of the GPU accelerator.
-        string manufacturer = 2;
-        message GpuDeviceMemoryInfo {
-          int32 size_in_mib = 1;
-        }
-        // Describes the memory available to the GPU accelerator.
-        GpuDeviceMemoryInfo memory_info = 3;
-        // The name of the GPU accelerator.
-        string name = 4;
-      }
-      // Describes the GPU accelerators for the instance type.
-      repeated GpuDeviceInfo gpus = 6;
-      // The total size of the memory for the GPU accelerators for the instance type, in MiB.
-      int32 total_gpu_memory_in_mib = 7;
-    }
-    // Indicates whether On-Demand hibernation is supported.
-    bool hibernation_supported = 6;
-    // The hypervisor for the instance type.
-    // Valid Values: nitro | xen
-    string hypervisor = 7;
-    message InferenceAcceleratorInfo {
-      message InferenceDeviceInfo {
-        // The number of Inference accelerators for the instance type.
-        int32 count = 1;
-        // The manufacturer of the Inference accelerator.
-        string manufacturer = 2;
-        // The name of the Inference accelerator.
-        string name = 3;
-      }
-      // Describes the Inference accelerators for the instance type.
-      repeated InferenceDeviceInfo accelerators = 1;
-    }
-    // Describes the Inference accelerator settings for the instance type.
-    InferenceAcceleratorInfo inferenceAcceleratorInfo = 8;
-    message InstanceStorageInfo {
-      message DiskInfo {
-        // The number of disks with this configuration.
-        int32 count = 1;
-        // The size of the disk in GB.
-        int64 size_in_gb = 2;
-        // The type of disk.
-        // Valid Values: hdd | ssd
-        string type = 3;
-      }
-      // Describes the disks that are available for the instance type.
-      repeated DiskInfo disks = 1;
-      // Indicates whether data is encrypted at rest.
-      // Valid Values: unsupported | required
-      string encryption_support = 2;
-      // Indicates whether non-volatile memory express (NVMe) is supported.
-      // Valid Values: unsupported | supported | required
-      string nvme_support = 3;
-      // The total size of the disks, in GB.
-      int64 total_size_in_gb = 4;
-    }
-    // Describes the instance storage for the instance type.
-    InstanceStorageInfo instance_storage_info = 9;
-    // Indicates whether instance storage is supported.
-    bool instance_storage_supported = 10;
-    // The instance type.
-    string instance_type = 11;
-    message MemoryInfo {
-      int64 size_in_mib = 1;
-    }
-    // Describes the memory for the instance type.
-    MemoryInfo memory_info = 12;
-    message NetworkInfo {
-      // The index of the default network card, starting at 0.
-      int32 default_network_card_index = 1;
-      message EfaInfo {
-        // The maximum number of Elastic Fabric Adapters for the instance type.
-        int32 maximum_efa_interfaces = 1;
-      }
-      // Describes the Elastic Fabric Adapters for the instance type.
-      EfaInfo efa_info = 2;
-      // Indicates whether Elastic Fabric Adapter (EFA) is supported.
-      bool efa_supported = 3;
-      // Indicates whether Elastic Network Adapter (ENA) is supported.
-      // Valid Values: unsupported | supported | required
-      string ena_support = 4;
-      // Indicates whether the instance type automatically encrypts in-transit traffic between instances.
-      bool encryption_in_transit_supported = 5;
-      // The maximum number of IPv4 addresses per network interface.
-      int32 ipv4_addresses_per_interface = 6;
-      // The maximum number of IPv6 addresses per network interface.
-      int32 ipv6_addresses_per_interface = 7;
-      // Indicates whether IPv6 is supported.
-      bool ipv6_supported = 8;
-      // The maximum number of physical network cards that can be allocated to the instance.
-      int32 maximum_network_cards = 9;
-      // The maximum number of network interfaces for the instance type.
-      int32 maximum_network_interfaces = 10;
-      message NetworkCardInfo {
-        // The maximum number of network interfaces for the network card.
-        int32 maximum_network_interfaces = 1;
-        // The index of the network card.
-        int32 network_card_index = 2;
-        // The network performance of the network card.
-        string network_performance = 3;
-      }
-      // Describes the network settings for the instance type.
-      NetworkInfo networkInfo = 11;
-      message PlacementGroupInfo {
-        // The supported placement group types.
-        // Valid Values: cluster | partition | spread
-        repeated string supported_strategies = 1;
-      }
-      // Describes the placement group settings for the instance type.
-      PlacementGroupInfo placement_group_info = 12;
-      message ProcessorInfo {
-        // The architectures supported by the instance type.
-        // Valid Values: i386 | x86_64 | arm64 | x86_64_mac
-        repeated string supported_architectures = 1;
-        // The speed of the processor, in GHz.
-        float sustained_clock_speed_in_ghz = 2;
-      }
-      // Describes the processor.
-      ProcessorInfo processor_info = 13;
-      // The supported boot modes. For more information
-      // Valid Values: legacy-bios | uefi
-      repeated string supported_boot_modes = 14;
-      // The supported root device types.
-      // Valid Values: ebs | instance-store
-      repeated string supported_root_device_types = 15;
-      // Indicates whether the instance type is offered for spot or On-Demand.
-      // Valid Values: spot | on-demand
-      repeated string supported_usage_classes = 16;
-      // The supported virtualization types.
-      // Valid Values: hvm | paravirtual
-      repeated string supported_virtualization_types = 17;
-      // Describes the vCPU configurations for the instance type.
-      message VCpuInfo {
-        // The default number of cores for the instance type.
-        int32 default_cores = 1;
-        // The default number of threads per core for the instance type.
-        int32 default_threads_per_core = 2;
-        // The default number of vCPUs for the instance type.
-        int32 default_v_cpus = 3;
-        // The valid number of cores that can be configured for the instance type.
-        repeated int32 valid_cores = 4;
-        // The valid number of threads per core that can be configured for the instance type.
-        repeated int32 valid_threads_perc_ore = 5;
-      }
-      // Describes the vCPU configurations for the instance type.
-      VCpuInfo v_cpu_info = 18;
-    }
-  }
-  repeated InstanceType instance_types = 1;
-  // The token to use to retrieve the next page of results. This value is null when there are no more results to return.
-  string next_token = 2;
-  // The ID of the request.
-  string request_id = 3;
+message ListInstanceTypesResponse {
+  google.protobuf.Any data = 1;
 }
 
-message StartInstanceRequest {
-  string access_key_id = 1;
-  string secret_key = 2;
-  string region = 3;
+message StartInstancesRequest {
+  // AWS Access key ID
+  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // AWS Secret Access Key
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // Region is the region to send requests to.
+  string region = 3 [(validate.rules).string.min_len = 1];
   repeated string instance_ids = 4;
 }
 
-message InstanceState {
-  // The state of the instance as a 16-bit unsigned integer.
-  // The high byte is all of the bits between 2^8 and (2^16)-1, which equals decimal values between 256 and 65,535. These numerical values are used for internal purposes and should be ignored.
-  // The low byte is all of the bits between 2^0 and (2^8)-1, which equals decimal values between 0 and 255.
-  // The valid values for instance-state-code will all be in the range of the low byte and they are:
-  // 0 : pending
-  // 16 : running
-  // 32 : shutting-down
-  // 48 : terminated
-  // 64 : stopping
-  // 80 : stopped
-  int32 code = 1;
-  // The current state of the instance.
-  // Valid Values: pending | running | shutting-down | terminated | stopping | stopped
-  string name = 2;
+message StartInstancesResponse {
+  google.protobuf.Any data = 1;
 }
 
-message InstanceStateChange {
-  // The current state of the instance.
-  InstanceState current_state = 1;
-  // The ID of the instance.
-  string instance_id = 2;
-  // The previous state of the instance.
-  InstanceState previous_state = 3;
-}
-
-message StartInstanceResponse {
-  // Information about the started instances.
-  repeated InstanceStateChange instance_state_changes = 1;
-}
-
-message StopInstanceRequest {
-  string access_key_id = 1;
-  string secret_key = 2;
-  string region = 3;
+message StopInstancesRequest {
+  // AWS Access key ID
+  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // AWS Secret Access Key
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // Region is the region to send requests to.
+  string region = 3 [(validate.rules).string.min_len = 1];
   repeated string instance_ids = 4;
 }
 
-message StopInstanceResponse {
-  // Information about the stopped instances.
-  repeated InstanceStateChange instance_state_changes = 1;
+message StopInstancesResponse {
+  google.protobuf.Any data = 1;
 }
 
-message RebootInstanceRequest {
-  string access_key_id = 1;
-  string secret_key = 2;
-  string region = 3;
+message RebootInstancesRequest {
+  // AWS Access key ID
+  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // AWS Secret Access Key
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // Region is the region to send requests to.
+  string region = 3 [(validate.rules).string.min_len = 1];
   repeated string instance_ids = 4;
 }
 
-message RebootInstanceResponse {
+message RebootInstancesResponse {
+  google.protobuf.Any data = 1;
 }
 
-message DeleteInstanceRequest {
-  string access_key_id = 1;
-  string secret_key = 2;
-  string region = 3;
+message DeleteInstancesRequest {
+  // AWS Access key ID
+  string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // AWS Secret Access Key
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // Region is the region to send requests to.
+  string region = 3 [(validate.rules).string.min_len = 1];
   repeated string instance_ids = 4;
 }
 
-message DeleteInstanceResponse {
-  // Information about the terminated instances.
-  repeated InstanceStateChange instance_state_changes = 1;
+message DeleteInstancesResponse {
+  google.protobuf.Any data = 1;
 }

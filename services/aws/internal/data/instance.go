@@ -21,7 +21,7 @@ func NewInstanceRepo(data *Data, logger log.Logger) biz.InstanceResponse {
 	}
 }
 
-func (r *instanceResponse) Create(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.RunInstancesInput) (*ec2.RunInstancesOutput, error) {
+func (r *instanceResponse) CreateInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.RunInstancesInput) (*ec2.RunInstancesOutput, error) {
 	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,
@@ -38,7 +38,7 @@ func (r *instanceResponse) Create(ctx context.Context, accessKeyId, secretAccess
 	return result, nil
 }
 
-func (r *instanceResponse) ListInstance(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.DescribeInstancesInput) (*ec2.DescribeInstancesOutput, error) {
+func (r *instanceResponse) ListInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.DescribeInstancesInput) (*ec2.DescribeInstancesOutput, error) {
 	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,
@@ -54,7 +54,7 @@ func (r *instanceResponse) ListInstance(ctx context.Context, accessKeyId, secret
 	return result, nil
 }
 
-func (r *instanceResponse) StartInstance(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.StartInstancesInput) (*ec2.StartInstancesOutput, error) {
+func (r *instanceResponse) StartInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.StartInstancesInput) (*ec2.StartInstancesOutput, error) {
 	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,
@@ -70,7 +70,7 @@ func (r *instanceResponse) StartInstance(ctx context.Context, accessKeyId, secre
 	return result, nil
 }
 
-func (r *instanceResponse) StopInstance(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.StopInstancesInput) (*ec2.StopInstancesOutput, error) {
+func (r *instanceResponse) StopInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.StopInstancesInput) (*ec2.StopInstancesOutput, error) {
 	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,
@@ -86,7 +86,7 @@ func (r *instanceResponse) StopInstance(ctx context.Context, accessKeyId, secret
 	return result, nil
 }
 
-func (r *instanceResponse) RebootInstance(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.RebootInstancesInput) (*ec2.RebootInstancesOutput, error) {
+func (r *instanceResponse) RebootInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.RebootInstancesInput) (*ec2.RebootInstancesOutput, error) {
 	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,
@@ -102,7 +102,7 @@ func (r *instanceResponse) RebootInstance(ctx context.Context, accessKeyId, secr
 	return result, nil
 }
 
-func (r *instanceResponse) DeleteInstance(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) {
+func (r *instanceResponse) DeleteInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) {
 	client, err := getClient(
 		accessKeyId,
 		secretAccessKey,

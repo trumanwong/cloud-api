@@ -2,6 +2,7 @@ package service
 
 import (
 	v1 "ali/api/instance/v1"
+	"ali/pkg/util/convert"
 	"context"
 	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v4/client"
 )
@@ -16,17 +17,9 @@ func (service *InstanceService) ListRegions(ctx context.Context, request *v1.Lis
 		return nil, err
 	}
 
-	var regions []*v1.ListRegionsResponse_Region
-	if result.Body.Regions != nil {
-		regions = make([]*v1.ListRegionsResponse_Region, len(regions))
-		for i, v := range result.Body.Regions.Region {
-			regions[i] = &v1.ListRegionsResponse_Region{
-				RegionEndPoint: v.RegionEndpoint,
-				LocalName:      v.LocalName,
-				RegionId:       v.RegionId,
-				Status:         v.Status,
-			}
-		}
+	data, err := convert.CastToAny(result)
+	if err != nil {
+		return nil, err
 	}
-	return &v1.ListRegionsResponse{Regions: regions}, nil
+	return &v1.ListRegionsResponse{Data: data}, nil
 }

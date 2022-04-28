@@ -1,6 +1,9 @@
 syntax = "proto3";
 
 package services.vultr.api.instance.v1;
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "validate/validate.proto";
 
 option go_package = "cloud-api/services/vultr/api/instance/v1;v1";
 option java_multiple_files = true;
@@ -8,125 +11,84 @@ option java_package = "services.vultr.api.instance.v1";
 
 service Instance {
 	// List all Regions at Vultr.
-	rpc ListRegions (ListRegionsRequest) returns (ListRegionsResponse);
+	rpc ListRegions (ListRegionsRequest) returns (ListRegionsResponse) {
+		option (google.api.http) = {
+			get: "/api/regions"
+		};
+	};
 	// List the OS images available for installation at Vultr.
-	rpc ListImages (ListImagesRequest) returns (ListImagesResponse);
+	rpc ListImages (ListImagesRequest) returns (ListImagesResponse) {
+		option (google.api.http) = {
+			get: "/api/images"
+		};
+	};
 	// Get a list of all VPS plans at Vultr.
-	rpc ListPlans(ListPlansRequest) returns (ListPlansResponse);
+	rpc ListPlans(ListPlansRequest) returns (ListPlansResponse) {
+		option (google.api.http) = {
+			get: "/api/plans"
+		};
+	};
 	// 创建实例
-	rpc CreateInstance (CreateInstanceRequest) returns (CreateInstanceResponse);
+	rpc CreateInstance (CreateInstanceRequest) returns (CreateInstanceResponse) {
+		option (google.api.http) = {
+			post: "/api/instance",
+			body: "*"
+		};
+	};
 	// 实例列表
-	rpc ListInstance (ListInstancesRequest) returns (ListInstancesResponse);
+	rpc ListInstance (ListInstancesRequest) returns (ListInstancesResponse) {
+		option (google.api.http) = {
+			get: "/api/instances"
+		};
+	};
 	// 开机
-	rpc StartInstance(StartInstanceRequest) returns (StartInstanceResponse);
+	rpc StartInstance(StartInstanceRequest) returns (StartInstanceResponse) {
+		option (google.api.http) = {
+			put: "/api/instances/start",
+			body: "*"
+		};
+	};
 	// 关机
-	rpc StopInstance(StopInstanceRequest) returns (StopInstanceResponse);
+	rpc StopInstance(StopInstanceRequest) returns (StopInstanceResponse) {
+		option (google.api.http) = {
+			put: "/api/instances/stop",
+			body: "*"
+		};
+	};
 	// 重启
-	rpc RebootInstance(RebootInstanceRequest) returns (RebootInstanceResponse);
+	rpc RebootInstance(RebootInstanceRequest) returns (RebootInstanceResponse) {
+		option (google.api.http) = {
+			put: "/api/instances/reboot",
+			body: "*"
+		};
+	};
 	// 删除实例
-	rpc DeleteInstance(DeleteInstanceRequest) returns (DeleteInstanceResponse);
-}
-
-message Meta {
-	int32 total = 1;
-	message Link {
-		string next = 1;
-		string prev = 2;
-	}
-	Link link = 2;
+	rpc DeleteInstance(DeleteInstanceRequest) returns (DeleteInstanceResponse) {
+		option (google.api.http) = {
+			put: "/api/instances/terminate",
+			body: "*"
+		};
+	};
 }
 
 message CreateInstanceRequest {
-	string access_token = 1;
+	string access_token = 1 [(validate.rules).string.min_len = 1];
 	// The Region id where the Instance is located.
-	string region = 2;
+	string region = 2 [(validate.rules).string.min_len = 1];
 	// The Plan id to use when deploying this instance.
-	string plan = 3;
+	string plan = 3 [(validate.rules).string.min_len = 1];
 	// The Operating System id to use when deploying this instance.
-	string image_id = 4;
+	string image_id = 4 [(validate.rules).string.min_len = 1];
 	// The hostname to use when deploying this instance.
 	string hostname = 5;
 }
 
-// Instance information.
-message InstanceObj {
-	// A unique ID for the VPS Instance.
-	string id = 1;
-	// The Operating System name.
-	string os = 2;
-	// The amount of RAM in MB.
-	int32 ram = 3;
-	// The size of the disk in GB.
-	int32 disk = 4;
-	// The main IPv4 address.
-	string main_ip = 5;
-	// Number of vCPUs.
-	int32 vcpu_count = 6;
-	// The Region id where the Instance is located.
-	string region = 7;
-	// The default password assigned at deployment.
-	string default_password = 8;
-	// The date this instance was created.
-	string date_created = 9;
-	// The current status.
-	//		active
-	//		pending
-	//		suspended
-	//		resizing
-	string status = 10;
-	// The power-on status.
-	//		running
-	//		stopped
-	string power_status = 11;
-	// The server health status.
-	//		none
-	//		locked
-	//		installingbooting
-	//		ok
-	string server_status = 12;
-	// Monthly bandwidth quota in GB.
-	int32 allowed_bandwidth = 13;
-	// The IPv4 netmask in dot-decimal notation.
-	string netmask_v4 = 14;
-	// The gateway IP address.
-	string gateway_v4 = 15;
-	// The IPv6 subnet.
-	string v6_network = 16;
-	// The main IPv6 network address.
-	string v6_main_ip = 17;
-	// The IPv6 network size in bits.
-	int32 v6_network_size = 18;
-	// The hostname for this instance.
-	string hostname = 19;
-	// The user-supplied label for this instance.
-	string label = 20;
-	// The user-supplied tag for this instance.
-	string tag = 21;
-	// The user data that can be supplied for tools such as cloudinit.
-	string internal_ip = 22;
-	// HTTPS link to the Vultr noVNC Web Console.
-	string kvm = 23;
-	// The Operating System id used by this instance.
-	int32 os_id = 24;
-	// The Application id used by this instance.
-	int32 app_id = 25;
-	// The Application image_id used by this instance.
-	string image_id = 26;
-	// The Firewall Group id linked to this Instance.
-	string firewall_group_id = 27;
-	// "auto_backups", "ipv6", "ddos_protection"
-	repeated string features = 28;
-	// A unique ID for the Plan.
-	string plan = 29;
-}
-
 message CreateInstanceResponse {
-	// Instance information.
-	InstanceObj instance = 1;
+	google.protobuf.Any data = 1;
 }
 
 message ListInstancesRequest {
-	string access_token = 1;
+	string access_token = 1 [(validate.rules).string.min_len = 1];
 	// Number of items requested per page. Default is 100 and Max is 500.
 	int32 per_page = 2;
 	// Cursor for paging.
@@ -142,14 +104,11 @@ message ListInstancesRequest {
 }
 
 message ListInstancesResponse {
-	// Array of objects (instance)
-	repeated InstanceObj instances = 1;
-	// The meta information object
-	Meta meta = 2;
+	google.protobuf.Any data = 1;
 }
 
 message ListRegionsRequest {
-	string access_token = 1;
+	string access_token = 1 [(validate.rules).string.min_len = 1];
 	// Number of items requested per page. Default is 100 and Max is 500.
 	int32 per_page = 2;
 	// Cursor for paging.
@@ -157,24 +116,11 @@ message ListRegionsRequest {
 }
 
 message ListRegionsResponse {
-	message Region {
-		// A unique ID for the Region.
-		string id = 1;
-		// The name of the city for this Region.
-		string city = 2;
-		// The two-letter country code for this Region.
-		string country = 3;
-		// The name of the continent for this Region.
-		string continent = 4;
-		// An array of product features available in this Region.
-		repeated string options = 5;
-	}
-	repeated Region regions = 1;
-	Meta meta = 2;
+	google.protobuf.Any data = 1;
 }
 
 message ListImagesRequest {
-	string access_token = 1;
+	string access_token = 1 [(validate.rules).string.min_len = 1];
 	// Number of items requested per page. Default is 100 and Max is 500.
 	int32 per_page = 2;
 	// Cursor for paging.
@@ -182,22 +128,11 @@ message ListImagesRequest {
 }
 
 message ListImagesResponse {
-	message Image {
-		// The Operating System id.
-		int32 id = 1;
-		// The Operating System description.
-		string name = 2;
-		// The Operating System architecture.
-		string arch = 3;
-		// The Operating System family.
-		string family = 4;
-	}
-	repeated Image images = 1;
-	Meta meta = 2;
+	google.protobuf.Any data = 1;
 }
 
 message ListPlansRequest {
-	string access_token = 1;
+	string access_token = 1 [(validate.rules).string.min_len = 1];
 	// Number of items requested per page. Default is 100 and Max is 500.
 	int32 per_page = 2;
 	// Cursor for paging.
@@ -218,35 +153,11 @@ message ListPlansRequest {
 }
 
 message ListPlansResponse {
-	message Plan {
-		// A unique ID for the Plan.
-		string id = 1;
-		// The number of vCPUs in this Plan.
-		int32 vcpu_count = 2;
-		// The amount of RAM in MB.
-		int32 ram = 3;
-		// The disk size in GB.
-		int32 disk = 4;
-		// The monthly bandwidth quota in GB.
-		int32 bandwidth = 5;
-		// The monthly cost in US Dollars.
-		int32 monthly_cost = 6;
-		// The plan type.
-		// vc2	Cloud Compute
-		// vhf	High Frequency Compute
-		// vdc	Dedicated Cloud
-		string plan_type = 7;
-		// An array of Regions where this plan is valid for use.
-		repeated string locations = 8;
-		// The number of disks that this plan offers.
-		int32 disk_count = 9;
-	}
-	repeated Plan plans = 1;
-	Meta meta = 2;
+	google.protobuf.Any data = 1;
 }
 
 message StartInstanceRequest {
-	string access_token = 1;
+	string access_token = 1 [(validate.rules).string.min_len = 1];
 	// The Instance ID.
 	string instance_id = 2;
 }
@@ -255,7 +166,7 @@ message StartInstanceResponse {
 }
 
 message StopInstanceRequest {
-	string access_token = 1;
+	string access_token = 1 [(validate.rules).string.min_len = 1];
 	// The Instance ID.
 	string instance_id = 2;
 }
@@ -264,7 +175,7 @@ message StopInstanceResponse {
 }
 
 message RebootInstanceRequest {
-	string access_token = 1;
+	string access_token = 1 [(validate.rules).string.min_len = 1];
 	// The Instance ID.
 	string instance_id = 2;
 }
@@ -273,7 +184,7 @@ message RebootInstanceResponse {
 }
 
 message DeleteInstanceRequest {
-	string access_token = 1;
+	string access_token = 1 [(validate.rules).string.min_len = 1];
 	// The Instance ID.
 	string instance_id = 2;
 }

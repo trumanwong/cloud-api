@@ -4,7 +4,6 @@ import (
 	"aws/internal/biz"
 	"context"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -21,7 +20,7 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	}
 }
 
-func (r *regionResponse) ListAll(ctx context.Context, accessKeyId, secretAccessKey string, request *ec2.DescribeRegionsInput) ([]types.Region, error) {
+func (r *regionResponse) ListRegions(ctx context.Context, accessKeyId, secretAccessKey string, request *ec2.DescribeRegionsInput) (*ec2.DescribeRegionsOutput, error) {
 	client, err := getClient(accessKeyId, secretAccessKey, "")
 	if err != nil {
 		return nil, err
@@ -30,5 +29,5 @@ func (r *regionResponse) ListAll(ctx context.Context, accessKeyId, secretAccessK
 	if err != nil {
 		return nil, err
 	}
-	return result.Regions, nil
+	return result, nil
 }

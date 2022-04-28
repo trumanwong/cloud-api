@@ -3,7 +3,7 @@ package data
 import (
 	"azure/internal/biz"
 	"context"
-	"github.com/Azure/azure-sdk-for-go/profiles/latest/resources/mgmt/subscriptions"
+	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2021-12-01/compute"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -20,14 +20,6 @@ func NewInstanceTypeRepo(data *Data, logger log.Logger) biz.InstanceTypeResponse
 	}
 }
 
-func (r *instanceTypeResponse) ListInstanceType(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string, includeExtendedLocations bool) (*[]subscriptions.Location, error) {
-	client, err := getSubscriptionsClient(tenantID, clientID, clientSecret, subscriptionId)
-	if err != nil {
-		return nil, err
-	}
-	result, err := client.ListLocations(ctx, subscriptionId, &includeExtendedLocations)
-	if err != nil {
-		return nil, err
-	}
-	return result.Value, nil
+func (r *instanceTypeResponse) ListInstanceType(ctx context.Context) (*biz.ListInstanceTypesResponse, error) {
+	return &biz.ListInstanceTypesResponse{InstanceTypes: compute.PossibleVirtualMachineSizeTypesValues()}, nil
 }

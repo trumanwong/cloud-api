@@ -18,17 +18,28 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(confServer *conf.Server, registry *conf.Registry, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
 	dataData, cleanup, err := data.NewData(confData, logger)
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterRepo := data.NewGreeterRepo(dataData, logger)
-	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
-	greeterService := service.NewGreeterService(greeterUsecase)
-	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
-	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
-	app := newApp(logger, httpServer, grpcServer)
+	instanceRepo := data.NewInstanceRepo(dataData, logger)
+	instanceUsecase := biz.NewInstanceUseCase(instanceRepo, logger)
+	regionRepo := data.NewRegionRepo(dataData, logger)
+	regionUsecase := biz.NewRegionUseCase(regionRepo, logger)
+	imageRepo := data.NewImageRepo(dataData, logger)
+	imageUsecase := biz.NewImageUseCase(imageRepo, logger)
+	instanceTypeRepo := data.NewInstanceTypeRepo(dataData, logger)
+	instanceTypeUsecase := biz.NewInstanceTypeUseCase(instanceTypeRepo, logger)
+	vpcRepo := data.NewVpcRepo(dataData, logger)
+	vpcUsecase := biz.NewVpcUseCase(vpcRepo, logger)
+	subnetRepo := data.NewSubnetRepo(dataData, logger)
+	subnetUsecase := biz.NewSubnetUseCase(subnetRepo, logger)
+	instanceService := service.NewInstanceService(instanceUsecase, regionUsecase, imageUsecase, instanceTypeUsecase, vpcUsecase, subnetUsecase)
+	grpcServer := server.NewGRPCServer(confServer, instanceService, logger)
+	httpServer := server.NewHTTPServer(confServer, instanceService, logger)
+	registrar := server.NewRegistrar(registry)
+	app := newApp(logger, httpServer, grpcServer, registrar)
 	return app, func() {
 		cleanup()
 	}, nil

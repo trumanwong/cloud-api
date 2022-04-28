@@ -1,6 +1,9 @@
 syntax = "proto3";
 
 package services.vultr.api.instance.v1;
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "validate/validate.proto";
 
 option go_package = "cloud-api/services/vultr/api/instance/v1;v1";
 option java_multiple_files = true;
@@ -8,120 +11,86 @@ option java_package = "services.vultr.api.instance.v1";
 
 service Instance {
   // Lists the Regions available for Linode services. Not all services are guaranteed to be available in all Regions.
-  rpc ListRegions (ListRegionsRequest) returns (ListRegionsResponse);
+  rpc ListRegions (ListRegionsRequest) returns (ListRegionsResponse) {
+    option (google.api.http) = {
+      get: "/api/regions"
+    };
+  };
   // LReturns a paginated list of Images.
-  rpc ListImages (ListImagesRequest) returns (ListImagesResponse);
+  rpc ListImages (ListImagesRequest) returns (ListImagesResponse) {
+    option (google.api.http) = {
+      get: "/api/images"
+    };
+  };
   // Get a list of all VPS plans at Vultr.
-  rpc ListInstanceTypes(ListInstanceTypesRequest) returns (ListInstanceTypesResponse);
+  rpc ListInstanceTypes(ListInstanceTypesRequest) returns (ListInstanceTypesResponse) {
+    option (google.api.http) = {
+      get: "/api/instance-types"
+    };
+  };
   // Creates a Linode Instance on your Account.
-  rpc CreateInstance (CreateInstanceRequest) returns (CreateInstanceResponse);
+  rpc CreateInstance (CreateInstanceRequest) returns (CreateInstanceResponse) {
+    option (google.api.http) = {
+      post: "/api/instance",
+      body: "*"
+    };
+  };
   // Returns a paginated list of Linodes you have permission to view.
-  rpc ListInstance (ListInstancesRequest) returns (ListInstancesResponse);
+  rpc ListInstance (ListInstancesRequest) returns (ListInstancesResponse) {
+    option (google.api.http) = {
+      get: "/api/instances"
+    };
+  };
   // Boots a Linode you have permission to modify.
-  rpc StartInstance(StartInstanceRequest) returns (StartInstanceResponse);
+  rpc StartInstance(StartInstanceRequest) returns (StartInstanceResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/start",
+      body: "*"
+    };
+  };
   // Shuts down a Linode you have permission to modify.
-  rpc StopInstance(StopInstanceRequest) returns (StopInstanceResponse);
+  rpc StopInstance(StopInstanceRequest) returns (StopInstanceResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/stop",
+      body: "*"
+    };
+  };
   // Reboots a Linode you have permission to modify.
-  rpc RebootInstance(RebootInstanceRequest) returns (RebootInstanceResponse);
+  rpc RebootInstance(RebootInstanceRequest) returns (RebootInstanceResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/reboot",
+      body: "*"
+    };
+  };
   // Deletes a Linode you have permission to read_write.
-  rpc DeleteInstance(DeleteInstanceRequest) returns (DeleteInstanceResponse);
+  rpc DeleteInstance(DeleteInstanceRequest) returns (DeleteInstanceResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/terminate",
+      body: "*"
+    };
+  };
 }
 
 message CreateInstanceRequest {
-  string access_token = 1;
+  string access_token = 1 [(validate.rules).string.min_len = 1];
   // The Region id where the Instance is located.
-  string region = 2;
+  string region = 2 [(validate.rules).string.min_len = 1];
   // The Linode Type of the Linode you are creating.
-  string instance_type = 3;
+  string instance_type = 3 [(validate.rules).string.min_len = 1];
   // An Image ID to deploy the Linode Disk from.
-  string image = 4;
+  string image = 4 [(validate.rules).string.min_len = 1];
   // 3..64 characters, The Linode’s label is for display purposes only. If no label is provided for a Linode, a default will be assigned.
   string label = 5;
   // 7..128 characters, This sets the root user’s password on a newly-created Linode Disk when deploying from an Image.
   string password = 6;
 }
 
-// Instance information.
-message InstanceObj {
-  message Alert {
-    // The percentage of CPU usage required to trigger an alert.
-    int32 cpu = 1;
-    // The amount of disk IO operation per second required to trigger an alert.
-    int32 io = 2;
-    // The amount of incoming traffic, in Mbit/s, required to trigger an alert.
-    int32 network_in = 3;
-    // The amount of outbound traffic, in Mbit/s, required to trigger an alert.
-    int32 network_out = 4;
-    // The percentage of network transfer that may be used before an alert is triggered.
-    int32 transfer_quota = 5;
-  }
-  Alert alters = 1;
-  // Information about this Linode’s backups status.
-  message Backup {
-    // If this Linode has the Backup service enabled.
-    bool enabled = 1;
-    // The last successful backup date. ‘null’ if there was no previous backup.
-    string last_successful = 2;
-    message Schedule {
-      // The day of the week that your Linode’s weekly Backup is taken.
-      string day = 1;
-      // Enum: Scheduling W0 W2 W4 W6 W8 W10 W12 W14 W16 W18 W20 W22
-      // The window in which your backups will be taken, in UTC. A backups window is a two-hour span of time in which the backup may occur.
-      string window = 2;
-    }
-    Schedule schedule = 3;
-  }
-  // Information about this Linode’s backups status.
-  Backup backups = 3;
-  // When this Linode was created.
-  string created = 4;
-  // The virtualization software powering this Linode.
-  string hypervisor = 5;
-  // This Linode’s ID which must be provided for all operations impacting this Linode.
-  int32 id = 6;
-  // An Image ID to deploy the Linode Disk from.
-  string image = 7;
-  // This Linode’s IPv4 Addresses.
-  repeated string ipv4 = 8;
-  // This Linode’s IPv6 SLAAC address.
-  string ipv6 = 9;
-  // The Linode’s label is for display purposes only.
-  string label = 10;
-  // This is the Region where the Linode was deployed.
-  string region = 11;
-  // Information about the resources available to this Linode.
-  message Specs {
-    // The amount of storage space, in MB, this Linode has access to.
-    int32 disk = 1;
-    // The amount of RAM, in MB, this Linode has access to.
-    int32 memory = 2;
-    // The amount of network transfer this Linode is allotted each month.
-    int32 transfer = 3;
-    // The number of vcpus this Linode has access to.
-    int32 vcpus = 4;
-  }
-  // Information about the resources available to this Linode.
-  Specs specs = 12;
-  // Enum: running offline booting rebooting shutting_down provisioning deleting migrating rebuilding cloning restoring stopped
-  // A brief description of this Linode’s current state.
-  string status = 13;
-  // An array of tags applied to this object. Tags are for organizational purposes only.
-  repeated string tags = 14;
-  // This is the Linode Type that this Linode was deployed with.
-  string instance_type = 15;
-  // When this Linode was last updated.
-  string updated = 16;
-  // The watchdog, named Lassie, is a Shutdown Watchdog that monitors your Linode and will reboot it if it powers off unexpectedly.
-  bool watchdog_enabled = 17;
-}
-
 message CreateInstanceResponse {
-  // Instance information.
-  InstanceObj instance = 1;
+  google.protobuf.Any data = 1;
 }
 
 message ListInstancesRequest {
-  string access_token = 1;
+  string access_token = 1 [(validate.rules).string.min_len = 1];
   // The page of a collection to return. integer >= 1, Default: 1
   int32 page = 2;
   // The number of items to return per page. integer 25..100, Default: 100
@@ -129,18 +98,11 @@ message ListInstancesRequest {
 }
 
 message ListInstancesResponse {
-  // Array of objects (instance)
-  repeated InstanceObj instances = 1;
-  // The current page.
-  int32 page = 2;
-  // The total number of pages.
-  int32 pages = 3;
-  // The total number of results.
-  int32 results = 4;
+  google.protobuf.Any data = 1;
 }
 
 message ListRegionsRequest {
-  string access_token = 1;
+  string access_token = 1 [(validate.rules).string.min_len = 1];
   // The page of a collection to return. integer >= 1, Default: 1
   int32 page = 2;
   // The number of items to return per page. integer 25..100, Default: 100
@@ -148,34 +110,11 @@ message ListRegionsRequest {
 }
 
 message ListRegionsResponse {
-  message Region {
-    // A list of capabilities of this region.
-    repeated string capabilities = 1;
-    // The country where this Region resides.
-    string country = 2;
-    // The unique ID of this Region.
-    string id = 3;
-    message Resolvers {
-      // The IPv4 addresses for this region’s DNS resolvers, separated by commas.
-      string ipv4 = 1;
-      // The IPv6 addresses for this region’s DNS resolvers, separated by commas.
-      string ipv6 = 2;
-    }
-    Resolvers resolvers = 4;
-    // This region’s current operational status. Enum: ok outage
-    string status = 5;
-  }
-  repeated Region regions = 1;
-  // The current page.
-  int32 page = 2;
-  // The total number of pages.
-  int32 pages = 3;
-  // The total number of results.
-  int32 results = 4;
+  google.protobuf.Any data = 1;
 }
 
 message ListImagesRequest {
-  string access_token = 1;
+  string access_token = 1 [(validate.rules).string.min_len = 1];
   // The page of a collection to return. integer >= 1, Default: 1
   int32 page = 2;
   // The number of items to return per page. integer 25..100, Default: 100
@@ -183,44 +122,11 @@ message ListImagesRequest {
 }
 
 message ListImagesResponse {
-  message Image {
-    // When this Image was created.
-    string created = 1;
-    // The name of the User who created this Image, or “linode” for public Images.
-    string created_by = 2;
-    // Whether or not this Image is deprecated. Will only be true for deprecated public Images.
-    bool deprecated = 3;
-    // A detailed description of this Image. 1..65000 characters
-    string description = 4;
-    // Only Images created automatically from a deleted Linode (type=automatic) will expire.
-    string expiry = 5;
-    // The unique ID of this Image.
-    string id = 6;
-    // True if the Image is a public distribution image. False if Image is private Account-specific Image.
-    bool is_public = 7;
-    // A short description of the Image.
-    string label = 8;
-    // The minimum size this Image needs to deploy. Size is in MB.
-    int32 size = 9;
-    // The current status of this Image. Only Images in an “available” status can be deployed. Images in a “creating” status are being created from a Linode Disk, and will become “available” shortly. Images in a “pending_upload” status are waiting for data to be uploaded, and become “available” after the upload and processing are complete.
-    // Enum: creating pending_upload available
-    string status = 10;
-    // How the Image was created. Enum: manual automatic, “Manual” Images can be created at any time. “Automatic” Images are created automatically from a deleted Linode.
-    string type = 11;
-    // The upstream distribution vendor. None for private Images.
-    string vendor = 12;
-  }
-  repeated Image images = 1;
-  // The current page.
-  int32 page = 2;
-  // The total number of pages.
-  int32 pages = 3;
-  // The total number of results.
-  int32 results = 4;
+  google.protobuf.Any data = 1;
 }
 
 message ListInstanceTypesRequest {
-  string access_token = 1;
+  string access_token = 1 [(validate.rules).string.min_len = 1];
   // The page of a collection to return. integer >= 1, Default: 1
   int32 page = 2;
   // The number of items to return per page. integer 25..100, Default: 100
@@ -228,62 +134,11 @@ message ListInstanceTypesRequest {
 }
 
 message ListInstanceTypesResponse {
-  message Price {
-    // The cost (in US dollars) per hour to add Backups service.
-    float hourly = 1;
-    // The cost (in US dollars) per month to add Backups service.
-    float monthly = 2;
-  }
-  message InstanceType {
-    message Addon {
-      message Backup {
-        // Cost of enabling Backups for this Linode Type.
-        Price price = 1;
-      }
-      // Information about the optional Backup service offered for Linodes.
-      Backup backups = 1;
-    }
-    // A list of optional add-on services for Linodes and their associated costs.
-    Addon addons = 1;
-    // The class of the Linode Type. Enum: nanode standard dedicated gpu highmem
-    // nanode - Nanode instances are good for low-duty workloads, where performance isn’t critical. Note: As of June 16th, 2020, Nanodes became 1 GB Linodes in the Cloud Manager, however, the API, the CLI, and billing will continue to refer to these instances as Nanodes.
-    // standard - Standard Shared instances are good for medium-duty workloads and are a good mix of performance, resources, and price. Note: As of June 16th, 2020, Standard Linodes in the Cloud Manager became Shared Linodes, however, the API, the CLI, and billing will continue to refer to these instances as Standard Linodes.
-    // dedicated - Dedicated CPU instances are good for full-duty workloads where consistent performance is important.
-    // gpu - Linodes with dedicated NVIDIA Quadro ® RTX 6000 GPUs accelerate highly specialized applications such as machine learning, AI, and video transcoding.
-    // highmem - High Memory instances favor RAM over other resources, and can be good for memory hungry use cases like caching and in-memory databases. All High Memory plans contain dedicated CPU cores.
-    string class = 2;
-    // The Disk size, in MB, of the Linode Type.
-    int32 disk = 3;
-    // The number of GPUs this Linode Type offers.
-    int32 gpus = 4;
-    // The ID representing the Linode Type.
-    string id = 5;
-    // The Linode Type’s label is for display purposes only.
-    string label = 6;
-    // Amount of RAM included in this Linode Type.
-    int32 memory = 7;
-    // The Mbits outbound bandwidth allocation.
-    int32 network_out = 8;
-    // Cost in US dollars, broken down into hourly and monthly charges.
-    Price price = 9;
-    // The Linode Type that a mutate will upgrade to for a Linode of this type. If “null”, a Linode of this type may not mutate.
-    string successor = 10;
-    // The monthly outbound transfer amount, in MB.
-    int32 transfer = 11;
-    // The number of VCPU cores this Linode Type offers.
-    int32 vcpus = 12;
-  }
-  repeated InstanceType instance_types = 1;
-  // The current page.
-  int32 page = 2;
-  // The total number of pages.
-  int32 pages = 3;
-  // The total number of results.
-  int32 results = 4;
+  google.protobuf.Any data = 1;
 }
 
 message StartInstanceRequest {
-  string access_token = 1;
+  string access_token = 1 [(validate.rules).string.min_len = 1];
   // The ID of the Linode to boot.
   int32 instance_id = 2;
   // The Linode Config ID to boot into.
@@ -294,7 +149,7 @@ message StartInstanceResponse {
 }
 
 message StopInstanceRequest {
-  string access_token = 1;
+  string access_token = 1 [(validate.rules).string.min_len = 1];
   // ID of the Linode to shutdown.
   int32 instance_id = 2;
 }
@@ -303,7 +158,7 @@ message StopInstanceResponse {
 }
 
 message RebootInstanceRequest {
-  string access_token = 1;
+  string access_token = 1 [(validate.rules).string.min_len = 1];
   // The ID of the Linode to reboot.
   int32 instance_id = 2;
   // The Linode Config ID to reboot into.
@@ -314,7 +169,7 @@ message RebootInstanceResponse {
 }
 
 message DeleteInstanceRequest {
-  string access_token = 1;
+  string access_token = 1 [(validate.rules).string.min_len = 1];
   // ID of the Linode to look up
   int32 instance_id = 2;
 }

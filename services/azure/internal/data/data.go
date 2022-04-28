@@ -4,7 +4,7 @@ import (
 	"azure/internal/conf"
 	"github.com/Azure/azure-sdk-for-go/profiles/latest/resources/mgmt/subscriptions"
 	"github.com/Azure/azure-sdk-for-go/profiles/preview/marketplaceordering/mgmt/marketplaceordering"
-	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2019-07-01/compute"
+	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2021-12-01/compute"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/adal"
 	"github.com/Azure/go-autorest/autorest/azure"
@@ -85,7 +85,7 @@ func getMarketplaceAgreementsClient(tenantID, clientID, clientSecret, subscripti
 	return &marketplaceAgreementsClient, nil
 }
 
-func getSubscriptionsClient(tenantID, clientID, clientSecret, subscriptionId string) (*subscriptions.Client, error) {
+func getSubscriptionsClient(tenantID, clientID, clientSecret string) (*subscriptions.Client, error) {
 	client := subscriptions.NewClient()
 	authorizer, err := getAuthorizerForResource(tenantID, clientID, clientSecret)
 	if err != nil {

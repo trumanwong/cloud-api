@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.20.0
-// source: vultr/api/instance/v1/instance.proto
+// source: api/instance/v1/instance.proto
 
 package v1
 
@@ -407,5 +407,5 @@ var Instance_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "vultr/api/instance/v1/instance.proto",
+	Metadata: "api/instance/v1/instance.proto",
 }

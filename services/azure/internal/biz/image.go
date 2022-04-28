@@ -2,13 +2,13 @@ package biz
 
 import (
 	"context"
-	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2019-07-01/compute"
+	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2021-12-01/compute"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
 // ImageResponse is a Greater repo.
 type ImageResponse interface {
-	ListImage(context.Context, string, string, string, string) (*compute.ImageListResultPage, error)
+	ListImages(context.Context, string, string, string, string) (*compute.ImageListResultPage, error)
 }
 
 // ImageUseCase is a Image UseCase.
@@ -23,6 +23,6 @@ func NewImageUseCase(repo ImageResponse, logger log.Logger) *ImageUseCase {
 }
 
 // ListImage List Image
-func (uc *ImageUseCase) ListImage(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string) (*compute.ImageListResultPage, error) {
-	return uc.repo.ListImage(ctx, tenantID, clientID, clientSecret, subscriptionId)
+func (uc *ImageUseCase) ListImages(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string) (*compute.ImageListResultPage, error) {
+	return uc.repo.ListImages(ctx, tenantID, clientID, clientSecret, subscriptionId)
 }

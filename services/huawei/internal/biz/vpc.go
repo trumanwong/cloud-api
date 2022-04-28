@@ -21,8 +21,8 @@ type VpcUseCase struct {
 }
 
 // NewVpcUseCase new a Vpc UseCase.
-func NewVpcUseCase(repo RegionResponse, logger log.Logger) *RegionUseCase {
-	return &RegionUseCase{repo: repo, log: log.NewHelper(logger)}
+func NewVpcUseCase(repo VpcResponse, logger log.Logger) *VpcUseCase {
+	return &VpcUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
 // CreateVpc create vpc

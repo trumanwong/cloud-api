@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/vultr/govultr/v2"
 	v1 "vultr/api/instance/v1"
+	"vultr/pkg/util/convert"
 )
 
 // CreateInstance Create Instance
@@ -18,45 +19,15 @@ func (service *InstanceService) CreateInstance(ctx context.Context, request *v1.
 		return nil, err
 	}
 
-	response := &v1.CreateInstanceResponse{}
-	if result != nil {
-		response.Instance = &v1.InstanceObj{
-			Id:               result.ID,
-			Os:               result.Os,
-			Ram:              int32(result.RAM),
-			Disk:             int32(result.Disk),
-			MainIp:           result.MainIP,
-			VcpuCount:        int32(result.VCPUCount),
-			Region:           result.Region,
-			DefaultPassword:  result.DefaultPassword,
-			DateCreated:      result.DateCreated,
-			Status:           result.Status,
-			PowerStatus:      result.PowerStatus,
-			ServerStatus:     result.ServerStatus,
-			AllowedBandwidth: int32(result.AllowedBandwidth),
-			NetmaskV4:        result.NetmaskV4,
-			GatewayV4:        result.GatewayV4,
-			V6Network:        result.V6Network,
-			V6MainIp:         result.V6MainIP,
-			V6NetworkSize:    int32(result.V6NetworkSize),
-			Hostname:         result.Hostname,
-			Label:            result.Label,
-			Tag:              result.Tag,
-			InternalIp:       result.InternalIP,
-			Kvm:              result.KVM,
-			OsId:             int32(result.OsID),
-			AppId:            int32(result.AppID),
-			ImageId:          result.ImageID,
-			FirewallGroupId:  result.FirewallGroupID,
-			Features:         result.Features,
-			Plan:             result.Plan,
-		}
+	data, err := convert.CastToAny(result)
+	if err != nil {
+		return nil, err
 	}
-	return response, nil
+	return &v1.CreateInstanceResponse{Data: data}, nil
 }
 
 func (service *InstanceService) ListInstances(ctx context.Context, request *v1.ListInstancesRequest) (*v1.ListInstancesResponse, error) {
-	result, meta, err := service.uc.ListInstances(ctx, request.AccessToken, &govultr.ListOptions{
+	result, err := service.uc.ListInstances(ctx, request.AccessToken, &govultr.ListOptions{
 		PerPage: int(request.PerPage),
 		Cursor:  request.Cursor,
 		MainIP:  request.MainIp,
@@ -68,54 +39,11 @@ func (service *InstanceService) ListInstances(ctx context.Context, request *v1.L
 		return nil, err
 	}
 
-	var link *v1.Meta_Link
-	if meta.Links != nil {
-		link = &v1.Meta_Link{
-			Next: meta.Links.Next,
-			Prev: meta.Links.Prev,
-		}
+	data, err := convert.CastToAny(result)
+	if err != nil {
+		return nil, err
 	}
-	response := &v1.ListInstancesResponse{
-		Instances: make([]*v1.InstanceObj, len(result)),
-		Meta: &v1.Meta{
-			Total: int32(meta.Total),
-			Link:  link,
-		},
-	}
-	for i, v := range result {
-		response.Instances[i] = &v1.InstanceObj{
-			Id:               v.ID,
-			Os:               v.Os,
-			Ram:              int32(v.RAM),
-			Disk:             int32(v.Disk),
-			MainIp:           v.MainIP,
-			VcpuCount:        int32(v.VCPUCount),
-			Region:           v.Region,
-			DefaultPassword:  v.DefaultPassword,
-			DateCreated:      v.DateCreated,
-			Status:           v.Status,
-			PowerStatus:      v.PowerStatus,
-			ServerStatus:     v.ServerStatus,
-			AllowedBandwidth: int32(v.AllowedBandwidth),
-			NetmaskV4:        v.NetmaskV4,
-			GatewayV4:        v.GatewayV4,
-			V6Network:        v.V6Network,
-			V6MainIp:         v.V6MainIP,
-			V6NetworkSize:    int32(v.V6NetworkSize),
-			Hostname:         v.Hostname,
-			Label:            v.Label,
-			Tag:              v.Tag,
-			InternalIp:       v.InternalIP,
-			Kvm:              v.KVM,
-			OsId:             int32(v.OsID),
-			AppId:            int32(v.AppID),
-			ImageId:          v.ImageID,
-			FirewallGroupId:  v.FirewallGroupID,
-			Features:         v.Features,
-			Plan:             v.Plan,
-		}
-	}
-	return response, nil
+	return &v1.ListInstancesResponse{Data: data}, nil
 }
 
 func (service *InstanceService) StartInstance(ctx context.Context, request *v1.StartInstanceRequest) (*v1.StartInstanceResponse, error) {

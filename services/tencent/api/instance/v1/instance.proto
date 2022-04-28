@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package api.instance.v1;
 import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
 import "validate/validate.proto";
 
 option go_package = "tencent/api/instance/v1;v1";
@@ -70,6 +71,22 @@ service Instance {
   };
 }
 
+message SystemDisk {
+  // 系统盘类型。系统盘类型限制详见[存储概述](https://cloud.tencent.com/document/product/213/4952)。
+  // 取值范围：
+  //  LOCAL_BASIC：本地硬盘
+  //  LOCAL_SSD：本地SSD硬盘
+  //  CLOUD_BASIC：普通云硬盘
+  //  CLOUD_SSD：SSD云硬盘
+  //  CLOUD_PREMIUM：高性能云硬盘
+  // 默认取值：当前有库存的硬盘类型。
+  optional string disk_type = 1;
+  // 系统盘大小，单位：GB。默认值为 50
+  optional int64 disk_size = 2;
+  // 所属的独享集群ID。
+  optional string cdc_id = 3;
+}
+
 message CreateInstancesRequest {
   string secret_id = 1 [(validate.rules).string.min_len = 1];
   string secret_key = 2 [(validate.rules).string.min_len = 1];
@@ -102,10 +119,7 @@ message CreateInstancesRequest {
 }
 
 message CreateInstancesResponse {
-  // 请求id
-  optional string request_id = 1;
-  // 实例id列表
-  repeated string instance_id_sets = 2;
+  google.protobuf.Any data = 1;
 }
 
 message ListInstancesRequest {
@@ -121,266 +135,8 @@ message ListInstancesRequest {
   optional string instance_name = 6;
 }
 
-message SystemDisk {
-  // 系统盘类型。系统盘类型限制详见[存储概述](https://cloud.tencent.com/document/product/213/4952)。
-  // 取值范围：
-  //  LOCAL_BASIC：本地硬盘
-  //  LOCAL_SSD：本地SSD硬盘
-  //  CLOUD_BASIC：普通云硬盘
-  //  CLOUD_SSD：SSD云硬盘
-  //  CLOUD_PREMIUM：高性能云硬盘
-  // 默认取值：当前有库存的硬盘类型。
-  optional string disk_type = 1;
-  // 系统盘大小，单位：GB。默认值为 50
-  optional int64 disk_size = 2;
-  // 所属的独享集群ID。
-  optional string cdc_id = 3;
-}
-
 message ListInstancesResponse {
-  // 符合条件的实例数量
-  optional int64 total_count = 1;
-  message Instance {
-    message Placement {
-
-      // 实例所属的可用区ID。该参数可以通过调用  [DescribeZones](https://cloud.tencent.com/document/product/213/15707) 的返回值中的Zone字段来获取。
-      optional string zone = 1;
-
-      // 实例所属项目ID。该参数可以通过调用 [DescribeProject](/document/api/378/4400) 的返回值中的 projectId 字段来获取。不填为默认项目。
-      optional int64 projectId = 2;
-
-      // 实例所属的专用宿主机ID列表，仅用于入参。如果您有购买专用宿主机并且指定了该参数，则您购买的实例就会随机的部署在这些专用宿主机上。
-      repeated string host_ids = 3;
-
-      // 指定母机ip生产子机
-      repeated string host_ips = 4;
-
-      // 实例所属的专用宿主机ID，仅用于出参。
-      optional string host_id = 5;
-    }
-    // 实例所在的位置。
-    Placement placement = 1;
-    // 实例`ID`。
-    optional string instance_id = 2;
-    // 实例机型。
-    optional string instance_type = 3;
-    // 实例的CPU核数，单位：核。
-    optional int64 cpu = 4;
-    // 实例内存容量，单位：`GB`。
-    optional int64 memory = 5;
-    // 实例业务状态。
-    // 取值范围：
-    //  NORMAL：表示正常状态的实例
-    //  EXPIRED：表示过期的实例
-    //  PROTECTIVELY_ISOLATED：表示被安全隔离的实例。
-    optional string restrict_state = 6;
-    // 实例名称。
-    optional string instance_name = 7;
-    // 实例计费模式。
-    // 取值范围：
-    //  `PREPAID`：表示预付费，即包年包月
-    //  `POSTPAID_BY_HOUR`：表示后付费，即按量计费
-    //  `CDHPAID`：`CDH`付费，即只对`CDH`计费，不对`CDH`上的实例计费。
-    //  `SPOTPAID`：表示竞价实例付费。
-    optional string instance_charge_type = 8;
-    // 实例系统盘信息。
-    SystemDisk system_disk = 9;
-    message DataDisk {
-      // 数据盘大小，单位：GB。最小调整步长为10G，不同数据盘类型取值范围不同，具体限制详见：[存储概述](https://cloud.tencent.com/document/product/213/4952)。默认值为0，表示不购买数据盘。更多限制详见产品文档。
-      optional int64 disk_size = 1;
-      // 数据盘类型。数据盘类型限制详见[存储概述](https://cloud.tencent.com/document/product/213/4952)。
-      // 取值范围：
-      //  LOCAL_BASIC：本地硬盘
-      //  LOCAL_SSD：本地SSD硬盘
-      //  LOCAL_NVME：本地NVME硬盘，与InstanceType强相关，不支持指定
-      //  LOCAL_PRO：本地HDD硬盘，与InstanceType强相关，不支持指定
-      //  CLOUD_BASIC：普通云硬盘
-      //  CLOUD_PREMIUM：高性能云硬盘
-      //  CLOUD_SSD：SSD云硬盘
-      //  CLOUD_HSSD：增强型SSD云硬盘
-      //  CLOUD_TSSD：极速型SSD云硬盘
-      //  默认取值：LOCAL_BASIC。
-      //  该参数对`ResizeInstanceDisk`接口无效。
-      optional string disk_type = 2;
-      // 云硬盘性能，单位：MB/s
-      // 注意：此字段可能返回 0，表示取不到有效值。
-      optional int64 throughput_performance = 3;
-      // 所属的独享集群ID。
-      // 注意：此字段可能返回 null，表示取不到有效值。
-      optional string cdc_id = 4;
-    }
-    // 实例数据盘信息。
-    repeated DataDisk data_disks = 10;
-    // 实例主网卡的内网`IP`列表。
-    repeated string private_ip_addresses = 11;
-    // 实例主网卡的公网`IP`列表。
-    // 注意：此字段可能返回 null，表示取不到有效值。
-    repeated string public_ip_addresses = 12;
-    message InternetAccessible {
-      // 网络计费类型。
-      // 取值范围：
-      //  BANDWIDTH_PREPAID：预付费按带宽结算
-      //  TRAFFIC_POSTPAID_BY_HOUR：流量按小时后付费
-      //  BANDWIDTH_POSTPAID_BY_HOUR：带宽按小时后付费
-      //  BANDWIDTH_PACKAGE：带宽包用户
-      // 默认取值：非带宽包用户默认与子机付费类型保持一致。
-      optional string internet_charge_type = 1;
-      // 公网出带宽上限，单位：Mbps。
-      // 默认值：0Mbps。
-      // 不同机型带宽上限范围不一致，具体限制详见[购买网络带宽](https://cloud.tencent.com/document/product/213/12523)。
-      optional int64 internet_max_bandwidth_out = 2;
-    }
-    // 实例带宽信息。
-    InternetAccessible internet_accessible = 13;
-    message VirtualPrivateCloud {
-      // 私有网络ID，形如`vpc-xxx`。有效的VpcId可通过登录[控制台](https://console.cloud.tencent.com/vpc/vpc?rid=1)查询；也可以调用接口 [DescribeVpcEx](/document/api/215/1372) ，从接口返回中的`unVpcId`字段获取。若在创建子机时VpcId与SubnetId同时传入`DEFAULT`，则强制使用默认vpc网络。
-      optional string vpc_id = 1;
-      // 私有网络子网ID，形如`subnet-xxx`。有效的私有网络子网ID可通过登录[控制台](https://console.cloud.tencent.com/vpc/subnet?rid=1)查询；也可以调用接口  [DescribeSubnets](/document/api/215/15784) ，从接口返回中的`unSubnetId`字段获取。若在创建子机时SubnetId与VpcId同时传入`DEFAULT`，则强制使用默认vpc网络。
-      optional string subnet_id = 2;
-      // 是否用作公网网关。
-      // 公网网关只有在实例拥有公网IP以及处于私有网络下时才能正常使用。
-      // 取值范围：
-      //  TRUE：表示用作公网网关
-      //  FALSE：表示不作为公网网关
-      // 默认取值：FALSE。
-      optional bool as_vpc_gateway = 3;
-      // 私有网络子网 IP 数组，在创建实例、修改实例vpc属性操作中可使用此参数。当前仅批量创建多台实例时支持传入相同子网的多个 IP。
-      repeated string private_ip_addresses = 4;
-      // 为弹性网卡指定随机生成的 IPv6 地址数量。
-      optional uint64 ipv6_address_count = 7;
-    }
-    // 实例所属虚拟私有网络信息。
-    VirtualPrivateCloud virtual_private_cloud = 14;
-    // 生产实例所使用的镜像`ID`。
-    optional string image_id = 15;
-    // 自动续费标识。
-    // 取值范围：
-    //  `NOTIFY_AND_MANUAL_RENEW`：表示通知即将过期，但不自动续费
-    //  `NOTIFY_AND_AUTO_RENEW`：表示通知即将过期，而且自动续费
-    //  `DISABLE_NOTIFY_AND_MANUAL_RENEW`：表示不通知即将过期，也不自动续费。
-    // 注意：后付费模式本项为null
-    optional string renew_flag = 16;
-    // 创建时间。
-    // 按照`ISO8601`标准表示，并且使用`UTC`时间。格式为：`YYYY-MM-DDThh:mm:ssZ`。
-    optional string created_time = 17;
-    // 到期时间。
-    // 按照`ISO8601`标准表示，并且使用`UTC`时间。格式为：`YYYY-MM-DDThh:mm:ssZ`。
-    // 注意：后付费模式本项为null
-    optional string expired_time = 18;
-    // 操作系统名称。
-    optional string os_name = 19;
-    // 实例所属安全组。
-    // 该参数可以通过调用 [DescribeSecurityGroups](https://cloud.tencent.com/document/api/215/15808) 的返回值中的sgId字段来获取。
-    repeated string security_group_ids = 20;
-    message LoginSettings {
-      // 实例登录密码。
-      // 不同操作系统类型密码复杂度限制不一样，具体如下：
-      //  Linux实例密码必须8到30位，至少包括两项[a-z]，[A-Z]、[0-9] 和 [( ) \` ~ ! @ # $ % ^ & *  - + = | { } [ ] : ; ' , . ? / ]中的特殊符号。
-      //  Windows实例密码必须12到30位，至少包括三项[a-z]，[A-Z]，[0-9] 和 [( ) \` ~ ! @ # $ % ^ & * - + = | { } [ ] : ; ' , . ? /]中的特殊符号。
-      //  若不指定该参数，则由系统随机生成密码，并通过站内信方式通知到用户。
-      // 注意：此字段可能返回 null，表示取不到有效值。
-      optional string password = 1;
-      // 密钥ID列表。
-      // 关联密钥后，就可以通过对应的私钥来访问实例；
-      // KeyId可通过接口[DescribeKeyPairs](https://cloud.tencent.com/document/api/213/15699)获取，密钥与密码不能同时指定，同时Windows操作系统不支持指定密钥。当前仅支持购买的时候指定一个密钥。
-      // 注意：此字段可能返回 null，表示取不到有效值。
-      repeated string key_ids = 2;
-      // 保持镜像的原始设置。
-      // 该参数与Password或KeyIds.N不能同时指定。
-      // 只有使用自定义镜像、共享镜像或外部导入镜像创建实例时才能指定该参数为TRUE。
-      // 取值范围：
-      //  TRUE：表示保持镜像的登录设置
-      //  FALSE：表示不保持镜像的登录设置
-      // 默认取值：FALSE。
-      // 注意：此字段可能返回 null，表示取不到有效值。
-      optional string keep_image_login = 3;
-    }
-    // 实例登录设置。目前只返回实例所关联的密钥。
-    LoginSettings login_settings = 21;
-    // 实例状态。
-    // 取值范围：
-    //  PENDING：表示创建中
-    //  LAUNCH_FAILED：表示创建失败
-    //  RUNNING：表示运行中
-    //  STOPPED：表示关机
-    //  STARTING：表示开机中
-    //  STOPPING：表示关机中
-    //  REBOOTING：表示重启中
-    //  SHUTDOWN：表示停止待销毁
-    //  TERMINATING：表示销毁中。
-    optional string instance_state = 22;
-    message Tag {
-      // 标签键
-      optional string key = 1;
-      // 标签值
-      optional string value = 2;
-    }
-    // 实例关联的标签列表。
-    repeated Tag tags = 23;
-    // 实例的关机计费模式。
-    // 取值范围：
-    //  KEEP_CHARGING：关机继续收费
-    //  STOP_CHARGING：关机停止收费
-    //  NOT_APPLICABLE：实例处于非关机状态或者不适用关机停止计费的条件
-    optional string stop_charging_mode = 24;
-    // 实例全局唯一ID
-    optional string uuid = 25;
-    // 实例的最新操作。例：StopInstances、ResetInstance。
-    // 注意：此字段可能返回 null，表示取不到有效值。
-    optional string latest_operation = 26;
-    // 实例的最新操作状态。
-    // 取值范围：
-    //  SUCCESS：表示操作成功
-    //  OPERATING：表示操作执行中
-    //  FAILED：表示操作失败
-    // 注意：此字段可能返回 null，表示取不到有效值。
-    optional string latest_operation_state = 27;
-    // 实例最新操作的唯一请求 ID。
-    // 注意：此字段可能返回 null，表示取不到有效值。
-    optional string latest_operation_requestId = 28;
-
-    // 分散置放群组ID。
-    // 注意：此字段可能返回 null，表示取不到有效值。
-    optional string disaster_recover_group_id = 29;
-    // 实例的IPv6地址。
-    // 注意：此字段可能返回 null，表示取不到有效值。
-    repeated string ipv6_addresses = 30;
-    // CAM角色名。
-    // 注意：此字段可能返回 null，表示取不到有效值。
-    optional string cam_role_name = 31;
-    // 高性能计算集群`ID`。
-    // 注意：此字段可能返回 null，表示取不到有效值。
-    optional string hpc_cluster_id = 32;
-    // 高性能计算集群`IP`列表。
-    // 注意：此字段可能返回 null，表示取不到有效值。
-    repeated string rdma_ip_addresses = 33;
-    // 实例隔离类型。
-    // 取值范围：
-    //  ARREAR：表示欠费隔离
-    //  EXPIRE：表示到期隔离
-    //  MANMADE：表示主动退还隔离
-    //  NOTISOLATED：表示未隔离
-    // 注意：此字段可能返回 null，表示取不到有效值。
-    optional string isolated_source = 34;
-    message GPUInfo {
-      // 实例GPU个数。值小于1代表VGPU类型，大于1代表GPU直通类型。
-      // 注意：此字段可能返回 null，表示取不到有效值。
-      optional float gpu_count = 1;
-      // 实例GPU地址。
-      // 注意：此字段可能返回 null，表示取不到有效值。
-      repeated string gpu_id = 2;
-      // 实例GPU类型。
-      // 注意：此字段可能返回 null，表示取不到有效值。
-      optional string gpu_type = 3;
-    }
-    // GPU信息。如果是gpu类型子机，该值会返回GPU信息，如果是其他类型子机则不返回。
-    // 注意：此字段可能返回 null，表示取不到有效值。
-    GPUInfo gpu_info = 35;
-  }
-  // 实例详细信息列表
-  repeated Instance instances = 2;
-  // 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-  optional string request_id = 3;
+  google.protobuf.Any data = 1;
 }
 
 message ListRegionsRequest {
@@ -389,20 +145,7 @@ message ListRegionsRequest {
 }
 
 message ListRegionsResponse {
-  message Region {
-    // 地域名称，例如，ap-guangzhou
-    optional string region = 1;
-    // 地域描述，例如，华南地区(广州)
-    optional string region_name = 2;
-    // 地域是否可用状态
-    optional string region_state = 3;
-  }
-  // 地域数量
-  optional uint64 total_count = 1;
-  // 地域列表信息
-  repeated Region regions = 2;
-  // 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-  optional string request_id = 3;
+  google.protobuf.Any data = 1;
 }
 
 message ListImagesRequest {
@@ -417,46 +160,7 @@ message ListImagesRequest {
 }
 
 message ListImagesResponse {
-  // 镜像详细信息
-  message Image {
-    // 镜像ID
-    optional string image_id = 1;
-    // 镜像操作系统
-    optional string os_name = 2;
-    // 镜像类型
-    optional string image_type = 3;
-    // 镜像创建时间
-    optional string created_time = 4;
-    // 镜像名称
-    optional string image_name = 5;
-    // 镜像描述
-    optional string image_description = 6;
-    // 镜像大小
-    optional int64 image_size = 7;
-    // 镜像架构
-    optional string architecture = 8;
-    // 镜像状态:
-    // CREATING-创建中
-    // NORMAL-正常
-    // CREATEFAILED-创建失败
-    // USING-使用中
-    // SYNCING-同步中
-    // IMPORTING-导入中
-    // IMPORTFAILED-导入失败
-    optional string image_state = 9;
-    // 镜像来源平台
-    optional string platform = 10;
-    // 镜像创建者
-    optional string image_creator = 11;
-    // 镜像来源
-    optional string image_source = 12;
-  }
-  // 一个关于镜像详细信息的结构体，主要包括镜像的主要状态与属性。
-  repeated Image images = 1;
-  // 符合要求的镜像数量
-  optional int64 total_count = 2;
-  // 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-  optional string request_id = 3;
+  google.protobuf.Any data = 1;
 }
 
 message ListInstanceTypesRequest {
@@ -467,25 +171,7 @@ message ListInstanceTypesRequest {
 }
 
 message ListInstanceTypesResponse {
-  message InstanceType {
-    // 可用区。
-    optional string zone = 1;
-    // 实例机型。
-    optional string instance_type = 2;
-    // 实例机型系列。
-    optional string instance_family = 3;
-    // GPU核数，单位：核。
-    optional int64 gpu = 4;
-    // CPU核数，单位：核。
-    optional int64 cpu = 5;
-    // 内存容量，单位：`GB`。
-    optional int64 memory = 6;
-    // FPGA核数，单位：核。
-    optional int64 fpga = 7;
-  }
-  repeated InstanceType instance_types = 1;
-  // 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-  optional string request_id = 2;
+  google.protobuf.Any data = 1;
 }
 
 message StartInstancesRequest {
@@ -498,8 +184,7 @@ message StartInstancesRequest {
 }
 
 message StartInstancesResponse {
-  // 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-  optional string request_id = 1;
+  google.protobuf.Any data = 1;
 }
 
 message StopInstancesRequest {
@@ -526,8 +211,7 @@ message StopInstancesRequest {
 }
 
 message StopInstancesResponse {
-  // 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-  optional string request_id = 1;
+  google.protobuf.Any data = 1;
 }
 
 message RebootInstancesRequest {
@@ -547,8 +231,7 @@ message RebootInstancesRequest {
 }
 
 message RebootInstancesResponse {
-  // 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-  optional string request_id = 1;
+  google.protobuf.Any data = 1;
 }
 
 message DeleteInstancesRequest {
@@ -561,6 +244,5 @@ message DeleteInstancesRequest {
 }
 
 message DeleteInstancesResponse {
-  // 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-  optional string request_id = 1;
+  google.protobuf.Any data = 1;
 }

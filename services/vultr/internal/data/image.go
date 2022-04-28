@@ -20,11 +20,11 @@ func NewImageRepo(data *Data, logger log.Logger) biz.ImageResponse {
 	}
 }
 
-func (r *imageResponse) ListImages(ctx context.Context, accessToken string, request *govultr.ListOptions) ([]govultr.OS, *govultr.Meta, error) {
-	client := newClient(accessToken)
-	result, meta, err := client.OS.List(ctx, request)
+func (r *imageResponse) ListImages(ctx context.Context, accessToken string, request *govultr.ListOptions) (*biz.ListImagesResponse, error) {
+	client := getClient(accessToken)
+	images, meta, err := client.OS.List(ctx, request)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	return result, meta, nil
+	return &biz.ListImagesResponse{Images: images, Meta: meta}, nil
 }

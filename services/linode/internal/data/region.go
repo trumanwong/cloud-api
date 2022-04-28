@@ -20,11 +20,11 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	}
 }
 
-func (r *regionResponse) ListRegions(ctx context.Context, accessToken string, request *linodego.ListOptions) ([]linodego.Region, error) {
+func (r *regionResponse) ListRegions(ctx context.Context, accessToken string, request *linodego.ListOptions) (*biz.ListRegionResponse, error) {
 	client := newClient(accessToken)
-	result, err := client.ListRegions(ctx, request)
+	regions, err := client.ListRegions(ctx, request)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return &biz.ListRegionResponse{Regions: regions}, nil
 }

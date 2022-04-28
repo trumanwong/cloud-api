@@ -6,8 +6,13 @@ import (
 	"github.com/vultr/govultr/v2"
 )
 
+type ListPlansResponse struct {
+	Plans []govultr.Plan `json:"plans"`
+	Meta  *govultr.Meta  `json:"meta"`
+}
+
 type PlanResponse interface {
-	ListPlans(context.Context, string, string, *govultr.ListOptions) ([]govultr.Plan, *govultr.Meta, error)
+	ListPlans(context.Context, string, string, *govultr.ListOptions) (*ListPlansResponse, error)
 }
 
 // PlanUseCase is a Plan UseCase.
@@ -21,7 +26,7 @@ func NewPlanUseCase(repo PlanResponse, logger log.Logger) *PlanUseCase {
 	return &PlanUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// ListAll List All Regions
-func (uc *PlanUseCase) ListPlans(ctx context.Context, accessToken, planType string, request *govultr.ListOptions) ([]govultr.Plan, *govultr.Meta, error) {
+// ListPlans List All Plans
+func (uc *PlanUseCase) ListPlans(ctx context.Context, accessToken, planType string, request *govultr.ListOptions) (*ListPlansResponse, error) {
 	return uc.repo.ListPlans(ctx, accessToken, planType, request)
 }

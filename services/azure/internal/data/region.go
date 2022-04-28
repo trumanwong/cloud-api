@@ -20,12 +20,12 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	}
 }
 
-func (r *regionResponse) ListRegions(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string, includeExtendedLocations bool) (*[]subscriptions.Location, error) {
-	client, err := getSubscriptionsClient(tenantID, clientID, clientSecret, subscriptionId)
+func (r *regionResponse) ListRegions(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string, includeExtendedLocations *bool) (*[]subscriptions.Location, error) {
+	client, err := getSubscriptionsClient(tenantID, clientID, clientSecret)
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.ListLocations(ctx, subscriptionId, &includeExtendedLocations)
+	result, err := client.ListLocations(ctx, subscriptionId, includeExtendedLocations)
 	if err != nil {
 		return nil, err
 	}

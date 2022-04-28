@@ -1,6 +1,9 @@
 syntax = "proto3";
 
 package api.instance.v1;
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "validate/validate.proto";
 
 option go_package = "/api/instance/v1;v1";
 option java_multiple_files = true;
@@ -8,56 +11,145 @@ option java_package = "api.instance.v1";
 
 service Instance {
   // 可使用的地域
-  rpc ListRegions (ListRegionsRequest) returns (ListRegionsResponse);
+  rpc ListRegions (ListRegionsRequest) returns (ListRegionsResponse) {
+    option (google.api.http) = {
+      get: "/api/regions"
+    };
+  };
   // 选择镜像
-  rpc ListImages (ListImagesRequest) returns (ListImagesResponse);
+  rpc ListImages (ListImagesRequest) returns (ListImagesResponse) {
+    option (google.api.http) = {
+      get: "/api/images"
+    };
+  };
   // 选择实例规格
-  rpc ListInstanceTypes(ListInstanceTypesRequest) returns (ListInstanceTypesResponse);
+  rpc ListInstanceTypes(ListInstanceTypesRequest) returns (ListInstanceTypesResponse) {
+    option (google.api.http) = {
+      get: "/api/instance-types"
+    };
+  };
   // 创建实例
-  rpc CreateInstances (CreateInstancesRequest) returns (CreateInstancesResponse);
+  rpc CreateInstances (CreateInstancesRequest) returns (CreateInstancesResponse) {
+    option (google.api.http) = {
+      post: "/api/instances",
+      body: "*"
+    };
+  };
   // 实例列表
-  rpc ListInstances (ListInstancesRequest) returns (ListInstancesResponse);
+  rpc ListInstances (ListInstancesRequest) returns (ListInstancesResponse) {
+    option (google.api.http) = {
+      get: "/api/instances"
+    };
+  };
   // 查询任务的执行状态
-  rpc ShowJob(ShowJobRequest) returns (ShowJobResponse);
+  rpc ShowJob(ShowJobRequest) returns (ShowJobResponse) {
+    option (google.api.http) = {
+      get: "/api/job"
+    };
+  };
   // 开机
-  rpc StartInstances(StartInstancesRequest) returns (StartInstancesResponse);
+  rpc StartInstances(StartInstancesRequest) returns (StartInstancesResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/start",
+      body: "*"
+    };
+  };
   // 关机
-  rpc StopInstances(StopInstancesRequest) returns (StopInstancesResponse);
+  rpc StopInstances(StopInstancesRequest) returns (StopInstancesResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/stop",
+      body: "*"
+    };
+  };
   // 重启
-  rpc RebootInstances(RebootInstancesRequest) returns (RebootInstancesResponse);
+  rpc RebootInstances(RebootInstancesRequest) returns (RebootInstancesResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/reboot",
+      body: "*"
+    };
+  };
   // 删除实例
-  rpc DeleteInstances(DeleteInstancesRequest) returns (DeleteInstancesResponse);
+  rpc DeleteInstances(DeleteInstancesRequest) returns (DeleteInstancesResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/terminate",
+      body: "*"
+    };
+  };
   // 创建虚拟私有云
-  rpc CreateVpc(CreateVpcRequest) returns (CreateVpcResponse);
+  rpc CreateVpc(CreateVpcRequest) returns (CreateVpcResponse) {
+    option (google.api.http) = {
+      post: "/api/vpc",
+      body: "*"
+    };
+  };
   // 删除虚拟私有云
-  rpc DeleteVpc(DeleteVpcRequest) returns (DeleteVpcResponse);
+  rpc DeleteVpc(DeleteVpcRequest) returns (DeleteVpcResponse) {
+    option (google.api.http) = {
+      delete: "/api/vpc"
+    };
+  };
   // 查询虚拟私有云列表
-  rpc ListVpcs(ListVpcsRequest) returns (ListVpcsResponse);
+  rpc ListVpcs(ListVpcsRequest) returns (ListVpcsResponse) {
+    option (google.api.http) = {
+      get: "/api/vpc"
+    };
+  };
   // 查询虚拟私有云
-  rpc ShowVpc(ShowVpcRequest) returns (ShowVpcResponse);
+  rpc ShowVpc(ShowVpcRequest) returns (ShowVpcResponse) {
+    option (google.api.http) = {
+      get: "/api/vpc/query"
+    };
+  };
   // 更新虚拟私有云
-  rpc UpdateVpc(UpdateVpcRequest) returns (UpdateVpcResponse);
+  rpc UpdateVpc(UpdateVpcRequest) returns (UpdateVpcResponse) {
+    option (google.api.http) = {
+      put: "/api/vpc",
+      body: "*"
+    };
+  };
   // 创建子网
-  rpc CreateSubnet(CreateSubnetRequest) returns (CreateSubnetResponse);
+  rpc CreateSubnet(CreateSubnetRequest) returns (CreateSubnetResponse) {
+    option (google.api.http) = {
+      post: "/api/subnet",
+      body: "*"
+    };
+  };
   // 删除子网
-  rpc DeleteSubnet(DeleteSubnetRequest) returns (DeleteSubnetResponse);
+  rpc DeleteSubnet(DeleteSubnetRequest) returns (DeleteSubnetResponse) {
+    option (google.api.http) = {
+      delete: "/api/subnet"
+    };
+  };
   // 查询子网列表
-  rpc ListSubnets(ListVpcsRequest) returns (ListSubnetsResponse);
+  rpc ListSubnets(ListSubnetsRequest) returns (ListSubnetsResponse) {
+    option (google.api.http) = {
+      get: "/api/subnet"
+    };
+  };
   // 查询子网
-  rpc ShowSubnet(ShowSubnetRequest) returns (ShowSubnetResponse);
+  rpc ShowSubnet(ShowSubnetRequest) returns (ShowSubnetResponse) {
+    option (google.api.http) = {
+      get: "/api/subnet/query"
+    };
+  };
   // 更新子网
-  rpc UpdateSubnet(UpdateSubnetRequest) returns (UpdateSubnetResponse);
+  rpc UpdateSubnet(UpdateSubnetRequest) returns (UpdateSubnetResponse) {
+    option (google.api.http) = {
+      put: "/api/subnet",
+      body: "*"
+    };
+  };
 }
 
 message CreateInstancesRequest {
-  string access_key = 1;
-  string secret_key = 2;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
   // 区域id
-  string region_id = 3;
+  string region_id = 3 [(validate.rules).string.min_len = 1];
   // project_id
-  string project_id = 4;
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 镜像id
-  string image_id = 5;
+  string image_id = 5 [(validate.rules).string.min_len = 1];
   // 实例名称只能由中文字符、英文字母、数字及“_”、“-”、“.”组成,且长度为[1-64]个字符。
   // 创建的云服务器器数量(count字段对应的值)大于1时,为区分不同云服务器,创建过程中系统会自动在名称后加“-0000”的类似标记。故此时名称的长度为[1-59]个字符。
   string name = 6;
@@ -77,222 +169,45 @@ message CreateInstancesRequest {
     string volume_type = 1;
 
     // 系统盘大小，容量单位为GB， 输入大小范围为[1,1024]。  约束：  - 系统盘大小取值应不小于镜像支持的系统盘的最小值(镜像的min_disk属性)。 - 若该参数没有指定或者指定为0时，系统盘大小默认取值为镜像中系统盘的最小值(镜像的min_disk属性)。  > 说明：  > 镜像系统盘的最小值(镜像的min_disk属性)可在控制台中点击镜像详情查看。或通过调用“查询镜像详情（OpenStack原生）”API获取，详细操作请参考[《镜像服务API参考》](https://support.huaweicloud.com/api-ims/ims_03_0702.html)中“查询镜像详情（OpenStack原生）”章节。
-    int32 size = 2;
+    optional int32 size = 2;
   }
   RootVolume root_volume = 10;
   // 是否为instance_name自动添加有序后缀（默认false）
   bool unique_suffix = 11;
   // 创建数量(1-100，默认1)
   // 不传该字段时默认取值为1。 租户的配额足够时,最大值为500。
-  int32 amount = 12;
+  optional int32 amount = 12;
   // 实例密码
-  string password = 13;
+  optional string password = 13;
   // 是否只预检此次请求
   // true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式等。
   // 如果检查不通过，则返回对应错误。
   // 如果检查通过，则返回202状态码。
   // false：发送正常请求，通过检查后并且执行创建云服务器请求。
-  bool dry_run = 14;
+  optional bool dry_run = 14;
 }
 
 message CreateInstancesResponse {
-  // 提交任务成功后返回的任务ID，用户可以使用该ID对任务执行情况进行查询。
-  string job_id = 1;
-  // 订单号，创建包年包月的弹性云服务器时返回该参数。
-  string order_id = 2;
-  // 云服务器ID列表。  通过云服务器ID查询云服务器详情 ，若返回404 可能云服务器还在创建或者已经创建失败。
-  repeated string server_ids = 3;
+  google.protobuf.Any data = 1;
 }
 
 message ListInstancesRequest {
-  string access_key = 1;
-  string secret_key = 2;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
   // 区域id
-  string region_id = 3;
+  string region_id = 3 [(validate.rules).string.min_len = 1];
   // project_id
-  string project_id = 4;
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 查询返回云服务器当前页面的大小。每页最多返回1000台云服务器的信息。
-  int32 limit = 5;
+  optional int32 limit = 5;
   // 页码。 当前页面数，默认为1。  取值大于等于0，取值为0时返回第1页。
-  int32 offset = 6;
+  optional int32 offset = 6;
   // 云服务器名称,匹配规则为模糊匹配。
-  string name = 7;
+  optional string name = 7;
 }
 
 message ListInstancesResponse {
-  message Instance {
-    // 弹性云服务器状态。  取值范围：  ACTIVE、BUILD、DELETED、ERROR、HARD_REBOOT、MIGRATING、PAUSED、REBOOT、REBUILD、RESIZE、REVERT_RESIZE、SHUTOFF、SHELVED、SHELVED_OFFLOADED、SOFT_DELETED、SUSPENDED、VERIFY_RESIZE  弹性云服务器状态说明请参考[云服务器状态](https://support.huaweicloud.com/api-ecs/ecs_08_0002.html)
-    string status = 1;
-    // 弹性云服务器更新时间。  时间格式例如：2019-05-22T03:30:52Z
-    string updated = 2;
-    // 弹性云服务器自动释放时间。  时间格式例如：2020-01-19T03:30:52Z
-    string auto_terminate_time = 3;
-    // 弹性云服务器所在主机的主机ID。
-    string host_id = 4;
-    // 弹性云服务器所在主机的主机名称。
-    string os_ext_srv_attr_host = 5;
-    // 弹性云服务器的网络属性。
-    message ServerAddress {
-      // IP地址版本。  - “4”：代表IPv4。 - “6”：代表IPv6。
-      string version = 1;
-      // IP地址。
-      string addr = 2;
-      // IP地址类型。  - fixed：代表私有IP地址。 - floating：代表浮动IP地址。
-      string os_ext_ips_type = 3;
-      // MAC地址。
-      string os_ext_ips_mac_mac_addr = 4;
-      // IP地址对应的端口ID。
-      string os_ext_ip_sport_id = 5;
-    }
-    message ServerAddresses {
-      repeated ServerAddress server_addresses = 1;
-    }
-    map<string, ServerAddresses> addresses = 6;
-    // 弹性云服务器使用的密钥对名称。
-    string key_name = 7;
-    // 镜像id
-    string image_id = 8;
-    // 扩展属性，弹性云服务器当前任务的状态。  取值范围请参考[云服务器状态](https://support.huaweicloud.com/api-ecs/ecs_08_0002.html)表3。
-    string os_ext_sts_task_state = 9;
-    // 扩展属性，弹性云服务器当前状态。  云服务器状态说明请参考[云服务器状态](https://support.huaweicloud.com/api-ecs/ecs_08_0002.html)。
-    string os_ext_sts_vm_state = 10;
-    // 扩展属性，弹性云服务器别名。
-    string os_ext_srv_attr_instance_name = 11;
-    // 扩展属性，弹性云服务器所在虚拟化主机名。
-    string os_ext_srv_attr_hypervisor_hostname = 12;
-    message InstanceType {
-      // 弹性云服务器规格ID。
-      string id = 1;
-      // 弹性云服务器规格名称。
-      string name = 2;
-      // 该云服务器规格对应要求系统盘大小，0为不限制。此字段在本系统中无效。
-      string disk = 3;
-      // 该云服务器规格对应的CPU核数。
-      string vcpus = 4;
-      // 该云服务器规格对应的内存大小，单位为MB。
-      string ram = 5;
-    }
-    InstanceType instance_type = 13;
-    // 弹性云服务器ID，格式为UUID。
-    string id = 14;
-    // 弹性云服务器所属安全组列表。
-    message  SecurityGroup {
-      // 安全组名称或者UUID。
-      string name = 1;
-      // 安全组ID。
-      string id = 2;
-    }
-    repeated SecurityGroup security_groups = 15;
-    // 扩展属性，弹性云服务器所在可用区名称。
-    string os_ext_az_availability_zone = 16;
-    // 创建弹性云服务器的用户ID，格式为UUID。
-    string user_id = 17;
-    // 弹性云服务器名称。
-    string name = 18;
-    // 弹性云服务器创建时间。  时间格式例如：2019-05-22T03:19:19Z
-    string created = 19;
-    // 弹性云服务器所属租户ID，即项目id，和project_id表示相同的概念，格式为UUID。
-    string tenant_id = 20;
-    // 扩展属性， diskConfig的类型。  - MANUAL，镜像空间不会扩展。 - AUTO，系统盘镜像空间会自动扩展为与flavor大小一致。
-    string os_dcf_disk_config = 21;
-    // 预留属性。
-    string access_ipv4 = 22;
-    // 预留属性。
-    string access_ipv6 = 23;
-    message ServerFault {
-      // 错误码。
-      int32 code = 1;
-      // 异常出现的时间。
-      string created = 2;
-      // 异常描述信息。
-      string message = 3;
-      // 异常详情信息。
-      string details = 4;
-    }
-    ServerFault fault = 24;
-    // 弹性云服务器进度。
-    int32 progress = 25;
-    // 扩展属性，弹性云服务器电源状态。
-    int32 os_ext_sts_power_state = 26;
-    // config drive信息。
-    string config_drive = 27;
-    // 弹性云服务器元数据。  > 说明： >  > 元数据包含系统默认添加字段和用户设置的字段。  系统默认添加字段  1. charging_mode 云服务器的计费类型。  - “0”：按需计费（即postPaid-后付费方式）。 - “1”：按包年包月计费（即prePaid-预付费方式）。\"2\"：竞价实例计费  2. metering.order_id 按“包年/包月”计费的云服务器对应的订单ID。  3. metering.product_id 按“包年/包月”计费的云服务器对应的产品ID。  4. vpc_id 云服务器所属的虚拟私有云ID。  5. EcmResStatus 云服务器的冻结状态。  - normal：云服务器正常状态（未被冻结）。 - freeze：云服务器被冻结。  > 当云服务器被冻结或者解冻后，系统默认添加该字段，且该字段必选。  6. metering.image_id 云服务器操作系统对应的镜像ID  7.  metering.imagetype 镜像类型，目前支持：  - 公共镜像（gold） - 私有镜像（private） - 共享镜像（shared）  8. metering.resourcespeccode 云服务器对应的资源规格。  9. image_name 云服务器操作系统对应的镜像名称。  10. os_bit 操作系统位数，一般取值为“32”或者“64”。  11. lockCheckEndpoint 回调URL，用于检查弹性云服务器的加锁是否有效。  - 如果有效，则云服务器保持锁定状态。 - 如果无效，解除锁定状态，删除失效的锁。  12. lockSource 弹性云服务器来自哪个服务。订单加锁（ORDER）  13. lockSourceId 弹性云服务器的加锁来自哪个ID。lockSource为“ORDER”时，lockSourceId为订单ID。  14. lockScene 弹性云服务器的加锁类型。  - 按需转包周期（TO_PERIOD_LOCK）  15. virtual_env_type  - IOS镜像创建虚拟机，\"virtual_env_type\": \"IsoImage\" 属性； - 非IOS镜像创建虚拟机，在19.5.0版本以后创建的虚拟机将不会添加virtual_env_type 属性，而在此之前的版本创建的虚拟机可能会返回\"virtual_env_type\": \"FusionCompute\"属性 。  > virtual_env_type属性不允许用户增加、删除和修改。  16. metering.resourcetype 云服务器对应的资源类型。  17. os_type 操作系统类型，取值为：Linux、Windows。  18. cascaded.instance_extrainfo 系统内部虚拟机扩展信息。  19. __support_agent_list 云服务器是否支持企业主机安全、主机监控。  - “hss”：企业主机安全 -  “ces”：主机监控  20. agency_name 委托的名称。  委托是由租户管理员在统一身份认证服务（Identity and Access Management，IAM）上创建的，可以为弹性云服务器提供访问云服务的临时凭证。
-    map<string, string> metadata = 28;
-    // 弹性云服务器启动时间。时间格式例如：2019-05-22T03:23:59.000000
-    string os_srv_usg_launched_at = 29;
-    // 弹性云服务器删除时间。  时间格式例如：2019-05-22T03:23:59.000000
-    string os_srv_usg_terminated_at = 30;
-    message ServerExtendVolumeAttachment {
-      // 磁盘ID，格式为UUID。
-      string id = 1;
-      // 删弹性云服务器时是否一并删除该磁盘。  - true：是 - false：否 微版本2.3及以上版本支持。
-      string delete_on_termination = 2;
-      // 启动标识，“0”代表启动盘，“-1“代表非启动盘。
-      string boot_index = 3;
-      // 云硬盘挂载盘符，即磁盘挂载点。
-      string device = 4;
-    }
-    // 挂载到弹性云服务器上的磁盘。
-    repeated ServerExtendVolumeAttachment os_extended_volumes_volumes_Attached = 31;
-    // 弹性云服务器的描述信息。
-    string description = 32;
-    // nova-compute状态。  - UP：服务正常 - UNKNOWN：状态未知 - DOWN：服务异常 - MAINTENANCE：维护状态 - 空字符串：弹性云服务器无主机信息
-    string host_status = 33;
-    // 弹性云服务器的主机名。
-    string os_ext_srv_attr_hostname = 34;
-    // 批量创建场景，弹性云服务器的预留ID。
-    string os_ext_srv_attr_reservation_id = 35;
-    // 批量创建场景，弹性云服务器的启动顺序。
-    int32 os_ext_srv_attr_launch_index = 36;
-    // 若使用AMI格式的镜像，则表示kernel image的UUID；否则，留空。
-    string os_ext_srv_attr_kernel_id = 37;
-    // 若使用AMI格式镜像，则表示ramdisk image的UUID；否则，留空。
-    string os_ext_srv_attr_ramdisk_id = 38;
-    // 弹性云服务器系统盘的设备名称。
-    string os_ext_srv_attr_root_device_name = 39;
-    // 创建弹性云服务器时指定的user_data。
-    string os_ext_srv_attr_user_data = 40;
-    // 弹性云服务器是否为锁定状态。  - true：锁定 - false：未锁定
-    bool locked = 41;
-    // 弹性云服务器标签。
-    repeated string tags = 42;
-    message ServerSchedulerHints {
-      // 反亲和性组信息。  UUID格式。
-      repeated string group = 1;
-      // 在专属主机或共享池中创建弹性云服务器。默认为在共享池创建。值为： shared或dedicated。  - shared：表示共享池。 - dedicated:表示专属主机。  创建与查询此值均有效。
-      repeated string tenancy = 2;
-      // 专属主机ID。  此属性仅在tenancy值为dedicated时有效。  不指定此属性，系统将自动分配租户可自动放置弹性云服务器的专属主机。  创建与查询此值均有效。
-      repeated string dedicated_host_id = 3;
-    }
-    ServerSchedulerHints os_scheduler_hints = 43;
-    // 弹性云服务器所属的企业项目ID。
-    string enterprise_project_id = 44;
-    // 弹性云服务器系统标签
-    message ServerSystemTag {
-      // 系统标签的Key值。
-      string key = 1;
-      // 系统标签的value值。
-      string value = 2;
-    }
-    // 弹性云服务器系统标签。
-    repeated ServerSystemTag sys_tags = 45;
-    message CpuOptions {
-      // CPU超线程数， 决定CPU是否开启超线程
-      int32 hw_cpu_threads = 1;
-    }
-    CpuOptions cpu_options = 46;
-    message Hypervisor {
-      // hypervisor类型
-      string hypervisor_type = 1;
-      // hypervisor csd信息
-      string csd_hypervisor = 2;
-    }
-    Hypervisor hypervisor = 47;
-  }
-  // 弹性云服务器详情列表,具体参照-查询云服务器详情接口。查询级别不同,返回的详情不同。
-  repeated Instance instances = 1;
-  // 弹性云服务器的列表总数。
-  int32 count = 2;
+  google.protobuf.Any data = 1;
 }
 
 message ListRegionsRequest {
@@ -301,195 +216,59 @@ message ListRegionsRequest {
 }
 
 message ListRegionsResponse {
-  message Region {
-    string end_point = 1;
-    string id = 2;
-  }
-  repeated Region regions = 1;
+  google.protobuf.Any data = 1;
 }
 
 message ListImagesRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
   // 用于分页,表示查询几条镜像记录,取值为整数,默认返回25条镜像记录
-  int32 limit = 4;
+  optional int32 limit = 4;
   // 用于分页,表示从哪个镜像开始查询,取值为镜像ID。
-  string marker = 5;
+  optional string marker = 5;
 }
 
 message ListImagesResponse {
-  message Image {
-    // 镜像ID
-    string image_id = 1;
-    // 镜像名称
-    string image_name = 2;
-    // 镜像描述信息
-    string image_description = 3;
-    // 镜像文件的大小
-    int64 image_size = 4;
-    // 镜像类型，目前支持以下类型：
-    // 公共镜像：gold
-    // 私有镜像：private
-    // 共享镜像：shared
-    string image_type = 5;
-    // 是否被其他租户可见。取值如下：
-    //    public：表示公共镜像
-    //    private：表示私有镜像
-    //    shared：表示共享镜像
-    string visibility = 6;
-    // 镜像状态。取值如下：
-    //    queued：表示镜像元数据已经创建成功，等待上传镜像文件。
-    //    saving：表示镜像正在上传文件到后端存储。
-    //    deleted：表示镜像已经删除。
-    //    killed：表示镜像上传错误。
-    //    active：表示镜像可以正常使用。
-    string status = 7;
-    // 镜像运行需要的最小内存，单位为MB。参数取值依据云服务器的规格限制，一般为0
-    int32 min_ram = 8;
-    // 镜像支持的最大内存，单位为MB。
-    string max_ram = 9;
-    // 镜像运行需要的最小磁盘容量，单位为GB 。取值为40～1024GB。
-    int32 min_disk = 10;
-    // 操作系统位数，一般取值为32或者64。
-    string os_bit = 11;
-    // 镜像平台分类，取值为Windows、Ubuntu、RedHat、SUSE、CentOS、Debian、OpenSUSE、Oracle Linux、Fedora、Other、CoreOS和EulerOS
-    string platform = 12;
-    // 镜像系统类型，取值为Linux、Windows、Other
-    string os_type = 13;
-    // 操作系统具体版本
-    string os_version = 14;
-    // 创建时间。格式为UTC时间。
-    string created_at = 15;
-    // 更新时间。格式为UTC时间。
-    string updated_at = 16;
-    // 镜像状态变为正常的时间。
-    string active_at = 17;
-  }
-  repeated Image images = 1;
-  // 用于分页,表示从哪个镜像开始查询,取值为镜像ID。
-  string marker = 2;
+  google.protobuf.Any data = 1;
 }
 
 message ListInstanceTypesRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
 }
 
 message ListInstanceTypesResponse {
-  message InstanceType {
-    // 云服务器规格的ID
-    string id = 1;
-    // 云服务器规格的名称
-    string name = 2;
-    // 云服务器规格对应的CPU核数
-    string v_cpus = 3;
-    // 云服务器规格对应的内存大小，单位为MB。
-    int32 memory_size = 4;
-    message OsExtraSpec {
-      // 云服务器规格的分类：  - normal：通用型 - cpuv1：计算I型 - cpuv2：计算II型 - highmem：内存优化型 - gpu：GPU加速型 - entry：通用入门型 - saphana：大内存型 - ultracpu：超高性能计算型 - diskintensive：磁盘增强型 - highio：超高I/O型 - fpga：FPGA加速型  > 说明：  - 早期注册的规格该字段为hws:performancetype。
-      string ecs_performance_type = 1;
-      // 主机的物理cpu数量。
-      string hw_numa_nodes = 2;
-      // 资源类型。resource_type是为了区分云服务器的物理主机类型。
-      string resource_type = 3;
-      // 弹性运服务器高精度时钟是否开启，开启为true，否则为false。（该字段是否返回根据云服务器规格而定）
-      string h_pet_support = 4;
-      // 网卡类型，值固定为“enhanced”，表示使用增强型网络的资源创建云服务器。
-      string instance_v_nic_type = 5;
-      // 最大带宽，单位Mbps，最大值为10000。
-      string instance_v_nic_instance_bandwidth = 6;
-      // 最大网卡个数，最大为4。
-      string instance_vnic_max_count = 7;
-      // 值格式为{type}:{count}:{size}:{safeFormat}，其中：  - type指磁盘类型，当前只支持hdd。 - count指本地磁盘数量，目前支持d1类型：3/6/12/24，d2类型：2/4/8/12/16/24，d3类型：2/4/8/12/16/24/28。 - size指单个磁盘容量，单位GB，目前只支持1675（实际磁盘大小为1800，格式化后可用大小为1675）。 - safeFormat指云服务器本地磁盘是否安全格式化，目前仅支持d1类型：FALSE，d2/d3类型：True。  > 说明：  - 磁盘增强型特有字段。
-      string quota_local_disk = 8;
-      // 值格式为{type}:{spec}:{size}:{safeFormat}，其中：  - type指主机上配备的nvme ssd的单卡容量大小，当前只支持1.6T/3.2T。 - spec指nvme ssd的规格，包括large/small。large表示大规格，small表示小规格。目前仅支持i3类型：large。 - size指guest使用的盘的容量大小，单位为GB。在spec值为large的情况下，此项即为host单卡大小。在spec值为small的情况下，此为1/4规格或者1/2规格。 - safeFormat指云服务器本地磁盘是否安全格式化，目前仅支持i3类型：True。  > 说明：  - 超高I/O型特有字段。
-      string quota_nvme_ssd = 9;
-      // 是否支持持久化，值为true。  代表云服务器访问存储的方式为持久化授权。   > 说明：  - 密集存储D1型特有字段。
-      string extra_spec_io_persistent_grant = 10;
-      // 弹性云服务器类型的代数。  - s1：通用型I代 - s2：通用型II代 - s3：通用型 - m1：内存优化型I代 - m2：内存优化型II代 - m3：内存优化型 - h1：高性能计算型I代 - h2：高性能计算型II代 - h3：高性能计算型 - hi3：超高性能计算型 - d1：密集存储型I代 - d2：密集存储型II代 - d3：磁盘增强型 - g1：GPU加速型I代 - g2：GPU加速型II代 - f1：FPGA高性能型 - f2：FPGA通用型 - c3：通用计算增强型 - e3：大内存型 - i3：超高I/O型
-      string ecs_generation = 11;
-      // 虚拟化类型。  - 如果值为“FusionCompute”，表示弹性云服务器使用基于XEN的虚拟化技术。 - 如果值为“CloudCompute”，表示弹性云服务器使用基于KVM的虚拟化技术。
-      string ecs_virtualization_env_types = 12;
-      // 显卡是否直通。  值为“true”，表示GPU直通。
-      string pci_passthrough_enable_gpu = 13;
-      // G1型和G2型云服务器应用的技术，包括GPU虚拟化和GPU直通。  - 如果该规格的云服务器使用GPU虚拟化技术，且GPU卡的型号为M60-1Q，参数值可设置为“m60_1q:virt:1”。 - 如果该规格的云服务器使用GPU直通技术，且GPU卡的型号为M60，参数值可设置为“m60:direct_graphics:1”。
-      string pci_passthrough_gpu_specs = 14;
-      // P1型v本地直通GPU的型号和数量，参数值可设置为“nvidia-p100:1”，表示使用该规格创建的弹性云服务器将占用1张NVIDIA P100显卡。
-      string pci_passthrough_alias = 15;
-      // 此参数是Region级配置，某个AZ没有在cond:operation:az参数中配置时默认使用此参数的取值。不配置或无此参数时等同于“normal”。取值范围：  - normal：正常商用 - abandon：下线（即不显示） - sellout：售罄 - obt：公测 - promotion：推荐(等同normal，也是商用)
-      string cond_operation_status = 16;
-      // 此参数是AZ级配置，某个AZ没有在此参数中配置时默认使用cond:operation:status参数的取值。此参数的配置格式“az(xx)”。()内为某个AZ的flavor状态，()内必须要填有状态，不填为无效配置。状态的取值范围与cond:operation:status参数相同。  例如：flavor在某个region的az0正常商用，az1售罄，az2公测，az3正常商用，其他az显示下线，可配置为：  - “cond:operation:status”设置为“abandon” - “cond:operation:az”设置为“az0(normal), az1(sellout), az2(obt), az3(normal)”  > 说明：  - 如果flavor在某个AZ下的状态与cond:operation:status配置状态不同，必须配置该参数。
-      string cond_operation_az = 17;
-      // 最大带宽  - 单位Mbps，显示为Gbps时除以1000
-      string quota_max_rate = 18;
-      // 基准带宽  - 单位Mbps，显示为Gbps时除以1000
-      string quota_min_rate = 19;
-      // 内网最大收发包能力  - 单位个，显示为xx万时除以10000
-      string quota_max_pps = 20;
-      // 计费类型  - 计费场景，不配置时都支持 - period，包周期 - demand，按需
-      string cond_operation_charge = 21;
-      // 关机是否收费  - 关机是否计费，默认免费： - charge - free
-      string cond_operation_charge_stop = 22;
-      // 计费类型  - 计费场景，不配置时都支持 - period，包周期 - demand，按需
-      string cond_spot_operation_az = 23;
-      // 允许的角色 匹配的用户标签（roles的op_gatexxx标签）。不设置时所有用户可见
-      string cond_operation_roles = 24;
-      // Flavor在竞价销售模式下的状态  - 不配置时等同abandon - normal，正常商用 - abandon，下线 - sellout，售罄 - obt，公测，未申请时提示申请（暂不支持） - private，私有，只给特定用户显示（暂不支持） - test，试用/免费（暂不支持） - promotion，推荐
-      string cond_spot_operation_status = 25;
-      // 网络约束 支持网络特性，不配置时以UI配置为准。
-      string cond_network = 26;
-      // 存储约束  - 支持磁盘特性，不配置时以UI配置为准。 - scsi，支持scsi - localdisk，支持本地盘 - ib，支持ib
-      string cond_storage = 27;
-      // 计算约束  - true，支持在线扩容。 - false或不存在该字段，不支持在线扩容。
-      string cond_compute_live_resizable = 28;
-      // 计算约束  - autorecovery，自动恢复特性。 - 不存在该字段，不支持自动恢复。
-      string cond_compute = 29;
-      // GPU显卡数量和名称。
-      string info_gpu_name = 30;
-      // CPU名称
-      string info_cpu_name = 31;
-      // GPU显卡名称。
-      string quota_gpu = 32;
-      // 该规格对应的CPU架构，且仅鲲鹏实例架构规格返回该字段  - 取值为arm64表示CPU架构为鲲鹏计算。
-      string ecs_instance_architecture = 33;
-    }
-    OsExtraSpec os_extra_spec = 5;
-    message ServerAttachableQuantity {
-      // 可挂载scsi卷数。
-      int32 free_scsi = 1;
-      // 可挂载vbd卷数。
-      int32 free_blk = 2;
-      // 可挂载卷数。
-      int32 free_disk = 3;
-      // 可挂载网卡数。
-      int32 free_nic = 4;
-    }
-    ServerAttachableQuantity server_attachable_quantity = 6;
-  }
-  repeated InstanceType instance_types = 1;
+  google.protobuf.Any data = 1;
 }
 
 message StartInstancesRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 云服务器id列表
   repeated ServerId servers = 5;
 }
 
 message StartInstancesResponse {
-  string job_id = 1;
+  google.protobuf.Any data = 1;
 }
 
 message StopInstancesRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 云服务器id列表
   repeated ServerId servers = 5;
   // 关机类型，默认为SOFT：  - SOFT：普通关机（默认）。 - HARD：强制关机。
@@ -497,14 +276,16 @@ message StopInstancesRequest {
 }
 
 message StopInstancesResponse {
-  string job_id = 1;
+  google.protobuf.Any data = 1;
 }
 
 message RebootInstancesRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 云服务器id列表
   repeated ServerId servers = 5;
   // 重启类型，默认为SOFT：  - SOFT：普通关机（默认）。 - HARD：强制关机。
@@ -512,7 +293,7 @@ message RebootInstancesRequest {
 }
 
 message RebootInstancesResponse {
-  string job_id = 1;
+  google.protobuf.Any data = 1;
 }
 
 message ServerId {
@@ -521,94 +302,85 @@ message ServerId {
 }
 
 message DeleteInstancesRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 配置删除云服务器是否删除云服务器绑定的弹性IP。如果选择不删除，则系统仅做解绑定操作，保留弹性IP资源。 取值为true或false，默认为false。   - true：删除云服务器时会同时删除绑定在云服务器上的弹性IP。  - false：删除云服务器时，仅解绑定在云服务器上的弹性IP，不删除弹性IP
-  bool delete_public_ip = 5;
+  optional bool delete_public_ip = 5;
   // 配置删除云服务器是否删除云服务器对应的数据盘，如果选择不删除，则系统仅做解绑定操作，保留云磁盘资源。 取值为false或true，默认为false。  - true：删除云服务器时会同时删除挂载在云服务器上的数据盘。 - false：删除云服务器时，仅卸载云服务器上挂载的数据盘，不删除该数据盘。
-  bool delete_volume = 6;
+  optional bool delete_volume = 6;
   // 所需要删除的云服务器列表。
   repeated ServerId servers = 7;
 }
 
 message DeleteInstancesResponse {
-  string job_id = 1;
-}
-
-message Vpc {
-  // 功能说明：虚拟私有云ID 取值范围：带\"-\"的UUID
-  string id = 1;
-  // 功能说明：虚拟私有云名称 取值范围：0-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点） 约束：如果名称不为空，则同一个租户下的名称不能重复
-  string name = 2;
-  // 功能说明：虚拟私有云下可用子网的范围 取值范围： - 10.0.0.0/8~10.255.255.240/28 - 172.16.0.0/12 ~ 172.31.255.240/28 - 192.168.0.0/16 ~ 192.168.255.240/28 不指定cidr时，默认值为空 约束：必须是ipv4 cidr格式，例如:192.168.0.0/16
-  string cidr = 3;
-  // 功能说明：虚拟私有云的描述 取值范围：0-255个字符，不能包含“<”和“>”
-  string description = 4;
-  // 功能说明：路由信息列表，详情参见route对象
-  repeated VpcRoute routes = 5;
-  // 功能说明：虚拟私有云的状态 取值范围： - CREATING：创建中 - OK：创建成功
-  string status = 6;
-  // 功能说明：企业项目ID。 取值范围：最大长度36字节，带“-”连字符的UUID格式，或者是字符串“0”。“0”表示默认企业项目。
-  string enterprise_project_id = 7;
-}
-
-message VpcRoute {
-  // 功能说明：路由目的地 取值范围：IP地址段 约束：仅支持配置默认路由，且其取值只能是0.0.0.0/0
-  string destination = 1;
-  // 功能说明：路由下一跳IP地址 取值范围：ipv4地址格式 约束：nexthop仅支持所关联的子网范围内IP地址
-  string next_hop = 2;
+  google.protobuf.Any data = 1;
 }
 
 message CreateVpcRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 功能说明:虚拟私有云下可用子网的范围
   //  取值范围:
   //    10.0.0.0/8 ~ 10.255.255.240/28
   //    172.16.0.0/12 ~ 172.31.255.240/28
   //    192.168.0.0/16 ~ 192.168.255.240/28 约束:必须是ipv4 cidr格式,例如:192.168.0.0/16
-  string cidr = 5;
+  optional string cidr = 5;
   // 虚拟私有云名称
   //  取值范围:0-64个字符,支持数字、字母、中文、_(下划线)、-(中划线)、.(点)
   //  约束:如果名称不为空,则同一个租户下的名称不能重复
-  string name = 6;
+  optional string name = 6;
   // 虚拟私有云的描述
   //  取值范围:0-255个字符,不能包含“<”和“>”。
-  string description = 7;
+  optional string description = 7;
   // 企业项目ID。创建虚拟私有云时,给虚拟私有云绑定企业项目ID。
   //  取值范围:最大长度36字节,带“-”连字符的UUID格式,或者是字符串“0”。“0”表示默认企业项目。
   //  默认值:"0"
-  string enterprise_project_id = 8;
+  optional string enterprise_project_id = 8;
 }
 
 message CreateVpcResponse {
-  Vpc vpc = 1;
+  google.protobuf.Any data = 1;
 }
 
 message ListVpcsRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 功能说明：虚拟私有云ID。可以使用该字段过滤某个ID的虚拟私有云。
-  string id = 5;
+  optional string id = 5;
   // 功能说明：企业项目ID。可以使用该字段过滤某个企业项目下的虚拟私有云。若未传值则默认返回所有企业项目绑定的虚拟私有云。  取值范围：最大长度36字节，带“-”连字符的UUID格式，或者是字符串“0”。“0”表示默认企业项目。若需要查询当前用户所有企业项目绑定的虚拟私有云，请传参all_granted_eps。
-  string enterprise_project_id = 6;
+  optional string enterprise_project_id = 6;
 }
 
 message ListVpcsResponse {
-  repeated Vpc vpcs = 1;
+  google.protobuf.Any data = 1;
+}
+
+message VpcRoute {
+  // 功能说明：路由目的地 取值范围：IP地址段 约束：仅支持配置默认路由，且其取值只能是0.0.0.0/0
+  optional string destination = 1;
+  // 功能说明：路由下一跳IP地址 取值范围：ipv4地址格式 约束：nexthop仅支持所关联的子网范围内IP地址
+  optional string next_hop = 2;
 }
 
 message UpdateVpcRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 虚拟私有云ID
   string vpc_id = 5;
   // 功能说明:虚拟私有云下可用子网的范围
@@ -616,85 +388,48 @@ message UpdateVpcRequest {
   //    10.0.0.0/8 ~ 10.255.255.240/28
   //    172.16.0.0/12 ~ 172.31.255.240/28
   //    192.168.0.0/16 ~ 192.168.255.240/28 约束:必须是ipv4 cidr格式,例如:192.168.0.0/16
-  string cidr = 6;
+  optional string cidr = 6;
   // 虚拟私有云名称
   //  取值范围:0-64个字符,支持数字、字母、中文、_(下划线)、-(中划线)、.(点)
   //  约束:如果名称不为空,则同一个租户下的名称不能重复
-  string name = 7;
+  optional string name = 7;
   // 虚拟私有云的描述
   //  取值范围:0-255个字符,不能包含“<”和“>”。
-  string description = 8;
+  optional string description = 8;
   // 路由信息列表
   repeated VpcRoute routes = 9;
 }
 
 message UpdateVpcResponse {
-  Vpc vpc = 1;
+  google.protobuf.Any data = 1;
 }
 
 message DeleteVpcRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
-  string vpc_id = 5;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
+  string vpc_id = 5 [(validate.rules).string.min_len = 1];
 }
 
 message DeleteVpcResponse {
+  google.protobuf.Any data = 1;
 }
 
 message ShowVpcRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
-  string vpc_id = 5;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
+  string vpc_id = 5 [(validate.rules).string.min_len = 1];
 }
 
 message ShowVpcResponse {
-  Vpc vpc = 1;
-}
-
-message Subnet {
-  // 子网ID
-  string id = 1;
-  // 功能说明：子网名称 取值范围：1-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）
-  string name = 2;
-  // 功能说明：子网描述 取值范围：0-255个字符，不能包含“<”和“>”。
-  string description = 3;
-  // 功能说明：子网的网段 取值范围：必须在vpc对应cidr范围内 约束：必须是cidr格式。掩码长度不能大于28
-  string cidr = 4;
-  // 功能说明：子网的网关 取值范围：子网网段中的IP地址 约束：必须是ip格式
-  string gateway_ip = 5;
-  // 功能说明：是否创建cidr_v6 取值范围：true（开启），false（关闭）
-  bool ipv6_enable = 6;
-  // IPv6子网的网段，如果子网为IPv4子网，则不返回此参数
-  string cidr_v6 = 7;
-  // IPv6子网的网关，如果子网为IPv4子网，则不返回此参数
-  string gateway_ip_v6 = 8;
-  // 子网是否开启dhcp功能
-  bool dhcp_enable = 9;
-  // 子网dns服务器地址1
-  string primary_dns = 10;
-  // 子网dns服务器地址2
-  string secondary_dns = 11;
-  // 子网dns服务器地址列表
-  repeated string dns_list = 12;
-  // 子网所在的可用区标识
-  string availability_zone = 13;
-  // 子网所在VPC标识
-  string vpc_id = 14;
-  // 功能说明：子网的状态 取值范围： - ACTIVE：表示子网已挂载到ROUTER上 - UNKNOWN：表示子网还未挂载到ROUTER上 - ERROR：表示子网状态故障
-  string status = 15;
-  // 对应网络（OpenStack Neutron接口）id
-  string neutron_network_id = 16;
-  // 对应子网（OpenStack Neutron接口）id
-  string neutron_subnet_id = 17;
-  // 对应IPv6子网（OpenStack Neutron接口）id，如果子网为IPv4子网，则不返回此参数
-  string neutron_subnet_id_v6 = 18;
-  repeated ExtraDhcpOpts extra_dhcp_opts = 19;
-  // 功能说明：子网作用域 取值范围：center-表示作用域为中心；{azId}表示作用域为具体的AZ
-  string scope = 20;
+  google.protobuf.Any data = 1;
 }
 
 // 子网配置的NTP地址
@@ -706,10 +441,12 @@ message ExtraDhcpOpts {
 }
 
 message CreateSubnetRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 功能说明：子网的网段 取值范围：必须在vpc对应cidr范围内 约束：必须是cidr格式。掩码长度不能大于28
   string cidr = 5;
   // 功能说明：子网名称 取值范围：1-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）
@@ -719,45 +456,49 @@ message CreateSubnetRequest {
   // 功能说明：子网的网关 取值范围：子网网段中的IP地址 约束：必须是ip格式
   string gateway_ip = 8;
   // 功能说明：子网描述 取值范围：0-255个字符，不能包含“<”和“>”。
-  string description = 9;
+  optional string description = 9;
   // 功能说明：是否创建cidr_v6 取值范围：true（开启），false（关闭） 约束：不填时默认为false > 说明 该参数目前仅在“华北-北京四”区域开放，且申请IPv6公测后才可设置。
-  bool ipv6_enable = 10;
+  optional bool ipv6_enable = 10;
   // 功能说明：子网是否开启dhcp功能 取值范围：true（开启），false（关闭） 约束：不填时默认为true。当设置为false时，会导致新创建的ECS无法获取IP地址，cloudinit无法注入账号密码，请谨慎操作。
-  bool dhcp_enable = 11;
+  optional bool dhcp_enable = 11;
   // 功能说明：子网dns服务器地址1 约束：ip格式，不支持IPv6地址 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
-  string primary_dns = 12;
+  optional string primary_dns = 12;
   // 功能说明：子网dns服务器地址2 约束：ip格式，不支持IPv6地址 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
-  string secondary_dns = 13;
+  optional string secondary_dns = 13;
   // 功能说明：子网dns服务器地址的集合；如果想使用两个以上dns服务器，请使用该字段 约束：是子网dns服务器地址1跟子网dns服务器地址2的合集的父集，不支持IPv6地址。 默认值：不填时为空，无法使用云内网DNS功能 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
   repeated string dns_list = 14;
   // 功能说明：子网所在的可用分区标识 约束：系统存在的可用分区标识
-  string availability_zone = 15;
+  optional string availability_zone = 15;
   // 子网配置的NTP地址
   repeated ExtraDhcpOpts extra_dhcp_opts = 16;
 }
 
 message CreateSubnetResponse {
-  Subnet subnet = 1;
+  google.protobuf.Any data = 1;
 }
 
 message ListSubnetsRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 按照vpc_id过滤查询, 企业项目细粒度授权场景下，该字段必传
-  string vpc_id = 5;
+  optional string vpc_id = 5;
 }
 
 message ListSubnetsResponse {
-  repeated Subnet subnets = 1;
+  google.protobuf.Any data = 1;
 }
 
 message UpdateSubnetRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 子网对应的vpc_id
   string vpc_id = 5;
   // 子网唯一标识
@@ -765,15 +506,15 @@ message UpdateSubnetRequest {
   // 功能说明：子网名称 取值范围：1-64，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）
   string name = 7;
   // 功能说明：子网描述 取值范围：0-255个字符，不能包含“<”和“>”。
-  string description = 8;
+  optional string description = 8;
   // 功能说明：是否创建ipv6子网 取值范围：true（开启），false（关闭）
-  bool ipv6_enable = 9;
+  optional bool ipv6_enable = 9;
   // 功能说明：子网是否开启dhcp功能 取值范围：true（开启），false（关闭） 约束：不填时默认为true。当设置为false时，会导致新创建的ECS无法获取IP地址，cloudinit无法注入账号密码，请谨慎操作。
-  bool dhcp_enable = 10;
+  optional bool dhcp_enable = 10;
   // 功能说明：子网dns服务器地址1 约束：ip格式 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
-  string primary_dns = 11;
+  optional string primary_dns = 11;
   // 功能说明：子网dns服务器地址2 约束：ip格式 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
-  string secondary_dns = 12;
+  optional string secondary_dns = 12;
   // 功能说明：子网dns服务器地址的集合；如果想使用两个以上dns服务器，请使用该字段。 约束：是子网dns服务器地址1跟子网dns服务器地址2的合集的父集 默认值：不填时为空，无法使用云内网DNS功能 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
   repeated string dns_list = 13;
   // 子网配置的NTP地址
@@ -781,17 +522,16 @@ message UpdateSubnetRequest {
 }
 
 message UpdateSubnetResponse {
-  // uuid形式的一个资源标识。
-  string subnet_id = 1;
-  // 功能说明：子网的状态。   取值范围：ACTIVE,UNKNOWN,ERROR       ACTIVE表示子网已挂载到ROUTER上       UNKNOWN表示子网还未挂载到ROUTER上       ERROR表示子网状态故障
-  string status = 2;
+  google.protobuf.Any data = 1;
 }
 
 message DeleteSubnetRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 子网对应的vpc_id
   string vpc_id = 5;
   // 子网ID
@@ -799,47 +539,35 @@ message DeleteSubnetRequest {
 }
 
 message DeleteSubnetResponse {
+  google.protobuf.Any data = 1;
 }
 
 message ShowSubnetRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 子网ID
   string subnet_id = 5;
 }
 
 message ShowSubnetResponse {
-  Subnet subnet = 1;
+  google.protobuf.Any data = 1;
 }
 
 message ShowJobRequest {
-  string access_key = 1;
-  string secret_key = 2;
-  string region_id = 3;
-  string project_id = 4;
+  string access_key = 1 [(validate.rules).string.min_len = 1];
+  string secret_key = 2 [(validate.rules).string.min_len = 1];
+  // 区域id
+  string region_id = 3 [(validate.rules).string.min_len = 1];
+  // project_id
+  string project_id = 4 [(validate.rules).string.min_len = 1];
   // 异步请求的任务ID
   string job_id = 5;
 }
 
 message ShowJobResponse {
-  // 开始时间。
-  string begin_time = 1;
-  // 查询Job的API请求出现错误时，返回的错误码。
-  string code = 2;
-  // 结束时间。
-  string end_time = 3;
-  // Job执行失败时的错误码。  Job执行成功后，该值为空。
-  string error_code = 4;
-  // Job执行失败时的错误原因。  Job执行成功后，该值为空。
-  string fail_reason = 5;
-  // 异步请求的任务ID。
-  string job_id = 6;
-  // 异步请求的任务类型。
-  string job_type = 7;
-  // 查询Job的API请求出现错误时，返回的错误消息。
-  string message = 8;
-  // Job的状态。  - SUCCESS：成功。  - RUNNING：运行中。  - FAIL：失败。  - INIT：正在初始化。
-  string status = 9;
+  google.protobuf.Any data = 1;
 }

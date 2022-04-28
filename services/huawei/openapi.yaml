@@ -3,8 +3,1016 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: Instance API
     version: 0.0.1
-paths: {}
+paths:
+    /api/images:
+        get:
+            tags:
+                - Instance
+            description: 选择镜像
+            operationId: Instance_ListImages
+            parameters:
+                - name: accessKey
+                  in: query
+                  schema:
+                    type: string
+                - name: secretKey
+                  in: query
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 区域id
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  description: 用于分页,表示查询几条镜像记录,取值为整数,默认返回25条镜像记录
+                  schema:
+                    type: integer
+                    format: int32
+                - name: marker
+                  in: query
+                  description: 用于分页,表示从哪个镜像开始查询,取值为镜像ID。
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListImagesResponse'
+    /api/instance-types:
+        get:
+            tags:
+                - Instance
+            description: 选择实例规格
+            operationId: Instance_ListInstanceTypes
+            parameters:
+                - name: accessKey
+                  in: query
+                  schema:
+                    type: string
+                - name: secretKey
+                  in: query
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 区域id
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  description: project_id
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListInstanceTypesResponse'
+    /api/instances:
+        get:
+            tags:
+                - Instance
+            description: 实例列表
+            operationId: Instance_ListInstances
+            parameters:
+                - name: accessKey
+                  in: query
+                  schema:
+                    type: string
+                - name: secretKey
+                  in: query
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 区域id
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  description: project_id
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  description: 查询返回云服务器当前页面的大小。每页最多返回1000台云服务器的信息。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: offset
+                  in: query
+                  description: 页码。 当前页面数，默认为1。  取值大于等于0，取值为0时返回第1页。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: name
+                  in: query
+                  description: 云服务器名称,匹配规则为模糊匹配。
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListInstancesResponse'
+        post:
+            tags:
+                - Instance
+            description: 创建实例
+            operationId: Instance_CreateInstances
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateInstancesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateInstancesResponse'
+    /api/instances/reboot:
+        put:
+            tags:
+                - Instance
+            description: 重启
+            operationId: Instance_RebootInstances
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RebootInstancesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RebootInstancesResponse'
+    /api/instances/start:
+        put:
+            tags:
+                - Instance
+            description: 开机
+            operationId: Instance_StartInstances
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/StartInstancesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StartInstancesResponse'
+    /api/instances/stop:
+        put:
+            tags:
+                - Instance
+            description: 关机
+            operationId: Instance_StopInstances
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/StopInstancesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StopInstancesResponse'
+    /api/instances/terminate:
+        put:
+            tags:
+                - Instance
+            description: 删除实例
+            operationId: Instance_DeleteInstances
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DeleteInstancesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteInstancesResponse'
+    /api/job:
+        get:
+            tags:
+                - Instance
+            description: 查询任务的执行状态
+            operationId: Instance_ShowJob
+            parameters:
+                - name: accessKey
+                  in: query
+                  schema:
+                    type: string
+                - name: secretKey
+                  in: query
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 区域id
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  description: project_id
+                  schema:
+                    type: string
+                - name: jobId
+                  in: query
+                  description: 异步请求的任务ID
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ShowJobResponse'
+    /api/regions:
+        get:
+            tags:
+                - Instance
+            description: 可使用的地域
+            operationId: Instance_ListRegions
+            parameters:
+                - name: regionType
+                  in: query
+                  description: 查询地域类别，查询ims地域：image，查询ecs地域：ecs
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListRegionsResponse'
+    /api/subnet:
+        get:
+            tags:
+                - Instance
+            description: 查询子网列表
+            operationId: Instance_ListSubnets
+            parameters:
+                - name: accessKey
+                  in: query
+                  schema:
+                    type: string
+                - name: secretKey
+                  in: query
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 区域id
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  description: project_id
+                  schema:
+                    type: string
+                - name: vpcId
+                  in: query
+                  description: 按照vpc_id过滤查询, 企业项目细粒度授权场景下，该字段必传
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListSubnetsResponse'
+        put:
+            tags:
+                - Instance
+            description: 更新子网
+            operationId: Instance_UpdateSubnet
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateSubnetRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateSubnetResponse'
+        post:
+            tags:
+                - Instance
+            description: 创建子网
+            operationId: Instance_CreateSubnet
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateSubnetRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateSubnetResponse'
+        delete:
+            tags:
+                - Instance
+            description: 删除子网
+            operationId: Instance_DeleteSubnet
+            parameters:
+                - name: accessKey
+                  in: query
+                  schema:
+                    type: string
+                - name: secretKey
+                  in: query
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 区域id
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  description: project_id
+                  schema:
+                    type: string
+                - name: vpcId
+                  in: query
+                  description: 子网对应的vpc_id
+                  schema:
+                    type: string
+                - name: subnetId
+                  in: query
+                  description: 子网ID
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteSubnetResponse'
+    /api/subnet/query:
+        get:
+            tags:
+                - Instance
+            description: 查询子网
+            operationId: Instance_ShowSubnet
+            parameters:
+                - name: accessKey
+                  in: query
+                  schema:
+                    type: string
+                - name: secretKey
+                  in: query
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 区域id
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  description: project_id
+                  schema:
+                    type: string
+                - name: subnetId
+                  in: query
+                  description: 子网ID
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ShowSubnetResponse'
+    /api/vpc:
+        get:
+            tags:
+                - Instance
+            description: 查询虚拟私有云列表
+            operationId: Instance_ListVpcs
+            parameters:
+                - name: accessKey
+                  in: query
+                  schema:
+                    type: string
+                - name: secretKey
+                  in: query
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 区域id
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  description: project_id
+                  schema:
+                    type: string
+                - name: id
+                  in: query
+                  description: 功能说明：虚拟私有云ID。可以使用该字段过滤某个ID的虚拟私有云。
+                  schema:
+                    type: string
+                - name: enterpriseProjectId
+                  in: query
+                  description: 功能说明：企业项目ID。可以使用该字段过滤某个企业项目下的虚拟私有云。若未传值则默认返回所有企业项目绑定的虚拟私有云。  取值范围：最大长度36字节，带“-”连字符的UUID格式，或者是字符串“0”。“0”表示默认企业项目。若需要查询当前用户所有企业项目绑定的虚拟私有云，请传参all_granted_eps。
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListVpcsResponse'
+        put:
+            tags:
+                - Instance
+            description: 更新虚拟私有云
+            operationId: Instance_UpdateVpc
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateVpcRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateVpcResponse'
+        post:
+            tags:
+                - Instance
+            description: 创建虚拟私有云
+            operationId: Instance_CreateVpc
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateVpcRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateVpcResponse'
+        delete:
+            tags:
+                - Instance
+            description: 删除虚拟私有云
+            operationId: Instance_DeleteVpc
+            parameters:
+                - name: accessKey
+                  in: query
+                  schema:
+                    type: string
+                - name: secretKey
+                  in: query
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 区域id
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  description: project_id
+                  schema:
+                    type: string
+                - name: vpcId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteVpcResponse'
+    /api/vpc/query:
+        get:
+            tags:
+                - Instance
+            description: 查询虚拟私有云
+            operationId: Instance_ShowVpc
+            parameters:
+                - name: accessKey
+                  in: query
+                  schema:
+                    type: string
+                - name: secretKey
+                  in: query
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  description: 区域id
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  description: project_id
+                  schema:
+                    type: string
+                - name: vpcId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ShowVpcResponse'
 components:
-    schemas: {}
+    schemas:
+        Any:
+            type: object
+            properties:
+                typeUrl:
+                    type: string
+                    description: 'A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one "/" character. The last segment of the URL''s path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading "." is not accepted). In practice, teams usually precompile into the binary all types that they expect it to use in the context of Any. However, for URLs which use the scheme `http`, `https`, or no scheme, one can optionally set up a type server that maps type URLs to message definitions as follows: * If no scheme is provided, `https` is assumed. * An HTTP GET on the URL must yield a [google.protobuf.Type][]   value in binary format, or produce an error. * Applications are allowed to cache lookup results based on the   URL, or have them precompiled into a binary to avoid any   lookup. Therefore, binary compatibility needs to be preserved   on changes to types. (Use versioned type names to manage   breaking changes.) Note: this functionality is not currently available in the official protobuf release, and it is not used for type URLs beginning with type.googleapis.com. Schemes other than `http`, `https` (or the empty scheme) might be used with implementation specific semantics.'
+                value:
+                    type: string
+                    description: Must be a valid serialized protocol buffer of the above specified type.
+                    format: bytes
+            description: '`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message. Protobuf library provides support to pack/unpack Any values in the form of utility functions or additional generated methods of the Any type. Example 1: Pack and unpack a message in C++.     Foo foo = ...;     Any any;     any.PackFrom(foo);     ...     if (any.UnpackTo(&foo)) {       ...     } Example 2: Pack and unpack a message in Java.     Foo foo = ...;     Any any = Any.pack(foo);     ...     if (any.is(Foo.class)) {       foo = any.unpack(Foo.class);     } Example 3: Pack and unpack a message in Python.     foo = Foo(...)     any = Any()     any.Pack(foo)     ...     if any.Is(Foo.DESCRIPTOR):       any.Unpack(foo)       ... Example 4: Pack and unpack a message in Go      foo := &pb.Foo{...}      any, err := anypb.New(foo)      if err != nil {        ...      }      ...      foo := &pb.Foo{}      if err := any.UnmarshalTo(foo); err != nil {        ...      } The pack methods provided by protobuf library will by default use ''type.googleapis.com/full.type.name'' as the type URL and the unpack methods only use the fully qualified type name after the last ''/'' in the type URL, for example "foo.bar.com/x/y.z" will yield type name "y.z". JSON The JSON representation of an `Any` value uses the regular representation of the deserialized, embedded message, with an additional field `@type` which contains the type URL. Example:     package google.profile;     message Person {       string first_name = 1;       string last_name = 2;     }     {       "@type": "type.googleapis.com/google.profile.Person",       "firstName": <string>,       "lastName": <string>     } If the embedded message type is well-known and has a custom JSON representation, that representation will be embedded adding a field `value` which holds the custom JSON in addition to the `@type` field. Example (for message [google.protobuf.Duration][]):     {       "@type": "type.googleapis.com/google.protobuf.Duration",       "value": "1.212s"     }'
+        CreateInstancesRequest:
+            type: object
+            properties:
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                regionId:
+                    type: string
+                    description: 区域id
+                projectId:
+                    type: string
+                    description: project_id
+                imageId:
+                    type: string
+                    description: 镜像id
+                name:
+                    type: string
+                    description: 实例名称只能由中文字符、英文字母、数字及“_”、“-”、“.”组成,且长度为[1-64]个字符。 创建的云服务器器数量(count字段对应的值)大于1时,为区分不同云服务器,创建过程中系统会自动在名称后加“-0000”的类似标记。故此时名称的长度为[1-59]个字符。
+                instanceType:
+                    type: string
+                    description: 实例规格
+                vpcId:
+                    type: string
+                    description: 待创建云服务器所属虚拟私有云(简称VPC),需要指定已创建VPC的ID,UUID格式。
+                nics:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateInstancesRequest_Nic'
+                    description: 待创建云服务器的网卡信息。  约束：  - 网卡对应的子网（subnet）必须属于vpcid对应的VPC。 - 当前单个云服务器支持最多挂载12张网卡。 - 不同的规格对网卡上限有一定的区别，参考[规格清单](https://support.huaweicloud.com/productdesc-ecs/zh-cn_topic_0159822360.html)。
+                rootVolume:
+                    $ref: '#/components/schemas/CreateInstancesRequest_RootVolume'
+                uniqueSuffix:
+                    type: boolean
+                    description: 是否为instance_name自动添加有序后缀（默认false）
+                amount:
+                    type: integer
+                    description: 创建数量(1-100，默认1) 不传该字段时默认取值为1。 租户的配额足够时,最大值为500。
+                    format: int32
+                password:
+                    type: string
+                    description: 实例密码
+                dryRun:
+                    type: boolean
+                    description: 是否只预检此次请求 true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式等。 如果检查不通过，则返回对应错误。 如果检查通过，则返回202状态码。 false：发送正常请求，通过检查后并且执行创建云服务器请求。
+        CreateInstancesRequest_Nic:
+            type: object
+            properties:
+                subnetId:
+                    type: string
+                    description: 待创建云服务器所在的子网信息,需要指定vpcid对应VPC下的子网ID,UUID格式。
+            description: 待创建云服务器的网卡信息。  约束：  - 网卡对应的子网（subnet）必须属于vpcid对应的VPC。 - 当前单个云服务器支持最多挂载12张网卡。 - 不同的规格对网卡上限有一定的区别，参考[规格清单](https://support.huaweicloud.com/productdesc-ecs/zh-cn_topic_0159822360.html)。
+        CreateInstancesRequest_RootVolume:
+            type: object
+            properties:
+                volumeType:
+                    type: string
+                    description: 云服务器系统盘对应的磁盘类型，需要与系统所提供的磁盘类型相匹配。  - SATA：普通IO磁盘类型。 - SAS：高IO磁盘类型。 - SSD：超高IO磁盘类型。 - co-p1：高IO (性能优化Ⅰ型) - uh-l1：超高IO (时延优化)  > 说明： >  > 对于HANA云服务器、HL1型云服务器、HL2型云服务器，需使用co-p1和uh-l1两种磁盘类型。对于其他类型的云服务器，不能使用co-p1和uh-l1两种磁盘类型。
+                size:
+                    type: integer
+                    description: 系统盘大小，容量单位为GB， 输入大小范围为[1,1024]。  约束：  - 系统盘大小取值应不小于镜像支持的系统盘的最小值(镜像的min_disk属性)。 - 若该参数没有指定或者指定为0时，系统盘大小默认取值为镜像中系统盘的最小值(镜像的min_disk属性)。  > 说明：  > 镜像系统盘的最小值(镜像的min_disk属性)可在控制台中点击镜像详情查看。或通过调用“查询镜像详情（OpenStack原生）”API获取，详细操作请参考[《镜像服务API参考》](https://support.huaweicloud.com/api-ims/ims_03_0702.html)中“查询镜像详情（OpenStack原生）”章节。
+                    format: int32
+        CreateInstancesResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        CreateSubnetRequest:
+            type: object
+            properties:
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                regionId:
+                    type: string
+                    description: 区域id
+                projectId:
+                    type: string
+                    description: project_id
+                cidr:
+                    type: string
+                    description: 功能说明：子网的网段 取值范围：必须在vpc对应cidr范围内 约束：必须是cidr格式。掩码长度不能大于28
+                name:
+                    type: string
+                    description: 功能说明：子网名称 取值范围：1-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）
+                vpcId:
+                    type: string
+                    description: 子网所在VPC标识
+                gatewayIp:
+                    type: string
+                    description: 功能说明：子网的网关 取值范围：子网网段中的IP地址 约束：必须是ip格式
+                description:
+                    type: string
+                    description: 功能说明：子网描述 取值范围：0-255个字符，不能包含“<”和“>”。
+                ipv6Enable:
+                    type: boolean
+                    description: 功能说明：是否创建cidr_v6 取值范围：true（开启），false（关闭） 约束：不填时默认为false > 说明 该参数目前仅在“华北-北京四”区域开放，且申请IPv6公测后才可设置。
+                dhcpEnable:
+                    type: boolean
+                    description: 功能说明：子网是否开启dhcp功能 取值范围：true（开启），false（关闭） 约束：不填时默认为true。当设置为false时，会导致新创建的ECS无法获取IP地址，cloudinit无法注入账号密码，请谨慎操作。
+                primaryDns:
+                    type: string
+                    description: 功能说明：子网dns服务器地址1 约束：ip格式，不支持IPv6地址 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+                secondaryDns:
+                    type: string
+                    description: 功能说明：子网dns服务器地址2 约束：ip格式，不支持IPv6地址 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+                dnsList:
+                    type: array
+                    items:
+                        type: string
+                    description: 功能说明：子网dns服务器地址的集合；如果想使用两个以上dns服务器，请使用该字段 约束：是子网dns服务器地址1跟子网dns服务器地址2的合集的父集，不支持IPv6地址。 默认值：不填时为空，无法使用云内网DNS功能 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+                availabilityZone:
+                    type: string
+                    description: 功能说明：子网所在的可用分区标识 约束：系统存在的可用分区标识
+                extraDhcpOpts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ExtraDhcpOpts'
+                    description: 子网配置的NTP地址
+        CreateSubnetResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        CreateVpcRequest:
+            type: object
+            properties:
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                regionId:
+                    type: string
+                    description: 区域id
+                projectId:
+                    type: string
+                    description: project_id
+                cidr:
+                    type: string
+                    description: '功能说明:虚拟私有云下可用子网的范围  取值范围:    10.0.0.0/8 ~ 10.255.255.240/28    172.16.0.0/12 ~ 172.31.255.240/28    192.168.0.0/16 ~ 192.168.255.240/28 约束:必须是ipv4 cidr格式,例如:192.168.0.0/16'
+                name:
+                    type: string
+                    description: 虚拟私有云名称  取值范围:0-64个字符,支持数字、字母、中文、_(下划线)、-(中划线)、.(点)  约束:如果名称不为空,则同一个租户下的名称不能重复
+                description:
+                    type: string
+                    description: 虚拟私有云的描述  取值范围:0-255个字符,不能包含“<”和“>”。
+                enterpriseProjectId:
+                    type: string
+                    description: 企业项目ID。创建虚拟私有云时,给虚拟私有云绑定企业项目ID。  取值范围:最大长度36字节,带“-”连字符的UUID格式,或者是字符串“0”。“0”表示默认企业项目。  默认值:"0"
+        CreateVpcResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        DeleteInstancesRequest:
+            type: object
+            properties:
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                regionId:
+                    type: string
+                    description: 区域id
+                projectId:
+                    type: string
+                    description: project_id
+                deletePublicIp:
+                    type: boolean
+                    description: 配置删除云服务器是否删除云服务器绑定的弹性IP。如果选择不删除，则系统仅做解绑定操作，保留弹性IP资源。 取值为true或false，默认为false。   - true：删除云服务器时会同时删除绑定在云服务器上的弹性IP。  - false：删除云服务器时，仅解绑定在云服务器上的弹性IP，不删除弹性IP
+                deleteVolume:
+                    type: boolean
+                    description: 配置删除云服务器是否删除云服务器对应的数据盘，如果选择不删除，则系统仅做解绑定操作，保留云磁盘资源。 取值为false或true，默认为false。  - true：删除云服务器时会同时删除挂载在云服务器上的数据盘。 - false：删除云服务器时，仅卸载云服务器上挂载的数据盘，不删除该数据盘。
+                servers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ServerId'
+                    description: 所需要删除的云服务器列表。
+        DeleteInstancesResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        DeleteSubnetResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        DeleteVpcResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        ExtraDhcpOpts:
+            type: object
+            properties:
+                optName:
+                    type: string
+                    description: 功能说明：子网配置的NTP地址名称 约束：目前只支持字段“ntp”
+                optValue:
+                    type: string
+                    description: 功能说明：子网配置的NTP地址 约束：目前只支持IPv4地址，每个IP地址以逗号隔开，IP地址个数不能超过4个，不能存在相同地址。该字段为null表示取消该子网NTP的设置，不能为””(空字符串)。
+            description: 子网配置的NTP地址
+        ListImagesResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        ListInstanceTypesResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        ListInstancesResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        ListRegionsResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        ListSubnetsResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        ListVpcsResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        RebootInstancesRequest:
+            type: object
+            properties:
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                regionId:
+                    type: string
+                    description: 区域id
+                projectId:
+                    type: string
+                    description: project_id
+                servers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ServerId'
+                    description: 云服务器id列表
+                restartType:
+                    type: string
+                    description: 重启类型，默认为SOFT：  - SOFT：普通关机（默认）。 - HARD：强制关机。
+        RebootInstancesResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        ServerId:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: 云服务器ID。
+        ShowJobResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        ShowSubnetResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        ShowVpcResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        StartInstancesRequest:
+            type: object
+            properties:
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                regionId:
+                    type: string
+                    description: 区域id
+                projectId:
+                    type: string
+                    description: project_id
+                servers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ServerId'
+                    description: 云服务器id列表
+        StartInstancesResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        StopInstancesRequest:
+            type: object
+            properties:
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                regionId:
+                    type: string
+                    description: 区域id
+                projectId:
+                    type: string
+                    description: project_id
+                servers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ServerId'
+                    description: 云服务器id列表
+                stopType:
+                    type: string
+                    description: 关机类型，默认为SOFT：  - SOFT：普通关机（默认）。 - HARD：强制关机。
+        StopInstancesResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        UpdateSubnetRequest:
+            type: object
+            properties:
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                regionId:
+                    type: string
+                    description: 区域id
+                projectId:
+                    type: string
+                    description: project_id
+                vpcId:
+                    type: string
+                    description: 子网对应的vpc_id
+                subnetId:
+                    type: string
+                    description: 子网唯一标识
+                name:
+                    type: string
+                    description: 功能说明：子网名称 取值范围：1-64，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）
+                description:
+                    type: string
+                    description: 功能说明：子网描述 取值范围：0-255个字符，不能包含“<”和“>”。
+                ipv6Enable:
+                    type: boolean
+                    description: 功能说明：是否创建ipv6子网 取值范围：true（开启），false（关闭）
+                dhcpEnable:
+                    type: boolean
+                    description: 功能说明：子网是否开启dhcp功能 取值范围：true（开启），false（关闭） 约束：不填时默认为true。当设置为false时，会导致新创建的ECS无法获取IP地址，cloudinit无法注入账号密码，请谨慎操作。
+                primaryDns:
+                    type: string
+                    description: 功能说明：子网dns服务器地址1 约束：ip格式 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+                secondaryDns:
+                    type: string
+                    description: 功能说明：子网dns服务器地址2 约束：ip格式 默认值：不填时为空 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+                dnsList:
+                    type: array
+                    items:
+                        type: string
+                    description: 功能说明：子网dns服务器地址的集合；如果想使用两个以上dns服务器，请使用该字段。 约束：是子网dns服务器地址1跟子网dns服务器地址2的合集的父集 默认值：不填时为空，无法使用云内网DNS功能 [内网DNS地址请参见](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) [通过API获取请参见](https://support.huaweicloud.com/api-dns/dns_api_69001.html)
+                extraDhcpOpts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ExtraDhcpOpts'
+                    description: 子网配置的NTP地址
+        UpdateSubnetResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        UpdateVpcRequest:
+            type: object
+            properties:
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                regionId:
+                    type: string
+                    description: 区域id
+                projectId:
+                    type: string
+                    description: project_id
+                vpcId:
+                    type: string
+                    description: 虚拟私有云ID
+                cidr:
+                    type: string
+                    description: '功能说明:虚拟私有云下可用子网的范围  取值范围:    10.0.0.0/8 ~ 10.255.255.240/28    172.16.0.0/12 ~ 172.31.255.240/28    192.168.0.0/16 ~ 192.168.255.240/28 约束:必须是ipv4 cidr格式,例如:192.168.0.0/16'
+                name:
+                    type: string
+                    description: 虚拟私有云名称  取值范围:0-64个字符,支持数字、字母、中文、_(下划线)、-(中划线)、.(点)  约束:如果名称不为空,则同一个租户下的名称不能重复
+                description:
+                    type: string
+                    description: 虚拟私有云的描述  取值范围:0-255个字符,不能包含“<”和“>”。
+                routes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/VpcRoute'
+                    description: 路由信息列表
+        UpdateVpcResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Any'
+        VpcRoute:
+            type: object
+            properties:
+                destination:
+                    type: string
+                    description: 功能说明：路由目的地 取值范围：IP地址段 约束：仅支持配置默认路由，且其取值只能是0.0.0.0/0
+                nextHop:
+                    type: string
+                    description: 功能说明：路由下一跳IP地址 取值范围：ipv4地址格式 约束：nexthop仅支持所关联的子网范围内IP地址
+tags:
+    - name: Instance

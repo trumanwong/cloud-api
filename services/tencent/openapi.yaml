@@ -234,6 +234,17 @@ paths:
                                 $ref: '#/components/schemas/ListRegionsResponse'
 components:
     schemas:
+        Any:
+            type: object
+            properties:
+                typeUrl:
+                    type: string
+                    description: 'A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one "/" character. The last segment of the URL''s path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading "." is not accepted). In practice, teams usually precompile into the binary all types that they expect it to use in the context of Any. However, for URLs which use the scheme `http`, `https`, or no scheme, one can optionally set up a type server that maps type URLs to message definitions as follows: * If no scheme is provided, `https` is assumed. * An HTTP GET on the URL must yield a [google.protobuf.Type][]   value in binary format, or produce an error. * Applications are allowed to cache lookup results based on the   URL, or have them precompiled into a binary to avoid any   lookup. Therefore, binary compatibility needs to be preserved   on changes to types. (Use versioned type names to manage   breaking changes.) Note: this functionality is not currently available in the official protobuf release, and it is not used for type URLs beginning with type.googleapis.com. Schemes other than `http`, `https` (or the empty scheme) might be used with implementation specific semantics.'
+                value:
+                    type: string
+                    description: Must be a valid serialized protocol buffer of the above specified type.
+                    format: bytes
+            description: '`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message. Protobuf library provides support to pack/unpack Any values in the form of utility functions or additional generated methods of the Any type. Example 1: Pack and unpack a message in C++.     Foo foo = ...;     Any any;     any.PackFrom(foo);     ...     if (any.UnpackTo(&foo)) {       ...     } Example 2: Pack and unpack a message in Java.     Foo foo = ...;     Any any = Any.pack(foo);     ...     if (any.is(Foo.class)) {       foo = any.unpack(Foo.class);     } Example 3: Pack and unpack a message in Python.     foo = Foo(...)     any = Any()     any.Pack(foo)     ...     if any.Is(Foo.DESCRIPTOR):       any.Unpack(foo)       ... Example 4: Pack and unpack a message in Go      foo := &pb.Foo{...}      any, err := anypb.New(foo)      if err != nil {        ...      }      ...      foo := &pb.Foo{}      if err := any.UnmarshalTo(foo); err != nil {        ...      } The pack methods provided by protobuf library will by default use ''type.googleapis.com/full.type.name'' as the type URL and the unpack methods only use the fully qualified type name after the last ''/'' in the type URL, for example "foo.bar.com/x/y.z" will yield type name "y.z". JSON The JSON representation of an `Any` value uses the regular representation of the deserialized, embedded message, with an additional field `@type` which contains the type URL. Example:     package google.profile;     message Person {       string first_name = 1;       string last_name = 2;     }     {       "@type": "type.googleapis.com/google.profile.Person",       "firstName": <string>,       "lastName": <string>     } If the embedded message type is well-known and has a custom JSON representation, that representation will be embedded adding a field `value` which holds the custom JSON in addition to the `@type` field. Example (for message [google.protobuf.Duration][]):     {       "@type": "type.googleapis.com/google.protobuf.Duration",       "value": "1.212s"     }'
         CreateInstancesRequest:
             type: object
             properties:
@@ -268,14 +279,8 @@ components:
         CreateInstancesResponse:
             type: object
             properties:
-                requestId:
-                    type: string
-                    description: 请求id
-                instanceIdSets:
-                    type: array
-                    items:
-                        type: string
-                    description: 实例id列表
+                data:
+                    $ref: '#/components/schemas/Any'
         DeleteInstancesRequest:
             type: object
             properties:
@@ -294,372 +299,28 @@ components:
         DeleteInstancesResponse:
             type: object
             properties:
-                requestId:
-                    type: string
-                    description: 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-        Instance_DataDisk:
-            type: object
-            properties:
-                diskSize:
-                    type: integer
-                    description: 数据盘大小，单位：GB。最小调整步长为10G，不同数据盘类型取值范围不同，具体限制详见：[存储概述](https://cloud.tencent.com/document/product/213/4952)。默认值为0，表示不购买数据盘。更多限制详见产品文档。
-                    format: int64
-                diskType:
-                    type: string
-                    description: 数据盘类型。数据盘类型限制详见[存储概述](https://cloud.tencent.com/document/product/213/4952)。 取值范围：  LOCAL_BASIC：本地硬盘  LOCAL_SSD：本地SSD硬盘  LOCAL_NVME：本地NVME硬盘，与InstanceType强相关，不支持指定  LOCAL_PRO：本地HDD硬盘，与InstanceType强相关，不支持指定  CLOUD_BASIC：普通云硬盘  CLOUD_PREMIUM：高性能云硬盘  CLOUD_SSD：SSD云硬盘  CLOUD_HSSD：增强型SSD云硬盘  CLOUD_TSSD：极速型SSD云硬盘  默认取值：LOCAL_BASIC。  该参数对`ResizeInstanceDisk`接口无效。
-                throughputPerformance:
-                    type: integer
-                    description: 云硬盘性能，单位：MB/s 注意：此字段可能返回 0，表示取不到有效值。
-                    format: int64
-                cdcId:
-                    type: string
-                    description: 所属的独享集群ID。 注意：此字段可能返回 null，表示取不到有效值。
-        Instance_GPUInfo:
-            type: object
-            properties:
-                gpuCount:
-                    type: number
-                    description: 实例GPU个数。值小于1代表VGPU类型，大于1代表GPU直通类型。 注意：此字段可能返回 null，表示取不到有效值。
-                    format: float
-                gpuId:
-                    type: array
-                    items:
-                        type: string
-                    description: 实例GPU地址。 注意：此字段可能返回 null，表示取不到有效值。
-                gpuType:
-                    type: string
-                    description: 实例GPU类型。 注意：此字段可能返回 null，表示取不到有效值。
-        Instance_InternetAccessible:
-            type: object
-            properties:
-                internetChargeType:
-                    type: string
-                    description: 网络计费类型。 取值范围：  BANDWIDTH_PREPAID：预付费按带宽结算  TRAFFIC_POSTPAID_BY_HOUR：流量按小时后付费  BANDWIDTH_POSTPAID_BY_HOUR：带宽按小时后付费  BANDWIDTH_PACKAGE：带宽包用户 默认取值：非带宽包用户默认与子机付费类型保持一致。
-                internetMaxBandwidthOut:
-                    type: integer
-                    description: 公网出带宽上限，单位：Mbps。 默认值：0Mbps。 不同机型带宽上限范围不一致，具体限制详见[购买网络带宽](https://cloud.tencent.com/document/product/213/12523)。
-                    format: int64
-        Instance_LoginSettings:
-            type: object
-            properties:
-                password:
-                    type: string
-                    description: '实例登录密码。 不同操作系统类型密码复杂度限制不一样，具体如下：  Linux实例密码必须8到30位，至少包括两项[a-z]，[A-Z]、[0-9] 和 [( ) \` ~ ! @ # $ % ^ & *  - + = | { } [ ] : ; '' , . ? / ]中的特殊符号。  Windows实例密码必须12到30位，至少包括三项[a-z]，[A-Z]，[0-9] 和 [( ) \` ~ ! @ # $ % ^ & * - + = | { } [ ] : ; '' , . ? /]中的特殊符号。  若不指定该参数，则由系统随机生成密码，并通过站内信方式通知到用户。 注意：此字段可能返回 null，表示取不到有效值。'
-                keyIds:
-                    type: array
-                    items:
-                        type: string
-                    description: 密钥ID列表。 关联密钥后，就可以通过对应的私钥来访问实例； KeyId可通过接口[DescribeKeyPairs](https://cloud.tencent.com/document/api/213/15699)获取，密钥与密码不能同时指定，同时Windows操作系统不支持指定密钥。当前仅支持购买的时候指定一个密钥。 注意：此字段可能返回 null，表示取不到有效值。
-                keepImageLogin:
-                    type: string
-                    description: 保持镜像的原始设置。 该参数与Password或KeyIds.N不能同时指定。 只有使用自定义镜像、共享镜像或外部导入镜像创建实例时才能指定该参数为TRUE。 取值范围：  TRUE：表示保持镜像的登录设置  FALSE：表示不保持镜像的登录设置 默认取值：FALSE。 注意：此字段可能返回 null，表示取不到有效值。
-        Instance_Placement:
-            type: object
-            properties:
-                zone:
-                    type: string
-                    description: 实例所属的可用区ID。该参数可以通过调用  [DescribeZones](https://cloud.tencent.com/document/product/213/15707) 的返回值中的Zone字段来获取。
-                projectId:
-                    type: integer
-                    description: 实例所属项目ID。该参数可以通过调用 [DescribeProject](/document/api/378/4400) 的返回值中的 projectId 字段来获取。不填为默认项目。
-                    format: int64
-                hostIds:
-                    type: array
-                    items:
-                        type: string
-                    description: 实例所属的专用宿主机ID列表，仅用于入参。如果您有购买专用宿主机并且指定了该参数，则您购买的实例就会随机的部署在这些专用宿主机上。
-                hostIps:
-                    type: array
-                    items:
-                        type: string
-                    description: 指定母机ip生产子机
-                hostId:
-                    type: string
-                    description: 实例所属的专用宿主机ID，仅用于出参。
-        Instance_Tag:
-            type: object
-            properties:
-                key:
-                    type: string
-                    description: 标签键
-                value:
-                    type: string
-                    description: 标签值
-        Instance_VirtualPrivateCloud:
-            type: object
-            properties:
-                vpcId:
-                    type: string
-                    description: 私有网络ID，形如`vpc-xxx`。有效的VpcId可通过登录[控制台](https://console.cloud.tencent.com/vpc/vpc?rid=1)查询；也可以调用接口 [DescribeVpcEx](/document/api/215/1372) ，从接口返回中的`unVpcId`字段获取。若在创建子机时VpcId与SubnetId同时传入`DEFAULT`，则强制使用默认vpc网络。
-                subnetId:
-                    type: string
-                    description: 私有网络子网ID，形如`subnet-xxx`。有效的私有网络子网ID可通过登录[控制台](https://console.cloud.tencent.com/vpc/subnet?rid=1)查询；也可以调用接口  [DescribeSubnets](/document/api/215/15784) ，从接口返回中的`unSubnetId`字段获取。若在创建子机时SubnetId与VpcId同时传入`DEFAULT`，则强制使用默认vpc网络。
-                asVpcGateway:
-                    type: boolean
-                    description: 是否用作公网网关。 公网网关只有在实例拥有公网IP以及处于私有网络下时才能正常使用。 取值范围：  TRUE：表示用作公网网关  FALSE：表示不作为公网网关 默认取值：FALSE。
-                privateIpAddresses:
-                    type: array
-                    items:
-                        type: string
-                    description: 私有网络子网 IP 数组，在创建实例、修改实例vpc属性操作中可使用此参数。当前仅批量创建多台实例时支持传入相同子网的多个 IP。
-                ipv6AddressCount:
-                    type: integer
-                    description: 为弹性网卡指定随机生成的 IPv6 地址数量。
-                    format: uint64
+                data:
+                    $ref: '#/components/schemas/Any'
         ListImagesResponse:
             type: object
             properties:
-                images:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ListImagesResponse_Image'
-                    description: 一个关于镜像详细信息的结构体，主要包括镜像的主要状态与属性。
-                totalCount:
-                    type: integer
-                    description: 符合要求的镜像数量
-                    format: int64
-                requestId:
-                    type: string
-                    description: 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-        ListImagesResponse_Image:
-            type: object
-            properties:
-                imageId:
-                    type: string
-                    description: 镜像ID
-                osName:
-                    type: string
-                    description: 镜像操作系统
-                imageType:
-                    type: string
-                    description: 镜像类型
-                createdTime:
-                    type: string
-                    description: 镜像创建时间
-                imageName:
-                    type: string
-                    description: 镜像名称
-                imageDescription:
-                    type: string
-                    description: 镜像描述
-                imageSize:
-                    type: integer
-                    description: 镜像大小
-                    format: int64
-                architecture:
-                    type: string
-                    description: 镜像架构
-                imageState:
-                    type: string
-                    description: '镜像状态: CREATING-创建中 NORMAL-正常 CREATEFAILED-创建失败 USING-使用中 SYNCING-同步中 IMPORTING-导入中 IMPORTFAILED-导入失败'
-                platform:
-                    type: string
-                    description: 镜像来源平台
-                imageCreator:
-                    type: string
-                    description: 镜像创建者
-                imageSource:
-                    type: string
-                    description: 镜像来源
-            description: 镜像详细信息
+                data:
+                    $ref: '#/components/schemas/Any'
         ListInstanceTypesResponse:
             type: object
             properties:
-                instanceTypes:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ListInstanceTypesResponse_InstanceType'
-                requestId:
-                    type: string
-                    description: 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-        ListInstanceTypesResponse_InstanceType:
-            type: object
-            properties:
-                zone:
-                    type: string
-                    description: 可用区。
-                instanceType:
-                    type: string
-                    description: 实例机型。
-                instanceFamily:
-                    type: string
-                    description: 实例机型系列。
-                gpu:
-                    type: integer
-                    description: GPU核数，单位：核。
-                    format: int64
-                cpu:
-                    type: integer
-                    description: CPU核数，单位：核。
-                    format: int64
-                memory:
-                    type: integer
-                    description: 内存容量，单位：`GB`。
-                    format: int64
-                fpga:
-                    type: integer
-                    description: FPGA核数，单位：核。
-                    format: int64
+                data:
+                    $ref: '#/components/schemas/Any'
         ListInstancesResponse:
             type: object
             properties:
-                totalCount:
-                    type: integer
-                    description: 符合条件的实例数量
-                    format: int64
-                instances:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ListInstancesResponse_Instance'
-                    description: 实例详细信息列表
-                requestId:
-                    type: string
-                    description: 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-        ListInstancesResponse_Instance:
-            type: object
-            properties:
-                placement:
-                    $ref: '#/components/schemas/Instance_Placement'
-                instanceId:
-                    type: string
-                    description: 实例`ID`。
-                instanceType:
-                    type: string
-                    description: 实例机型。
-                cpu:
-                    type: integer
-                    description: 实例的CPU核数，单位：核。
-                    format: int64
-                memory:
-                    type: integer
-                    description: 实例内存容量，单位：`GB`。
-                    format: int64
-                restrictState:
-                    type: string
-                    description: 实例业务状态。 取值范围：  NORMAL：表示正常状态的实例  EXPIRED：表示过期的实例  PROTECTIVELY_ISOLATED：表示被安全隔离的实例。
-                instanceName:
-                    type: string
-                    description: 实例名称。
-                instanceChargeType:
-                    type: string
-                    description: 实例计费模式。 取值范围：  `PREPAID`：表示预付费，即包年包月  `POSTPAID_BY_HOUR`：表示后付费，即按量计费  `CDHPAID`：`CDH`付费，即只对`CDH`计费，不对`CDH`上的实例计费。  `SPOTPAID`：表示竞价实例付费。
-                systemDisk:
-                    $ref: '#/components/schemas/SystemDisk'
-                dataDisks:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Instance_DataDisk'
-                    description: 实例数据盘信息。
-                privateIpAddresses:
-                    type: array
-                    items:
-                        type: string
-                    description: 实例主网卡的内网`IP`列表。
-                publicIpAddresses:
-                    type: array
-                    items:
-                        type: string
-                    description: 实例主网卡的公网`IP`列表。 注意：此字段可能返回 null，表示取不到有效值。
-                internetAccessible:
-                    $ref: '#/components/schemas/Instance_InternetAccessible'
-                virtualPrivateCloud:
-                    $ref: '#/components/schemas/Instance_VirtualPrivateCloud'
-                imageId:
-                    type: string
-                    description: 生产实例所使用的镜像`ID`。
-                renewFlag:
-                    type: string
-                    description: 自动续费标识。 取值范围：  `NOTIFY_AND_MANUAL_RENEW`：表示通知即将过期，但不自动续费  `NOTIFY_AND_AUTO_RENEW`：表示通知即将过期，而且自动续费  `DISABLE_NOTIFY_AND_MANUAL_RENEW`：表示不通知即将过期，也不自动续费。 注意：后付费模式本项为null
-                createdTime:
-                    type: string
-                    description: 创建时间。 按照`ISO8601`标准表示，并且使用`UTC`时间。格式为：`YYYY-MM-DDThh:mm:ssZ`。
-                expiredTime:
-                    type: string
-                    description: 到期时间。 按照`ISO8601`标准表示，并且使用`UTC`时间。格式为：`YYYY-MM-DDThh:mm:ssZ`。 注意：后付费模式本项为null
-                osName:
-                    type: string
-                    description: 操作系统名称。
-                securityGroupIds:
-                    type: array
-                    items:
-                        type: string
-                    description: 实例所属安全组。 该参数可以通过调用 [DescribeSecurityGroups](https://cloud.tencent.com/document/api/215/15808) 的返回值中的sgId字段来获取。
-                loginSettings:
-                    $ref: '#/components/schemas/Instance_LoginSettings'
-                instanceState:
-                    type: string
-                    description: 实例状态。 取值范围：  PENDING：表示创建中  LAUNCH_FAILED：表示创建失败  RUNNING：表示运行中  STOPPED：表示关机  STARTING：表示开机中  STOPPING：表示关机中  REBOOTING：表示重启中  SHUTDOWN：表示停止待销毁  TERMINATING：表示销毁中。
-                tags:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Instance_Tag'
-                    description: 实例关联的标签列表。
-                stopChargingMode:
-                    type: string
-                    description: 实例的关机计费模式。 取值范围：  KEEP_CHARGING：关机继续收费  STOP_CHARGING：关机停止收费  NOT_APPLICABLE：实例处于非关机状态或者不适用关机停止计费的条件
-                uuid:
-                    type: string
-                    description: 实例全局唯一ID
-                latestOperation:
-                    type: string
-                    description: 实例的最新操作。例：StopInstances、ResetInstance。 注意：此字段可能返回 null，表示取不到有效值。
-                latestOperationState:
-                    type: string
-                    description: 实例的最新操作状态。 取值范围：  SUCCESS：表示操作成功  OPERATING：表示操作执行中  FAILED：表示操作失败 注意：此字段可能返回 null，表示取不到有效值。
-                latestOperationRequestId:
-                    type: string
-                    description: 实例最新操作的唯一请求 ID。 注意：此字段可能返回 null，表示取不到有效值。
-                disasterRecoverGroupId:
-                    type: string
-                    description: 分散置放群组ID。 注意：此字段可能返回 null，表示取不到有效值。
-                ipv6Addresses:
-                    type: array
-                    items:
-                        type: string
-                    description: 实例的IPv6地址。 注意：此字段可能返回 null，表示取不到有效值。
-                camRoleName:
-                    type: string
-                    description: CAM角色名。 注意：此字段可能返回 null，表示取不到有效值。
-                hpcClusterId:
-                    type: string
-                    description: 高性能计算集群`ID`。 注意：此字段可能返回 null，表示取不到有效值。
-                rdmaIpAddresses:
-                    type: array
-                    items:
-                        type: string
-                    description: 高性能计算集群`IP`列表。 注意：此字段可能返回 null，表示取不到有效值。
-                isolatedSource:
-                    type: string
-                    description: 实例隔离类型。 取值范围：  ARREAR：表示欠费隔离  EXPIRE：表示到期隔离  MANMADE：表示主动退还隔离  NOTISOLATED：表示未隔离 注意：此字段可能返回 null，表示取不到有效值。
-                gpuInfo:
-                    $ref: '#/components/schemas/Instance_GPUInfo'
+                data:
+                    $ref: '#/components/schemas/Any'
         ListRegionsResponse:
             type: object
             properties:
-                totalCount:
-                    type: integer
-                    description: 地域数量
-                    format: uint64
-                regions:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ListRegionsResponse_Region'
-                    description: 地域列表信息
-                requestId:
-                    type: string
-                    description: 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
-        ListRegionsResponse_Region:
-            type: object
-            properties:
-                region:
-                    type: string
-                    description: 地域名称，例如，ap-guangzhou
-                regionName:
-                    type: string
-                    description: 地域描述，例如，华南地区(广州)
-                regionState:
-                    type: string
-                    description: 地域是否可用状态
+                data:
+                    $ref: '#/components/schemas/Any'
         RebootInstancesRequest:
             type: object
             properties:
@@ -681,9 +342,8 @@ components:
         RebootInstancesResponse:
             type: object
             properties:
-                requestId:
-                    type: string
-                    description: 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
+                data:
+                    $ref: '#/components/schemas/Any'
         StartInstancesRequest:
             type: object
             properties:
@@ -702,9 +362,8 @@ components:
         StartInstancesResponse:
             type: object
             properties:
-                requestId:
-                    type: string
-                    description: 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
+                data:
+                    $ref: '#/components/schemas/Any'
         StopInstancesRequest:
             type: object
             properties:
@@ -729,9 +388,8 @@ components:
         StopInstancesResponse:
             type: object
             properties:
-                requestId:
-                    type: string
-                    description: 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
+                data:
+                    $ref: '#/components/schemas/Any'
         SystemDisk:
             type: object
             properties:

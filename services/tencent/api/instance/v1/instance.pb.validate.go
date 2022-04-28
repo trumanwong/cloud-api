@@ -35,6 +35,117 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on SystemDisk with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *SystemDisk) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SystemDisk with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SystemDiskMultiError, or
+// nil if none found.
+func (m *SystemDisk) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SystemDisk) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.DiskType != nil {
+		// no validation rules for DiskType
+	}
+
+	if m.DiskSize != nil {
+		// no validation rules for DiskSize
+	}
+
+	if m.CdcId != nil {
+		// no validation rules for CdcId
+	}
+
+	if len(errors) > 0 {
+		return SystemDiskMultiError(errors)
+	}
+
+	return nil
+}
+
+// SystemDiskMultiError is an error wrapping multiple validation errors
+// returned by SystemDisk.ValidateAll() if the designated constraints aren't met.
+type SystemDiskMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SystemDiskMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SystemDiskMultiError) AllErrors() []error { return m }
+
+// SystemDiskValidationError is the validation error returned by
+// SystemDisk.Validate if the designated constraints aren't met.
+type SystemDiskValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SystemDiskValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SystemDiskValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SystemDiskValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SystemDiskValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SystemDiskValidationError) ErrorName() string { return "SystemDiskValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SystemDiskValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSystemDisk.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SystemDiskValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SystemDiskValidationError{}
+
 // Validate checks the field values on CreateInstancesRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -278,8 +389,33 @@ func (m *CreateInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -509,117 +645,6 @@ var _ interface {
 	ErrorName() string
 } = ListInstancesRequestValidationError{}
 
-// Validate checks the field values on SystemDisk with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *SystemDisk) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on SystemDisk with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in SystemDiskMultiError, or
-// nil if none found.
-func (m *SystemDisk) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *SystemDisk) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.DiskType != nil {
-		// no validation rules for DiskType
-	}
-
-	if m.DiskSize != nil {
-		// no validation rules for DiskSize
-	}
-
-	if m.CdcId != nil {
-		// no validation rules for CdcId
-	}
-
-	if len(errors) > 0 {
-		return SystemDiskMultiError(errors)
-	}
-
-	return nil
-}
-
-// SystemDiskMultiError is an error wrapping multiple validation errors
-// returned by SystemDisk.ValidateAll() if the designated constraints aren't met.
-type SystemDiskMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SystemDiskMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SystemDiskMultiError) AllErrors() []error { return m }
-
-// SystemDiskValidationError is the validation error returned by
-// SystemDisk.Validate if the designated constraints aren't met.
-type SystemDiskValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SystemDiskValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SystemDiskValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SystemDiskValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SystemDiskValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SystemDiskValidationError) ErrorName() string { return "SystemDiskValidationError" }
-
-// Error satisfies the builtin error interface
-func (e SystemDiskValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSystemDisk.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SystemDiskValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SystemDiskValidationError{}
-
 // Validate checks the field values on ListInstancesResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -642,46 +667,33 @@ func (m *ListInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetInstances() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListInstancesResponseValidationError{
-						field:  fmt.Sprintf("Instances[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListInstancesResponseValidationError{
-						field:  fmt.Sprintf("Instances[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListInstancesResponseValidationError{
-					field:  fmt.Sprintf("Instances[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListInstancesResponseValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
-	}
-
-	if m.TotalCount != nil {
-		// no validation rules for TotalCount
-	}
-
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -910,46 +922,33 @@ func (m *ListRegionsResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetRegions() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListRegionsResponseValidationError{
-						field:  fmt.Sprintf("Regions[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListRegionsResponseValidationError{
-						field:  fmt.Sprintf("Regions[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListRegionsResponseValidationError{
-					field:  fmt.Sprintf("Regions[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListRegionsResponseValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListRegionsResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
-	}
-
-	if m.TotalCount != nil {
-		// no validation rules for TotalCount
-	}
-
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListRegionsResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -1208,46 +1207,33 @@ func (m *ListImagesResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetImages() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListImagesResponseValidationError{
-						field:  fmt.Sprintf("Images[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListImagesResponseValidationError{
-						field:  fmt.Sprintf("Images[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListImagesResponseValidationError{
-					field:  fmt.Sprintf("Images[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListImagesResponseValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListImagesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
-	}
-
-	if m.TotalCount != nil {
-		// no validation rules for TotalCount
-	}
-
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListImagesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -1487,42 +1473,33 @@ func (m *ListInstanceTypesResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetInstanceTypes() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListInstanceTypesResponseValidationError{
-						field:  fmt.Sprintf("InstanceTypes[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListInstanceTypesResponseValidationError{
-						field:  fmt.Sprintf("InstanceTypes[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListInstanceTypesResponseValidationError{
-					field:  fmt.Sprintf("InstanceTypes[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListInstanceTypesResponseValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListInstanceTypesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
-	}
-
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListInstanceTypesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -1762,8 +1739,33 @@ func (m *StartInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StartInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StartInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StartInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -2011,8 +2013,33 @@ func (m *StopInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StopInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StopInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StopInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -2256,8 +2283,33 @@ func (m *RebootInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RebootInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RebootInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RebootInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -2497,8 +2549,33 @@ func (m *DeleteInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DeleteInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DeleteInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DeleteInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -2580,1667 +2657,3 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteInstancesResponseValidationError{}
-
-// Validate checks the field values on ListInstancesResponse_Instance with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ListInstancesResponse_Instance with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// ListInstancesResponse_InstanceMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetPlacement()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "Placement",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "Placement",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetPlacement()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListInstancesResponse_InstanceValidationError{
-				field:  "Placement",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetSystemDisk()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "SystemDisk",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "SystemDisk",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetSystemDisk()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListInstancesResponse_InstanceValidationError{
-				field:  "SystemDisk",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	for idx, item := range m.GetDataDisks() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListInstancesResponse_InstanceValidationError{
-						field:  fmt.Sprintf("DataDisks[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListInstancesResponse_InstanceValidationError{
-						field:  fmt.Sprintf("DataDisks[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListInstancesResponse_InstanceValidationError{
-					field:  fmt.Sprintf("DataDisks[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if all {
-		switch v := interface{}(m.GetInternetAccessible()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "InternetAccessible",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "InternetAccessible",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetInternetAccessible()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListInstancesResponse_InstanceValidationError{
-				field:  "InternetAccessible",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetVirtualPrivateCloud()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "VirtualPrivateCloud",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "VirtualPrivateCloud",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetVirtualPrivateCloud()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListInstancesResponse_InstanceValidationError{
-				field:  "VirtualPrivateCloud",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetLoginSettings()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "LoginSettings",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "LoginSettings",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetLoginSettings()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListInstancesResponse_InstanceValidationError{
-				field:  "LoginSettings",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	for idx, item := range m.GetTags() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListInstancesResponse_InstanceValidationError{
-						field:  fmt.Sprintf("Tags[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListInstancesResponse_InstanceValidationError{
-						field:  fmt.Sprintf("Tags[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListInstancesResponse_InstanceValidationError{
-					field:  fmt.Sprintf("Tags[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if all {
-		switch v := interface{}(m.GetGpuInfo()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "GpuInfo",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "GpuInfo",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetGpuInfo()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListInstancesResponse_InstanceValidationError{
-				field:  "GpuInfo",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.InstanceId != nil {
-		// no validation rules for InstanceId
-	}
-
-	if m.InstanceType != nil {
-		// no validation rules for InstanceType
-	}
-
-	if m.Cpu != nil {
-		// no validation rules for Cpu
-	}
-
-	if m.Memory != nil {
-		// no validation rules for Memory
-	}
-
-	if m.RestrictState != nil {
-		// no validation rules for RestrictState
-	}
-
-	if m.InstanceName != nil {
-		// no validation rules for InstanceName
-	}
-
-	if m.InstanceChargeType != nil {
-		// no validation rules for InstanceChargeType
-	}
-
-	if m.ImageId != nil {
-		// no validation rules for ImageId
-	}
-
-	if m.RenewFlag != nil {
-		// no validation rules for RenewFlag
-	}
-
-	if m.CreatedTime != nil {
-		// no validation rules for CreatedTime
-	}
-
-	if m.ExpiredTime != nil {
-		// no validation rules for ExpiredTime
-	}
-
-	if m.OsName != nil {
-		// no validation rules for OsName
-	}
-
-	if m.InstanceState != nil {
-		// no validation rules for InstanceState
-	}
-
-	if m.StopChargingMode != nil {
-		// no validation rules for StopChargingMode
-	}
-
-	if m.Uuid != nil {
-		// no validation rules for Uuid
-	}
-
-	if m.LatestOperation != nil {
-		// no validation rules for LatestOperation
-	}
-
-	if m.LatestOperationState != nil {
-		// no validation rules for LatestOperationState
-	}
-
-	if m.LatestOperationRequestId != nil {
-		// no validation rules for LatestOperationRequestId
-	}
-
-	if m.DisasterRecoverGroupId != nil {
-		// no validation rules for DisasterRecoverGroupId
-	}
-
-	if m.CamRoleName != nil {
-		// no validation rules for CamRoleName
-	}
-
-	if m.HpcClusterId != nil {
-		// no validation rules for HpcClusterId
-	}
-
-	if m.IsolatedSource != nil {
-		// no validation rules for IsolatedSource
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_InstanceMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_InstanceMultiError is an error wrapping multiple
-// validation errors returned by ListInstancesResponse_Instance.ValidateAll()
-// if the designated constraints aren't met.
-type ListInstancesResponse_InstanceMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_InstanceMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_InstanceMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_InstanceValidationError is the validation error
-// returned by ListInstancesResponse_Instance.Validate if the designated
-// constraints aren't met.
-type ListInstancesResponse_InstanceValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_InstanceValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_InstanceValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_InstanceValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_InstanceValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_InstanceValidationError) ErrorName() string {
-	return "ListInstancesResponse_InstanceValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_InstanceValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_InstanceValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_InstanceValidationError{}
-
-// Validate checks the field values on ListInstancesResponse_Instance_Placement
-// with the rules defined in the proto definition for this message. If any
-// rules are violated, the first error encountered is returned, or nil if
-// there are no violations.
-func (m *ListInstancesResponse_Instance_Placement) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_Placement with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
-// ListInstancesResponse_Instance_PlacementMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_Placement) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_Placement) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.Zone != nil {
-		// no validation rules for Zone
-	}
-
-	if m.ProjectId != nil {
-		// no validation rules for ProjectId
-	}
-
-	if m.HostId != nil {
-		// no validation rules for HostId
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_PlacementMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_PlacementMultiError is an error wrapping
-// multiple validation errors returned by
-// ListInstancesResponse_Instance_Placement.ValidateAll() if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_PlacementMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_PlacementMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_PlacementMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_PlacementValidationError is the validation
-// error returned by ListInstancesResponse_Instance_Placement.Validate if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_PlacementValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_PlacementValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_PlacementValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_PlacementValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_PlacementValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_PlacementValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_PlacementValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_PlacementValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_Placement.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_PlacementValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_PlacementValidationError{}
-
-// Validate checks the field values on ListInstancesResponse_Instance_DataDisk
-// with the rules defined in the proto definition for this message. If any
-// rules are violated, the first error encountered is returned, or nil if
-// there are no violations.
-func (m *ListInstancesResponse_Instance_DataDisk) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_DataDisk with the rules defined in the proto
-// definition for this message. If any rules are violated, the result is a
-// list of violation errors wrapped in
-// ListInstancesResponse_Instance_DataDiskMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_DataDisk) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_DataDisk) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.DiskSize != nil {
-		// no validation rules for DiskSize
-	}
-
-	if m.DiskType != nil {
-		// no validation rules for DiskType
-	}
-
-	if m.ThroughputPerformance != nil {
-		// no validation rules for ThroughputPerformance
-	}
-
-	if m.CdcId != nil {
-		// no validation rules for CdcId
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_DataDiskMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_DataDiskMultiError is an error wrapping
-// multiple validation errors returned by
-// ListInstancesResponse_Instance_DataDisk.ValidateAll() if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_DataDiskMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_DataDiskMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_DataDiskMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_DataDiskValidationError is the validation
-// error returned by ListInstancesResponse_Instance_DataDisk.Validate if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_DataDiskValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_DataDiskValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_DataDiskValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_DataDiskValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_DataDiskValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_DataDiskValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_DataDiskValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_DataDiskValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_DataDisk.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_DataDiskValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_DataDiskValidationError{}
-
-// Validate checks the field values on
-// ListInstancesResponse_Instance_InternetAccessible with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance_InternetAccessible) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_InternetAccessible with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in
-// ListInstancesResponse_Instance_InternetAccessibleMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_InternetAccessible) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_InternetAccessible) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.InternetChargeType != nil {
-		// no validation rules for InternetChargeType
-	}
-
-	if m.InternetMaxBandwidthOut != nil {
-		// no validation rules for InternetMaxBandwidthOut
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_InternetAccessibleMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_InternetAccessibleMultiError is an error
-// wrapping multiple validation errors returned by
-// ListInstancesResponse_Instance_InternetAccessible.ValidateAll() if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_InternetAccessibleMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_InternetAccessibleMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_InternetAccessibleMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_InternetAccessibleValidationError is the
-// validation error returned by
-// ListInstancesResponse_Instance_InternetAccessible.Validate if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_InternetAccessibleValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_InternetAccessibleValidationError) Field() string {
-	return e.field
-}
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_InternetAccessibleValidationError) Reason() string {
-	return e.reason
-}
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_InternetAccessibleValidationError) Cause() error {
-	return e.cause
-}
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_InternetAccessibleValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_InternetAccessibleValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_InternetAccessibleValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_InternetAccessibleValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_InternetAccessible.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_InternetAccessibleValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_InternetAccessibleValidationError{}
-
-// Validate checks the field values on
-// ListInstancesResponse_Instance_VirtualPrivateCloud with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance_VirtualPrivateCloud) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_VirtualPrivateCloud with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in
-// ListInstancesResponse_Instance_VirtualPrivateCloudMultiError, or nil if
-// none found.
-func (m *ListInstancesResponse_Instance_VirtualPrivateCloud) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_VirtualPrivateCloud) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.VpcId != nil {
-		// no validation rules for VpcId
-	}
-
-	if m.SubnetId != nil {
-		// no validation rules for SubnetId
-	}
-
-	if m.AsVpcGateway != nil {
-		// no validation rules for AsVpcGateway
-	}
-
-	if m.Ipv6AddressCount != nil {
-		// no validation rules for Ipv6AddressCount
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_VirtualPrivateCloudMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_VirtualPrivateCloudMultiError is an error
-// wrapping multiple validation errors returned by
-// ListInstancesResponse_Instance_VirtualPrivateCloud.ValidateAll() if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_VirtualPrivateCloudMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_VirtualPrivateCloudMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_VirtualPrivateCloudMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_VirtualPrivateCloudValidationError is the
-// validation error returned by
-// ListInstancesResponse_Instance_VirtualPrivateCloud.Validate if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_VirtualPrivateCloudValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_VirtualPrivateCloudValidationError) Field() string {
-	return e.field
-}
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_VirtualPrivateCloudValidationError) Reason() string {
-	return e.reason
-}
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_VirtualPrivateCloudValidationError) Cause() error {
-	return e.cause
-}
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_VirtualPrivateCloudValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_VirtualPrivateCloudValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_VirtualPrivateCloudValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_VirtualPrivateCloudValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_VirtualPrivateCloud.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_VirtualPrivateCloudValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_VirtualPrivateCloudValidationError{}
-
-// Validate checks the field values on
-// ListInstancesResponse_Instance_LoginSettings with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance_LoginSettings) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_LoginSettings with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
-// ListInstancesResponse_Instance_LoginSettingsMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_LoginSettings) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_LoginSettings) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.Password != nil {
-		// no validation rules for Password
-	}
-
-	if m.KeepImageLogin != nil {
-		// no validation rules for KeepImageLogin
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_LoginSettingsMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_LoginSettingsMultiError is an error wrapping
-// multiple validation errors returned by
-// ListInstancesResponse_Instance_LoginSettings.ValidateAll() if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_LoginSettingsMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_LoginSettingsMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_LoginSettingsMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_LoginSettingsValidationError is the
-// validation error returned by
-// ListInstancesResponse_Instance_LoginSettings.Validate if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_LoginSettingsValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_LoginSettingsValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_LoginSettingsValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_LoginSettingsValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_LoginSettingsValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_LoginSettingsValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_LoginSettingsValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_LoginSettingsValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_LoginSettings.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_LoginSettingsValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_LoginSettingsValidationError{}
-
-// Validate checks the field values on ListInstancesResponse_Instance_Tag with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the first error encountered is returned, or nil if there are
-// no violations.
-func (m *ListInstancesResponse_Instance_Tag) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ListInstancesResponse_Instance_Tag
-// with the rules defined in the proto definition for this message. If any
-// rules are violated, the result is a list of violation errors wrapped in
-// ListInstancesResponse_Instance_TagMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_Tag) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_Tag) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.Key != nil {
-		// no validation rules for Key
-	}
-
-	if m.Value != nil {
-		// no validation rules for Value
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_TagMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_TagMultiError is an error wrapping multiple
-// validation errors returned by
-// ListInstancesResponse_Instance_Tag.ValidateAll() if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_TagMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_TagMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_TagMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_TagValidationError is the validation error
-// returned by ListInstancesResponse_Instance_Tag.Validate if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_TagValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_TagValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_TagValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_TagValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_TagValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_TagValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_TagValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_TagValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_Tag.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_TagValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_TagValidationError{}
-
-// Validate checks the field values on ListInstancesResponse_Instance_GPUInfo
-// with the rules defined in the proto definition for this message. If any
-// rules are violated, the first error encountered is returned, or nil if
-// there are no violations.
-func (m *ListInstancesResponse_Instance_GPUInfo) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_GPUInfo with the rules defined in the proto
-// definition for this message. If any rules are violated, the result is a
-// list of violation errors wrapped in
-// ListInstancesResponse_Instance_GPUInfoMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_GPUInfo) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_GPUInfo) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.GpuCount != nil {
-		// no validation rules for GpuCount
-	}
-
-	if m.GpuType != nil {
-		// no validation rules for GpuType
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_GPUInfoMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_GPUInfoMultiError is an error wrapping
-// multiple validation errors returned by
-// ListInstancesResponse_Instance_GPUInfo.ValidateAll() if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_GPUInfoMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_GPUInfoMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_GPUInfoMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_GPUInfoValidationError is the validation
-// error returned by ListInstancesResponse_Instance_GPUInfo.Validate if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_GPUInfoValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_GPUInfoValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_GPUInfoValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_GPUInfoValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_GPUInfoValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_GPUInfoValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_GPUInfoValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_GPUInfoValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_GPUInfo.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_GPUInfoValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_GPUInfoValidationError{}
-
-// Validate checks the field values on ListRegionsResponse_Region with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ListRegionsResponse_Region) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ListRegionsResponse_Region with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ListRegionsResponse_RegionMultiError, or nil if none found.
-func (m *ListRegionsResponse_Region) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListRegionsResponse_Region) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.Region != nil {
-		// no validation rules for Region
-	}
-
-	if m.RegionName != nil {
-		// no validation rules for RegionName
-	}
-
-	if m.RegionState != nil {
-		// no validation rules for RegionState
-	}
-
-	if len(errors) > 0 {
-		return ListRegionsResponse_RegionMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListRegionsResponse_RegionMultiError is an error wrapping multiple
-// validation errors returned by ListRegionsResponse_Region.ValidateAll() if
-// the designated constraints aren't met.
-type ListRegionsResponse_RegionMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListRegionsResponse_RegionMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListRegionsResponse_RegionMultiError) AllErrors() []error { return m }
-
-// ListRegionsResponse_RegionValidationError is the validation error returned
-// by ListRegionsResponse_Region.Validate if the designated constraints aren't met.
-type ListRegionsResponse_RegionValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListRegionsResponse_RegionValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListRegionsResponse_RegionValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListRegionsResponse_RegionValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListRegionsResponse_RegionValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListRegionsResponse_RegionValidationError) ErrorName() string {
-	return "ListRegionsResponse_RegionValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListRegionsResponse_RegionValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListRegionsResponse_Region.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListRegionsResponse_RegionValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListRegionsResponse_RegionValidationError{}
-
-// Validate checks the field values on ListImagesResponse_Image with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ListImagesResponse_Image) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ListImagesResponse_Image with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ListImagesResponse_ImageMultiError, or nil if none found.
-func (m *ListImagesResponse_Image) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListImagesResponse_Image) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.ImageId != nil {
-		// no validation rules for ImageId
-	}
-
-	if m.OsName != nil {
-		// no validation rules for OsName
-	}
-
-	if m.ImageType != nil {
-		// no validation rules for ImageType
-	}
-
-	if m.CreatedTime != nil {
-		// no validation rules for CreatedTime
-	}
-
-	if m.ImageName != nil {
-		// no validation rules for ImageName
-	}
-
-	if m.ImageDescription != nil {
-		// no validation rules for ImageDescription
-	}
-
-	if m.ImageSize != nil {
-		// no validation rules for ImageSize
-	}
-
-	if m.Architecture != nil {
-		// no validation rules for Architecture
-	}
-
-	if m.ImageState != nil {
-		// no validation rules for ImageState
-	}
-
-	if m.Platform != nil {
-		// no validation rules for Platform
-	}
-
-	if m.ImageCreator != nil {
-		// no validation rules for ImageCreator
-	}
-
-	if m.ImageSource != nil {
-		// no validation rules for ImageSource
-	}
-
-	if len(errors) > 0 {
-		return ListImagesResponse_ImageMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListImagesResponse_ImageMultiError is an error wrapping multiple validation
-// errors returned by ListImagesResponse_Image.ValidateAll() if the designated
-// constraints aren't met.
-type ListImagesResponse_ImageMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListImagesResponse_ImageMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListImagesResponse_ImageMultiError) AllErrors() []error { return m }
-
-// ListImagesResponse_ImageValidationError is the validation error returned by
-// ListImagesResponse_Image.Validate if the designated constraints aren't met.
-type ListImagesResponse_ImageValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListImagesResponse_ImageValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListImagesResponse_ImageValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListImagesResponse_ImageValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListImagesResponse_ImageValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListImagesResponse_ImageValidationError) ErrorName() string {
-	return "ListImagesResponse_ImageValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListImagesResponse_ImageValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListImagesResponse_Image.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListImagesResponse_ImageValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListImagesResponse_ImageValidationError{}
-
-// Validate checks the field values on ListInstanceTypesResponse_InstanceType
-// with the rules defined in the proto definition for this message. If any
-// rules are violated, the first error encountered is returned, or nil if
-// there are no violations.
-func (m *ListInstanceTypesResponse_InstanceType) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstanceTypesResponse_InstanceType with the rules defined in the proto
-// definition for this message. If any rules are violated, the result is a
-// list of violation errors wrapped in
-// ListInstanceTypesResponse_InstanceTypeMultiError, or nil if none found.
-func (m *ListInstanceTypesResponse_InstanceType) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstanceTypesResponse_InstanceType) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.Zone != nil {
-		// no validation rules for Zone
-	}
-
-	if m.InstanceType != nil {
-		// no validation rules for InstanceType
-	}
-
-	if m.InstanceFamily != nil {
-		// no validation rules for InstanceFamily
-	}
-
-	if m.Gpu != nil {
-		// no validation rules for Gpu
-	}
-
-	if m.Cpu != nil {
-		// no validation rules for Cpu
-	}
-
-	if m.Memory != nil {
-		// no validation rules for Memory
-	}
-
-	if m.Fpga != nil {
-		// no validation rules for Fpga
-	}
-
-	if len(errors) > 0 {
-		return ListInstanceTypesResponse_InstanceTypeMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstanceTypesResponse_InstanceTypeMultiError is an error wrapping
-// multiple validation errors returned by
-// ListInstanceTypesResponse_InstanceType.ValidateAll() if the designated
-// constraints aren't met.
-type ListInstanceTypesResponse_InstanceTypeMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstanceTypesResponse_InstanceTypeMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstanceTypesResponse_InstanceTypeMultiError) AllErrors() []error { return m }
-
-// ListInstanceTypesResponse_InstanceTypeValidationError is the validation
-// error returned by ListInstanceTypesResponse_InstanceType.Validate if the
-// designated constraints aren't met.
-type ListInstanceTypesResponse_InstanceTypeValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) ErrorName() string {
-	return "ListInstanceTypesResponse_InstanceTypeValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstanceTypesResponse_InstanceType.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstanceTypesResponse_InstanceTypeValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstanceTypesResponse_InstanceTypeValidationError{}

@@ -57,7 +57,7 @@ type InstanceClient interface {
 	// 删除子网
 	DeleteSubnet(ctx context.Context, in *DeleteSubnetRequest, opts ...grpc.CallOption) (*DeleteSubnetResponse, error)
 	// 查询子网列表
-	ListSubnets(ctx context.Context, in *ListVpcsRequest, opts ...grpc.CallOption) (*ListSubnetsResponse, error)
+	ListSubnets(ctx context.Context, in *ListSubnetsRequest, opts ...grpc.CallOption) (*ListSubnetsResponse, error)
 	// 查询子网
 	ShowSubnet(ctx context.Context, in *ShowSubnetRequest, opts ...grpc.CallOption) (*ShowSubnetResponse, error)
 	// 更新子网
@@ -225,7 +225,7 @@ func (c *instanceClient) DeleteSubnet(ctx context.Context, in *DeleteSubnetReque
 	return out, nil
 }
 
-func (c *instanceClient) ListSubnets(ctx context.Context, in *ListVpcsRequest, opts ...grpc.CallOption) (*ListSubnetsResponse, error) {
+func (c *instanceClient) ListSubnets(ctx context.Context, in *ListSubnetsRequest, opts ...grpc.CallOption) (*ListSubnetsResponse, error) {
 	out := new(ListSubnetsResponse)
 	err := c.cc.Invoke(ctx, "/api.instance.v1.Instance/ListSubnets", in, out, opts...)
 	if err != nil {
@@ -291,7 +291,7 @@ type InstanceServer interface {
 	// 删除子网
 	DeleteSubnet(context.Context, *DeleteSubnetRequest) (*DeleteSubnetResponse, error)
 	// 查询子网列表
-	ListSubnets(context.Context, *ListVpcsRequest) (*ListSubnetsResponse, error)
+	ListSubnets(context.Context, *ListSubnetsRequest) (*ListSubnetsResponse, error)
 	// 查询子网
 	ShowSubnet(context.Context, *ShowSubnetRequest) (*ShowSubnetResponse, error)
 	// 更新子网
@@ -354,7 +354,7 @@ func (UnimplementedInstanceServer) CreateSubnet(context.Context, *CreateSubnetRe
 func (UnimplementedInstanceServer) DeleteSubnet(context.Context, *DeleteSubnetRequest) (*DeleteSubnetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteSubnet not implemented")
 }
-func (UnimplementedInstanceServer) ListSubnets(context.Context, *ListVpcsRequest) (*ListSubnetsResponse, error) {
+func (UnimplementedInstanceServer) ListSubnets(context.Context, *ListSubnetsRequest) (*ListSubnetsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListSubnets not implemented")
 }
 func (UnimplementedInstanceServer) ShowSubnet(context.Context, *ShowSubnetRequest) (*ShowSubnetResponse, error) {
@@ -683,7 +683,7 @@ func _Instance_DeleteSubnet_Handler(srv interface{}, ctx context.Context, dec fu
 }
 
 func _Instance_ListSubnets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListVpcsRequest)
+	in := new(ListSubnetsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -695,7 +695,7 @@ func _Instance_ListSubnets_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/api.instance.v1.Instance/ListSubnets",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstanceServer).ListSubnets(ctx, req.(*ListVpcsRequest))
+		return srv.(InstanceServer).ListSubnets(ctx, req.(*ListSubnetsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

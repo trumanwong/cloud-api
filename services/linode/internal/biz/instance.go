@@ -9,11 +9,15 @@ import (
 // InstanceResponse is a Instance repo.
 type InstanceResponse interface {
 	CreateInstance(context.Context, string, linodego.InstanceCreateOptions) (*linodego.Instance, error)
-	ListInstances(context.Context, string, *linodego.ListOptions) ([]linodego.Instance, error)
+	ListInstances(context.Context, string, *linodego.ListOptions) (*ListInstancesResponse, error)
 	StartInstance(context.Context, string, int, int) error
 	StopInstance(context.Context, string, int) error
 	RebootInstance(context.Context, string, int, int) error
 	DeleteInstance(context.Context, string, int) error
+}
+
+type ListInstancesResponse struct {
+	Instances []linodego.Instance
 }
 
 // InstanceUseCase is a Instance UseCase.
@@ -32,7 +36,7 @@ func (uc *InstanceUseCase) CreateInstance(ctx context.Context, accessToken strin
 	return uc.repo.CreateInstance(ctx, accessToken, request)
 }
 
-func (uc *InstanceUseCase) ListInstances(ctx context.Context, accessToken string, request *linodego.ListOptions) ([]linodego.Instance, error) {
+func (uc *InstanceUseCase) ListInstances(ctx context.Context, accessToken string, request *linodego.ListOptions) (*ListInstancesResponse, error) {
 	return uc.repo.ListInstances(ctx, accessToken, request)
 }
 

@@ -251,16 +251,33 @@ func (m *CreateInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	if m.RequestId != nil {
-		// no validation rules for RequestId
-	}
-
-	if m.OrderId != nil {
-		// no validation rules for OrderId
-	}
-
-	if m.TradePrice != nil {
-		// no validation rules for TradePrice
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -536,58 +553,33 @@ func (m *ListInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetInstances() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListInstancesResponseValidationError{
-						field:  fmt.Sprintf("Instances[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListInstancesResponseValidationError{
-						field:  fmt.Sprintf("Instances[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListInstancesResponseValidationError{
-					field:  fmt.Sprintf("Instances[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListInstancesResponseValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
-	}
-
-	if m.RequestId != nil {
-		// no validation rules for RequestId
-	}
-
-	if m.PageNumber != nil {
-		// no validation rules for PageNumber
-	}
-
-	if m.PageSize != nil {
-		// no validation rules for PageSize
-	}
-
-	if m.TotalCount != nil {
-		// no validation rules for TotalCount
-	}
-
-	if m.NextToken != nil {
-		// no validation rules for NextToken
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -851,38 +843,33 @@ func (m *ListRegionsResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetRegions() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListRegionsResponseValidationError{
-						field:  fmt.Sprintf("Regions[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListRegionsResponseValidationError{
-						field:  fmt.Sprintf("Regions[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListRegionsResponseValidationError{
-					field:  fmt.Sprintf("Regions[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListRegionsResponseValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListRegionsResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListRegionsResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -1165,58 +1152,33 @@ func (m *ListImagesResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetImages() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListImagesResponseValidationError{
-						field:  fmt.Sprintf("Images[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListImagesResponseValidationError{
-						field:  fmt.Sprintf("Images[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListImagesResponseValidationError{
-					field:  fmt.Sprintf("Images[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListImagesResponseValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListImagesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
-	}
-
-	if m.PageSize != nil {
-		// no validation rules for PageSize
-	}
-
-	if m.PageNumber != nil {
-		// no validation rules for PageNumber
-	}
-
-	if m.RequestId != nil {
-		// no validation rules for RequestId
-	}
-
-	if m.TotalCount != nil {
-		// no validation rules for TotalCount
-	}
-
-	if m.RegionId != nil {
-		// no validation rules for RegionId
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListImagesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -1476,46 +1438,33 @@ func (m *ListInstanceTypesResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetInstanceTypes() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListInstanceTypesResponseValidationError{
-						field:  fmt.Sprintf("InstanceTypes[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListInstanceTypesResponseValidationError{
-						field:  fmt.Sprintf("InstanceTypes[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListInstanceTypesResponseValidationError{
-					field:  fmt.Sprintf("InstanceTypes[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListInstanceTypesResponseValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListInstanceTypesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
-	}
-
-	if m.RequestId != nil {
-		// no validation rules for RequestId
-	}
-
-	if m.NextToken != nil {
-		// no validation rules for NextToken
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListInstanceTypesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -1779,126 +1728,6 @@ var _ interface {
 	ErrorName() string
 } = StartInstancesRequestValidationError{}
 
-// Validate checks the field values on InstanceResponse with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *InstanceResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on InstanceResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// InstanceResponseMultiError, or nil if none found.
-func (m *InstanceResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *InstanceResponse) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.Code != nil {
-		// no validation rules for Code
-	}
-
-	if m.Message != nil {
-		// no validation rules for Message
-	}
-
-	if m.InstanceId != nil {
-		// no validation rules for InstanceId
-	}
-
-	if m.CurrentStatus != nil {
-		// no validation rules for CurrentStatus
-	}
-
-	if m.PreviousStatus != nil {
-		// no validation rules for PreviousStatus
-	}
-
-	if len(errors) > 0 {
-		return InstanceResponseMultiError(errors)
-	}
-
-	return nil
-}
-
-// InstanceResponseMultiError is an error wrapping multiple validation errors
-// returned by InstanceResponse.ValidateAll() if the designated constraints
-// aren't met.
-type InstanceResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m InstanceResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m InstanceResponseMultiError) AllErrors() []error { return m }
-
-// InstanceResponseValidationError is the validation error returned by
-// InstanceResponse.Validate if the designated constraints aren't met.
-type InstanceResponseValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e InstanceResponseValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e InstanceResponseValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e InstanceResponseValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e InstanceResponseValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e InstanceResponseValidationError) ErrorName() string { return "InstanceResponseValidationError" }
-
-// Error satisfies the builtin error interface
-func (e InstanceResponseValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sInstanceResponse.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = InstanceResponseValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = InstanceResponseValidationError{}
-
 // Validate checks the field values on StartInstancesResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1921,42 +1750,33 @@ func (m *StartInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetInstanceResponses() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, StartInstancesResponseValidationError{
-						field:  fmt.Sprintf("InstanceResponses[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, StartInstancesResponseValidationError{
-						field:  fmt.Sprintf("InstanceResponses[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return StartInstancesResponseValidationError{
-					field:  fmt.Sprintf("InstanceResponses[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StartInstancesResponseValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StartInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
-	}
-
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StartInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -2250,42 +2070,33 @@ func (m *StopInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetInstanceResponses() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, StopInstancesResponseValidationError{
-						field:  fmt.Sprintf("InstanceResponses[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, StopInstancesResponseValidationError{
-						field:  fmt.Sprintf("InstanceResponses[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return StopInstancesResponseValidationError{
-					field:  fmt.Sprintf("InstanceResponses[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StopInstancesResponseValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StopInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
-	}
-
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StopInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -2575,42 +2386,33 @@ func (m *RebootInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetInstanceResponses() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, RebootInstancesResponseValidationError{
-						field:  fmt.Sprintf("InstanceResponses[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, RebootInstancesResponseValidationError{
-						field:  fmt.Sprintf("InstanceResponses[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return RebootInstancesResponseValidationError{
-					field:  fmt.Sprintf("InstanceResponses[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RebootInstancesResponseValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RebootInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
-	}
-
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RebootInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -2889,8 +2691,33 @@ func (m *DeleteInstancesResponse) validate(all bool) error {
 
 	var errors []error
 
-	if m.RequestId != nil {
-		// no validation rules for RequestId
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DeleteInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DeleteInstancesResponseValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DeleteInstancesResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -2972,2190 +2799,3 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteInstancesResponseValidationError{}
-
-// Validate checks the field values on ListInstancesResponse_Instance with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ListInstancesResponse_Instance with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// ListInstancesResponse_InstanceMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	for idx, item := range m.GetNetworkInterfaces() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListInstancesResponse_InstanceValidationError{
-						field:  fmt.Sprintf("NetworkInterfaces[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListInstancesResponse_InstanceValidationError{
-						field:  fmt.Sprintf("NetworkInterfaces[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListInstancesResponse_InstanceValidationError{
-					field:  fmt.Sprintf("NetworkInterfaces[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	for idx, item := range m.GetOperationLocks() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListInstancesResponse_InstanceValidationError{
-						field:  fmt.Sprintf("OperationLocks[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListInstancesResponse_InstanceValidationError{
-						field:  fmt.Sprintf("OperationLocks[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListInstancesResponse_InstanceValidationError{
-					field:  fmt.Sprintf("OperationLocks[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	for idx, item := range m.GetTags() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListInstancesResponse_InstanceValidationError{
-						field:  fmt.Sprintf("Tags[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListInstancesResponse_InstanceValidationError{
-						field:  fmt.Sprintf("Tags[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListInstancesResponse_InstanceValidationError{
-					field:  fmt.Sprintf("Tags[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if all {
-		switch v := interface{}(m.GetVpcAttributes()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "VpcAttributes",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "VpcAttributes",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetVpcAttributes()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListInstancesResponse_InstanceValidationError{
-				field:  "VpcAttributes",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetEipAddress()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "EipAddress",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "EipAddress",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetEipAddress()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListInstancesResponse_InstanceValidationError{
-				field:  "EipAddress",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetDedicatedInstanceAttribute()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "DedicatedInstanceAttribute",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "DedicatedInstanceAttribute",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDedicatedInstanceAttribute()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListInstancesResponse_InstanceValidationError{
-				field:  "DedicatedInstanceAttribute",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetCpuOptions()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "CpuOptions",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListInstancesResponse_InstanceValidationError{
-					field:  "CpuOptions",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetCpuOptions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListInstancesResponse_InstanceValidationError{
-				field:  "CpuOptions",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.CreationTime != nil {
-		// no validation rules for CreationTime
-	}
-
-	if m.SerialNumber != nil {
-		// no validation rules for SerialNumber
-	}
-
-	if m.Status != nil {
-		// no validation rules for Status
-	}
-
-	if m.DeploymentSetId != nil {
-		// no validation rules for DeploymentSetId
-	}
-
-	if m.KeyPairName != nil {
-		// no validation rules for KeyPairName
-	}
-
-	if m.SaleCycle != nil {
-		// no validation rules for SaleCycle
-	}
-
-	if m.DeviceAvailable != nil {
-		// no validation rules for DeviceAvailable
-	}
-
-	if m.LocalStorageCapacity != nil {
-		// no validation rules for LocalStorageCapacity
-	}
-
-	if m.Description != nil {
-		// no validation rules for Description
-	}
-
-	if m.SpotDuration != nil {
-		// no validation rules for SpotDuration
-	}
-
-	if m.InstanceNetworkType != nil {
-		// no validation rules for InstanceNetworkType
-	}
-
-	if m.InstanceName != nil {
-		// no validation rules for InstanceName
-	}
-
-	if m.OsNameEn != nil {
-		// no validation rules for OsNameEn
-	}
-
-	if m.HpcClusterId != nil {
-		// no validation rules for HpcClusterId
-	}
-
-	if m.Memory != nil {
-		// no validation rules for Memory
-	}
-
-	if m.OsName != nil {
-		// no validation rules for OsName
-	}
-
-	if m.DeploymentSetGroupNo != nil {
-		// no validation rules for DeploymentSetGroupNo
-	}
-
-	if m.ImageId != nil {
-		// no validation rules for ImageId
-	}
-
-	if m.GpuSpec != nil {
-		// no validation rules for GpuSpec
-	}
-
-	if m.AutoReleaseTime != nil {
-		// no validation rules for AutoReleaseTime
-	}
-
-	if m.DeletionProtection != nil {
-		// no validation rules for DeletionProtection
-	}
-
-	if m.StoppedMode != nil {
-		// no validation rules for StoppedMode
-	}
-
-	if m.GpuAmount != nil {
-		// no validation rules for GpuAmount
-	}
-
-	if m.HostName != nil {
-		// no validation rules for HostName
-	}
-
-	if m.InstanceId != nil {
-		// no validation rules for InstanceId
-	}
-
-	if m.InternetMaxBandwidthOut != nil {
-		// no validation rules for InternetMaxBandwidthOut
-	}
-
-	if m.InternetMaxBandwidthIn != nil {
-		// no validation rules for InternetMaxBandwidthIn
-	}
-
-	if m.InstanceType != nil {
-		// no validation rules for InstanceType
-	}
-
-	if m.InstanceChargeType != nil {
-		// no validation rules for InstanceChargeType
-	}
-
-	if m.RegionId != nil {
-		// no validation rules for RegionId
-	}
-
-	if m.IoOptimized != nil {
-		// no validation rules for IoOptimized
-	}
-
-	if m.StartTime != nil {
-		// no validation rules for StartTime
-	}
-
-	if m.Cpu != nil {
-		// no validation rules for Cpu
-	}
-
-	if m.LocalStorageAmount != nil {
-		// no validation rules for LocalStorageAmount
-	}
-
-	if m.ExpiredTime != nil {
-		// no validation rules for ExpiredTime
-	}
-
-	if m.ResourceGroupId != nil {
-		// no validation rules for ResourceGroupId
-	}
-
-	if m.InternetChargeType != nil {
-		// no validation rules for InternetChargeType
-	}
-
-	if m.ZoneId != nil {
-		// no validation rules for ZoneId
-	}
-
-	if m.Recyclable != nil {
-		// no validation rules for Recyclable
-	}
-
-	if m.CreditSpecification != nil {
-		// no validation rules for CreditSpecification
-	}
-
-	if m.InstanceTypeFamily != nil {
-		// no validation rules for InstanceTypeFamily
-	}
-
-	if m.OsType != nil {
-		// no validation rules for OsType
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_InstanceMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_InstanceMultiError is an error wrapping multiple
-// validation errors returned by ListInstancesResponse_Instance.ValidateAll()
-// if the designated constraints aren't met.
-type ListInstancesResponse_InstanceMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_InstanceMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_InstanceMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_InstanceValidationError is the validation error
-// returned by ListInstancesResponse_Instance.Validate if the designated
-// constraints aren't met.
-type ListInstancesResponse_InstanceValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_InstanceValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_InstanceValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_InstanceValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_InstanceValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_InstanceValidationError) ErrorName() string {
-	return "ListInstancesResponse_InstanceValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_InstanceValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_InstanceValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_InstanceValidationError{}
-
-// Validate checks the field values on
-// ListInstancesResponse_Instance_NetworkInterface with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance_NetworkInterface) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_NetworkInterface with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in
-// ListInstancesResponse_Instance_NetworkInterfaceMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_NetworkInterface) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_NetworkInterface) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	for idx, item := range m.GetPrivateIpSets() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListInstancesResponse_Instance_NetworkInterfaceValidationError{
-						field:  fmt.Sprintf("PrivateIpSets[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListInstancesResponse_Instance_NetworkInterfaceValidationError{
-						field:  fmt.Sprintf("PrivateIpSets[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListInstancesResponse_Instance_NetworkInterfaceValidationError{
-					field:  fmt.Sprintf("PrivateIpSets[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	for idx, item := range m.GetIpv6Sets() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListInstancesResponse_Instance_NetworkInterfaceValidationError{
-						field:  fmt.Sprintf("Ipv6Sets[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListInstancesResponse_Instance_NetworkInterfaceValidationError{
-						field:  fmt.Sprintf("Ipv6Sets[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListInstancesResponse_Instance_NetworkInterfaceValidationError{
-					field:  fmt.Sprintf("Ipv6Sets[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if m.Type != nil {
-		// no validation rules for Type
-	}
-
-	if m.MacAddress != nil {
-		// no validation rules for MacAddress
-	}
-
-	if m.PrimaryIpAddress != nil {
-		// no validation rules for PrimaryIpAddress
-	}
-
-	if m.NetworkInterfaceId != nil {
-		// no validation rules for NetworkInterfaceId
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_NetworkInterfaceMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_NetworkInterfaceMultiError is an error
-// wrapping multiple validation errors returned by
-// ListInstancesResponse_Instance_NetworkInterface.ValidateAll() if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_NetworkInterfaceMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_NetworkInterfaceMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_NetworkInterfaceMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_NetworkInterfaceValidationError is the
-// validation error returned by
-// ListInstancesResponse_Instance_NetworkInterface.Validate if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_NetworkInterfaceValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_NetworkInterfaceValidationError) Field() string {
-	return e.field
-}
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_NetworkInterfaceValidationError) Reason() string {
-	return e.reason
-}
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_NetworkInterfaceValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_NetworkInterfaceValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_NetworkInterfaceValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_NetworkInterfaceValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_NetworkInterfaceValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_NetworkInterface.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_NetworkInterfaceValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_NetworkInterfaceValidationError{}
-
-// Validate checks the field values on
-// ListInstancesResponse_Instance_OperationLock with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance_OperationLock) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_OperationLock with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
-// ListInstancesResponse_Instance_OperationLockMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_OperationLock) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_OperationLock) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.LockMsg != nil {
-		// no validation rules for LockMsg
-	}
-
-	if m.LockReason != nil {
-		// no validation rules for LockReason
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_OperationLockMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_OperationLockMultiError is an error wrapping
-// multiple validation errors returned by
-// ListInstancesResponse_Instance_OperationLock.ValidateAll() if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_OperationLockMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_OperationLockMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_OperationLockMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_OperationLockValidationError is the
-// validation error returned by
-// ListInstancesResponse_Instance_OperationLock.Validate if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_OperationLockValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_OperationLockValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_OperationLockValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_OperationLockValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_OperationLockValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_OperationLockValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_OperationLockValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_OperationLockValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_OperationLock.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_OperationLockValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_OperationLockValidationError{}
-
-// Validate checks the field values on ListInstancesResponse_Instance_Tag with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the first error encountered is returned, or nil if there are
-// no violations.
-func (m *ListInstancesResponse_Instance_Tag) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ListInstancesResponse_Instance_Tag
-// with the rules defined in the proto definition for this message. If any
-// rules are violated, the result is a list of violation errors wrapped in
-// ListInstancesResponse_Instance_TagMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_Tag) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_Tag) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.TagValue != nil {
-		// no validation rules for TagValue
-	}
-
-	if m.TagKey != nil {
-		// no validation rules for TagKey
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_TagMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_TagMultiError is an error wrapping multiple
-// validation errors returned by
-// ListInstancesResponse_Instance_Tag.ValidateAll() if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_TagMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_TagMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_TagMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_TagValidationError is the validation error
-// returned by ListInstancesResponse_Instance_Tag.Validate if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_TagValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_TagValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_TagValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_TagValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_TagValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_TagValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_TagValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_TagValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_Tag.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_TagValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_TagValidationError{}
-
-// Validate checks the field values on
-// ListInstancesResponse_Instance_VpcAttributes with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance_VpcAttributes) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_VpcAttributes with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
-// ListInstancesResponse_Instance_VpcAttributesMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_VpcAttributes) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_VpcAttributes) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.VpcId != nil {
-		// no validation rules for VpcId
-	}
-
-	if m.NatIpAddress != nil {
-		// no validation rules for NatIpAddress
-	}
-
-	if m.VSwitchId != nil {
-		// no validation rules for VSwitchId
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_VpcAttributesMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_VpcAttributesMultiError is an error wrapping
-// multiple validation errors returned by
-// ListInstancesResponse_Instance_VpcAttributes.ValidateAll() if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_VpcAttributesMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_VpcAttributesMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_VpcAttributesMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_VpcAttributesValidationError is the
-// validation error returned by
-// ListInstancesResponse_Instance_VpcAttributes.Validate if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_VpcAttributesValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_VpcAttributesValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_VpcAttributesValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_VpcAttributesValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_VpcAttributesValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_VpcAttributesValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_VpcAttributesValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_VpcAttributesValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_VpcAttributes.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_VpcAttributesValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_VpcAttributesValidationError{}
-
-// Validate checks the field values on
-// ListInstancesResponse_Instance_EipAddress with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance_EipAddress) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_EipAddress with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
-// ListInstancesResponse_Instance_EipAddressMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_EipAddress) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_EipAddress) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.AllocationId != nil {
-		// no validation rules for AllocationId
-	}
-
-	if m.IsSupportUnAssociate != nil {
-		// no validation rules for IsSupportUnAssociate
-	}
-
-	if m.InternalChargeType != nil {
-		// no validation rules for InternalChargeType
-	}
-
-	if m.IpAddress != nil {
-		// no validation rules for IpAddress
-	}
-
-	if m.Bandwidth != nil {
-		// no validation rules for Bandwidth
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_EipAddressMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_EipAddressMultiError is an error wrapping
-// multiple validation errors returned by
-// ListInstancesResponse_Instance_EipAddress.ValidateAll() if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_EipAddressMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_EipAddressMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_EipAddressMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_EipAddressValidationError is the validation
-// error returned by ListInstancesResponse_Instance_EipAddress.Validate if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_EipAddressValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_EipAddressValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_EipAddressValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_EipAddressValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_EipAddressValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_EipAddressValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_EipAddressValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_EipAddressValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_EipAddress.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_EipAddressValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_EipAddressValidationError{}
-
-// Validate checks the field values on
-// ListInstancesResponse_Instance_DedicatedInstanceAttribute with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance_DedicatedInstanceAttribute) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_DedicatedInstanceAttribute with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ListInstancesResponse_Instance_DedicatedInstanceAttributeMultiError, or nil
-// if none found.
-func (m *ListInstancesResponse_Instance_DedicatedInstanceAttribute) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_DedicatedInstanceAttribute) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.Affinity != nil {
-		// no validation rules for Affinity
-	}
-
-	if m.Tenancy != nil {
-		// no validation rules for Tenancy
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_DedicatedInstanceAttributeMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_DedicatedInstanceAttributeMultiError is an
-// error wrapping multiple validation errors returned by
-// ListInstancesResponse_Instance_DedicatedInstanceAttribute.ValidateAll() if
-// the designated constraints aren't met.
-type ListInstancesResponse_Instance_DedicatedInstanceAttributeMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_DedicatedInstanceAttributeMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_DedicatedInstanceAttributeMultiError) AllErrors() []error {
-	return m
-}
-
-// ListInstancesResponse_Instance_DedicatedInstanceAttributeValidationError is
-// the validation error returned by
-// ListInstancesResponse_Instance_DedicatedInstanceAttribute.Validate if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_DedicatedInstanceAttributeValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_DedicatedInstanceAttributeValidationError) Field() string {
-	return e.field
-}
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_DedicatedInstanceAttributeValidationError) Reason() string {
-	return e.reason
-}
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_DedicatedInstanceAttributeValidationError) Cause() error {
-	return e.cause
-}
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_DedicatedInstanceAttributeValidationError) Key() bool {
-	return e.key
-}
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_DedicatedInstanceAttributeValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_DedicatedInstanceAttributeValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_DedicatedInstanceAttributeValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_DedicatedInstanceAttribute.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_DedicatedInstanceAttributeValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_DedicatedInstanceAttributeValidationError{}
-
-// Validate checks the field values on
-// ListInstancesResponse_Instance_CpuOptions with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance_CpuOptions) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_CpuOptions with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
-// ListInstancesResponse_Instance_CpuOptionsMultiError, or nil if none found.
-func (m *ListInstancesResponse_Instance_CpuOptions) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_CpuOptions) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.Numa != nil {
-		// no validation rules for Numa
-	}
-
-	if m.CoreCount != nil {
-		// no validation rules for CoreCount
-	}
-
-	if m.ThreadPerCore != nil {
-		// no validation rules for ThreadPerCore
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_CpuOptionsMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_CpuOptionsMultiError is an error wrapping
-// multiple validation errors returned by
-// ListInstancesResponse_Instance_CpuOptions.ValidateAll() if the designated
-// constraints aren't met.
-type ListInstancesResponse_Instance_CpuOptionsMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_CpuOptionsMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_CpuOptionsMultiError) AllErrors() []error { return m }
-
-// ListInstancesResponse_Instance_CpuOptionsValidationError is the validation
-// error returned by ListInstancesResponse_Instance_CpuOptions.Validate if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_CpuOptionsValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_CpuOptionsValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_CpuOptionsValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_CpuOptionsValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_CpuOptionsValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_CpuOptionsValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_CpuOptionsValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_CpuOptionsValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_CpuOptions.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_CpuOptionsValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_CpuOptionsValidationError{}
-
-// Validate checks the field values on
-// ListInstancesResponse_Instance_NetworkInterface_PrivateIpSet with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance_NetworkInterface_PrivateIpSet) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_NetworkInterface_PrivateIpSet with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetMultiError, or
-// nil if none found.
-func (m *ListInstancesResponse_Instance_NetworkInterface_PrivateIpSet) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_NetworkInterface_PrivateIpSet) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.PrivateIpAddress != nil {
-		// no validation rules for PrivateIpAddress
-	}
-
-	if m.Primary != nil {
-		// no validation rules for Primary
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetMultiError is an
-// error wrapping multiple validation errors returned by
-// ListInstancesResponse_Instance_NetworkInterface_PrivateIpSet.ValidateAll()
-// if the designated constraints aren't met.
-type ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetMultiError) AllErrors() []error {
-	return m
-}
-
-// ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetValidationError
-// is the validation error returned by
-// ListInstancesResponse_Instance_NetworkInterface_PrivateIpSet.Validate if
-// the designated constraints aren't met.
-type ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetValidationError) Field() string {
-	return e.field
-}
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetValidationError) Reason() string {
-	return e.reason
-}
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetValidationError) Cause() error {
-	return e.cause
-}
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetValidationError) Key() bool {
-	return e.key
-}
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_NetworkInterface_PrivateIpSet.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_NetworkInterface_PrivateIpSetValidationError{}
-
-// Validate checks the field values on
-// ListInstancesResponse_Instance_NetworkInterface_Ipv6Set with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ListInstancesResponse_Instance_NetworkInterface_Ipv6Set) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstancesResponse_Instance_NetworkInterface_Ipv6Set with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ListInstancesResponse_Instance_NetworkInterface_Ipv6SetMultiError, or nil
-// if none found.
-func (m *ListInstancesResponse_Instance_NetworkInterface_Ipv6Set) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstancesResponse_Instance_NetworkInterface_Ipv6Set) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.Ipv6Address != nil {
-		// no validation rules for Ipv6Address
-	}
-
-	if len(errors) > 0 {
-		return ListInstancesResponse_Instance_NetworkInterface_Ipv6SetMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstancesResponse_Instance_NetworkInterface_Ipv6SetMultiError is an
-// error wrapping multiple validation errors returned by
-// ListInstancesResponse_Instance_NetworkInterface_Ipv6Set.ValidateAll() if
-// the designated constraints aren't met.
-type ListInstancesResponse_Instance_NetworkInterface_Ipv6SetMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstancesResponse_Instance_NetworkInterface_Ipv6SetMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstancesResponse_Instance_NetworkInterface_Ipv6SetMultiError) AllErrors() []error {
-	return m
-}
-
-// ListInstancesResponse_Instance_NetworkInterface_Ipv6SetValidationError is
-// the validation error returned by
-// ListInstancesResponse_Instance_NetworkInterface_Ipv6Set.Validate if the
-// designated constraints aren't met.
-type ListInstancesResponse_Instance_NetworkInterface_Ipv6SetValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstancesResponse_Instance_NetworkInterface_Ipv6SetValidationError) Field() string {
-	return e.field
-}
-
-// Reason function returns reason value.
-func (e ListInstancesResponse_Instance_NetworkInterface_Ipv6SetValidationError) Reason() string {
-	return e.reason
-}
-
-// Cause function returns cause value.
-func (e ListInstancesResponse_Instance_NetworkInterface_Ipv6SetValidationError) Cause() error {
-	return e.cause
-}
-
-// Key function returns key value.
-func (e ListInstancesResponse_Instance_NetworkInterface_Ipv6SetValidationError) Key() bool {
-	return e.key
-}
-
-// ErrorName returns error name.
-func (e ListInstancesResponse_Instance_NetworkInterface_Ipv6SetValidationError) ErrorName() string {
-	return "ListInstancesResponse_Instance_NetworkInterface_Ipv6SetValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstancesResponse_Instance_NetworkInterface_Ipv6SetValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstancesResponse_Instance_NetworkInterface_Ipv6Set.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstancesResponse_Instance_NetworkInterface_Ipv6SetValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstancesResponse_Instance_NetworkInterface_Ipv6SetValidationError{}
-
-// Validate checks the field values on ListRegionsResponse_Region with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ListRegionsResponse_Region) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ListRegionsResponse_Region with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ListRegionsResponse_RegionMultiError, or nil if none found.
-func (m *ListRegionsResponse_Region) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListRegionsResponse_Region) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.RegionEndPoint != nil {
-		// no validation rules for RegionEndPoint
-	}
-
-	if m.LocalName != nil {
-		// no validation rules for LocalName
-	}
-
-	if m.RegionId != nil {
-		// no validation rules for RegionId
-	}
-
-	if m.Status != nil {
-		// no validation rules for Status
-	}
-
-	if len(errors) > 0 {
-		return ListRegionsResponse_RegionMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListRegionsResponse_RegionMultiError is an error wrapping multiple
-// validation errors returned by ListRegionsResponse_Region.ValidateAll() if
-// the designated constraints aren't met.
-type ListRegionsResponse_RegionMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListRegionsResponse_RegionMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListRegionsResponse_RegionMultiError) AllErrors() []error { return m }
-
-// ListRegionsResponse_RegionValidationError is the validation error returned
-// by ListRegionsResponse_Region.Validate if the designated constraints aren't met.
-type ListRegionsResponse_RegionValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListRegionsResponse_RegionValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListRegionsResponse_RegionValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListRegionsResponse_RegionValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListRegionsResponse_RegionValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListRegionsResponse_RegionValidationError) ErrorName() string {
-	return "ListRegionsResponse_RegionValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListRegionsResponse_RegionValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListRegionsResponse_Region.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListRegionsResponse_RegionValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListRegionsResponse_RegionValidationError{}
-
-// Validate checks the field values on ListImagesResponse_Image with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ListImagesResponse_Image) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ListImagesResponse_Image with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ListImagesResponse_ImageMultiError, or nil if none found.
-func (m *ListImagesResponse_Image) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListImagesResponse_Image) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.CreationTime != nil {
-		// no validation rules for CreationTime
-	}
-
-	if m.Status != nil {
-		// no validation rules for Status
-	}
-
-	if m.ImageFamily != nil {
-		// no validation rules for ImageFamily
-	}
-
-	if m.Progress != nil {
-		// no validation rules for Progress
-	}
-
-	if m.IsCopied != nil {
-		// no validation rules for IsCopied
-	}
-
-	if m.IsSupportIoOptimized != nil {
-		// no validation rules for IsSupportIoOptimized
-	}
-
-	if m.ImageOwnerAlias != nil {
-		// no validation rules for ImageOwnerAlias
-	}
-
-	if m.IsSupportCloudInit != nil {
-		// no validation rules for IsSupportCloudInit
-	}
-
-	if m.ImageVersion != nil {
-		// no validation rules for ImageVersion
-	}
-
-	if m.Usage != nil {
-		// no validation rules for Usage
-	}
-
-	if m.IsSelfShared != nil {
-		// no validation rules for IsSelfShared
-	}
-
-	if m.Description != nil {
-		// no validation rules for Description
-	}
-
-	if m.Size != nil {
-		// no validation rules for Size
-	}
-
-	if m.ResourceGroupId != nil {
-		// no validation rules for ResourceGroupId
-	}
-
-	if m.Platform != nil {
-		// no validation rules for Platform
-	}
-
-	if m.OsNameEn != nil {
-		// no validation rules for OsNameEn
-	}
-
-	if m.ImageName != nil {
-		// no validation rules for ImageName
-	}
-
-	if m.OsName != nil {
-		// no validation rules for OsName
-	}
-
-	if m.ImageId != nil {
-		// no validation rules for ImageId
-	}
-
-	if m.OsType != nil {
-		// no validation rules for OsType
-	}
-
-	if m.IsSubscribed != nil {
-		// no validation rules for IsSubscribed
-	}
-
-	if m.ProductCode != nil {
-		// no validation rules for ProductCode
-	}
-
-	if m.Architecture != nil {
-		// no validation rules for Architecture
-	}
-
-	if m.IsPublic != nil {
-		// no validation rules for IsPublic
-	}
-
-	if m.ImageOwnerId != nil {
-		// no validation rules for ImageOwnerId
-	}
-
-	if m.LoginAsNonRootSupported != nil {
-		// no validation rules for LoginAsNonRootSupported
-	}
-
-	if m.SupplierName != nil {
-		// no validation rules for SupplierName
-	}
-
-	if len(errors) > 0 {
-		return ListImagesResponse_ImageMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListImagesResponse_ImageMultiError is an error wrapping multiple validation
-// errors returned by ListImagesResponse_Image.ValidateAll() if the designated
-// constraints aren't met.
-type ListImagesResponse_ImageMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListImagesResponse_ImageMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListImagesResponse_ImageMultiError) AllErrors() []error { return m }
-
-// ListImagesResponse_ImageValidationError is the validation error returned by
-// ListImagesResponse_Image.Validate if the designated constraints aren't met.
-type ListImagesResponse_ImageValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListImagesResponse_ImageValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListImagesResponse_ImageValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListImagesResponse_ImageValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListImagesResponse_ImageValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListImagesResponse_ImageValidationError) ErrorName() string {
-	return "ListImagesResponse_ImageValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListImagesResponse_ImageValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListImagesResponse_Image.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListImagesResponse_ImageValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListImagesResponse_ImageValidationError{}
-
-// Validate checks the field values on ListInstanceTypesResponse_InstanceType
-// with the rules defined in the proto definition for this message. If any
-// rules are violated, the first error encountered is returned, or nil if
-// there are no violations.
-func (m *ListInstanceTypesResponse_InstanceType) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on
-// ListInstanceTypesResponse_InstanceType with the rules defined in the proto
-// definition for this message. If any rules are violated, the result is a
-// list of violation errors wrapped in
-// ListInstanceTypesResponse_InstanceTypeMultiError, or nil if none found.
-func (m *ListInstanceTypesResponse_InstanceType) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListInstanceTypesResponse_InstanceType) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.LocalStorageCategory != nil {
-		// no validation rules for LocalStorageCategory
-	}
-
-	if m.PrimaryEniQueueNumber != nil {
-		// no validation rules for PrimaryEniQueueNumber
-	}
-
-	if m.MemorySize != nil {
-		// no validation rules for MemorySize
-	}
-
-	if m.LocalStorageCapacity != nil {
-		// no validation rules for LocalStorageCapacity
-	}
-
-	if m.InstanceFamilyLevel != nil {
-		// no validation rules for InstanceFamilyLevel
-	}
-
-	if m.InstancePpsRx != nil {
-		// no validation rules for InstancePpsRx
-	}
-
-	if m.EniIpv6AddressQuantity != nil {
-		// no validation rules for EniIpv6AddressQuantity
-	}
-
-	if m.MaximumQueueNumberPerEni != nil {
-		// no validation rules for MaximumQueueNumberPerEni
-	}
-
-	if m.InstanceTypeId != nil {
-		// no validation rules for InstanceTypeId
-	}
-
-	if m.InstanceBandwidthRx != nil {
-		// no validation rules for InstanceBandwidthRx
-	}
-
-	if m.SecondaryEniQueueNumber != nil {
-		// no validation rules for SecondaryEniQueueNumber
-	}
-
-	if m.GpuSpec != nil {
-		// no validation rules for GpuSpec
-	}
-
-	if m.QueuePairNumber != nil {
-		// no validation rules for QueuePairNumber
-	}
-
-	if m.EriQuatity != nil {
-		// no validation rules for EriQuatity
-	}
-
-	if m.GpuAmount != nil {
-		// no validation rules for GpuAmount
-	}
-
-	if m.TotalEniQueueQuantity != nil {
-		// no validation rules for TotalEniQueueQuantity
-	}
-
-	if m.NvmeSupport != nil {
-		// no validation rules for NvmeSupport
-	}
-
-	if m.DiskQuantity != nil {
-		// no validation rules for DiskQuantity
-	}
-
-	if m.InitialCredit != nil {
-		// no validation rules for InitialCredit
-	}
-
-	if m.LocalStorageAmount != nil {
-		// no validation rules for LocalStorageAmount
-	}
-
-	if m.BaselineCredit != nil {
-		// no validation rules for BaselineCredit
-	}
-
-	if m.InstancePpsTx != nil {
-		// no validation rules for InstancePpsTx
-	}
-
-	if m.EniPrivateIpAddressQuantity != nil {
-		// no validation rules for EniPrivateIpAddressQuantity
-	}
-
-	if m.CpuCoreCount != nil {
-		// no validation rules for CpuCoreCount
-	}
-
-	if m.InstanceTypeFamily != nil {
-		// no validation rules for InstanceTypeFamily
-	}
-
-	if m.EniQuantity != nil {
-		// no validation rules for EniQuantity
-	}
-
-	if len(errors) > 0 {
-		return ListInstanceTypesResponse_InstanceTypeMultiError(errors)
-	}
-
-	return nil
-}
-
-// ListInstanceTypesResponse_InstanceTypeMultiError is an error wrapping
-// multiple validation errors returned by
-// ListInstanceTypesResponse_InstanceType.ValidateAll() if the designated
-// constraints aren't met.
-type ListInstanceTypesResponse_InstanceTypeMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListInstanceTypesResponse_InstanceTypeMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListInstanceTypesResponse_InstanceTypeMultiError) AllErrors() []error { return m }
-
-// ListInstanceTypesResponse_InstanceTypeValidationError is the validation
-// error returned by ListInstanceTypesResponse_InstanceType.Validate if the
-// designated constraints aren't met.
-type ListInstanceTypesResponse_InstanceTypeValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) ErrorName() string {
-	return "ListInstanceTypesResponse_InstanceTypeValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ListInstanceTypesResponse_InstanceTypeValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sListInstanceTypesResponse_InstanceType.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ListInstanceTypesResponse_InstanceTypeValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ListInstanceTypesResponse_InstanceTypeValidationError{}

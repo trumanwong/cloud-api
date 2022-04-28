@@ -7,7 +7,7 @@ import (
 )
 
 type RegionResponse interface {
-	ListRegions(context.Context, string) []*region.Region
+	ListRegions(context.Context, string) *ListRegionResponse
 }
 
 // RegionUseCase is a Region UseCase.
@@ -16,12 +16,16 @@ type RegionUseCase struct {
 	log  *log.Helper
 }
 
+type ListRegionResponse struct {
+	Regions []*region.Region `json:"regions"`
+}
+
 // NewRegionUseCase new a Region UseCase.
 func NewRegionUseCase(repo RegionResponse, logger log.Logger) *RegionUseCase {
 	return &RegionUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
 // ListRegions List All Regions
-func (uc *RegionUseCase) ListRegions(ctx context.Context, regionType string) []*region.Region {
+func (uc *RegionUseCase) ListRegions(ctx context.Context, regionType string) *ListRegionResponse {
 	return uc.repo.ListRegions(ctx, regionType)
 }

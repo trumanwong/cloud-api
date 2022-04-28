@@ -2,19 +2,18 @@ package biz
 
 import (
 	"context"
-	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v4/client"
-
+	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2021-12-01/compute"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
 // InstanceResponse is a Instance repo.
 type InstanceResponse interface {
-	CreateInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error)
-	ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error)
-	StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstancesRequest) (*string, error)
-	StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstancesRequest) (*string, error)
-	RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstancesRequest) (*string, error)
-	DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstancesRequest) (*string, error)
+	CreateInstances(context.Context, string, string, string, string, string, string, compute.VirtualMachine) (*compute.VirtualMachinesCreateOrUpdateFuture, error)
+	ListInstances(context.Context, string, string, string, string, string, string) (*compute.VirtualMachineListResultPage, error)
+	StartInstances(context.Context, string, string, string, string, string, string) (*compute.VirtualMachinesStartFuture, error)
+	StopInstances(context.Context, string, string, string, string, string, string, *bool) (*compute.VirtualMachinesPowerOffFuture, error)
+	RebootInstances(context.Context, string, string, string, string, string, string) (*compute.VirtualMachinesRestartFuture, error)
+	DeleteInstances(context.Context, string, string, string, string, string, string, *bool) (*compute.VirtualMachinesDeleteFuture, error)
 }
 
 // InstanceUseCase is a Instance UseCase.
@@ -29,26 +28,26 @@ func NewInstanceUseCase(repo InstanceResponse, logger log.Logger) *InstanceUseCa
 }
 
 // CreateInstances creates Instances, and returns the new Instances.
-func (uc *InstanceUseCase) CreateInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error) {
-	return uc.repo.CreateInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) CreateInstances(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, vmName string, request compute.VirtualMachine) (*compute.VirtualMachinesCreateOrUpdateFuture, error) {
+	return uc.repo.CreateInstances(ctx, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, vmName, request)
 }
 
-func (uc *InstanceUseCase) ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponseBody, error) {
-	return uc.repo.ListInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) ListInstances(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, filter string) (*compute.VirtualMachineListResultPage, error) {
+	return uc.repo.ListInstances(ctx, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, filter)
 }
 
-func (uc *InstanceUseCase) StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstancesRequest) (*string, error) {
-	return uc.repo.StartInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) StartInstances(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, vmName string) (*compute.VirtualMachinesStartFuture, error) {
+	return uc.repo.StartInstances(ctx, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, vmName)
 }
 
-func (uc *InstanceUseCase) StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstancesRequest) (*string, error) {
-	return uc.repo.StopInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) StopInstances(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, vmName string, skipShutDown *bool) (*compute.VirtualMachinesPowerOffFuture, error) {
+	return uc.repo.StopInstances(ctx, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, vmName, skipShutDown)
 }
 
-func (uc *InstanceUseCase) RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstancesRequest) (*string, error) {
-	return uc.repo.RebootInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) RebootInstances(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, vmName string) (*compute.VirtualMachinesRestartFuture, error) {
+	return uc.repo.RebootInstances(ctx, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, vmName)
 }
 
-func (uc *InstanceUseCase) DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstancesRequest) (*string, error) {
-	return uc.repo.DeleteInstances(ctx, accessKeyId, accessKeySecret, endpoint, request)
+func (uc *InstanceUseCase) DeleteInstances(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, vmName string, forceDeletion *bool) (*compute.VirtualMachinesDeleteFuture, error) {
+	return uc.repo.DeleteInstances(ctx, tenantID, clientID, clientSecret, subscriptionId, resourceGroupName, vmName, forceDeletion)
 }

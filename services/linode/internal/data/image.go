@@ -20,11 +20,11 @@ func NewImageRepo(data *Data, logger log.Logger) biz.ImageResponse {
 	}
 }
 
-func (r *imageResponse) ListImages(ctx context.Context, accessToken string, request *linodego.ListOptions) ([]linodego.Image, error) {
+func (r *imageResponse) ListImages(ctx context.Context, accessToken string, request *linodego.ListOptions) (*biz.ListImagesResponse, error) {
 	client := newClient(accessToken)
-	result, err := client.ListImages(ctx, request)
+	images, err := client.ListImages(ctx, request)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return &biz.ListImagesResponse{Images: images}, nil
 }

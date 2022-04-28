@@ -3,19 +3,15 @@ package service
 import (
 	"context"
 	v1 "huawei/api/instance/v1"
+	"huawei/pkg/util/convert"
 )
 
 func (service *InstanceService) ListRegions(ctx context.Context, request *v1.ListRegionsRequest) (*v1.ListRegionsResponse, error) {
-	regions := service.rc.ListRegions(ctx, request.RegionType)
+	result := service.rc.ListRegions(ctx, request.RegionType)
 
-	listRegionsResponse := &v1.ListRegionsResponse{
-		Regions: make([]*v1.ListRegionsResponse_Region, len(regions)),
+	data, err := convert.CastToAny(result)
+	if err != nil {
+		return nil, err
 	}
-	for i, region := range regions {
-		listRegionsResponse.Regions[i] = &v1.ListRegionsResponse_Region{
-			Id:       region.Id,
-			EndPoint: region.Endpoint,
-		}
-	}
-	return listRegionsResponse, nil
+	return &v1.ListRegionsResponse{Data: data}, nil
 }

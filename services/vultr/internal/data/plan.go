@@ -7,26 +7,29 @@ import (
 	"vultr/internal/biz"
 )
 
-type instanceTypeResponse struct {
+type planResponse struct {
 	data *Data
 	log  *log.Helper
 }
 
-// NewInstanceTypeRepo .
-func NewInstanceTypeRepo(data *Data, logger log.Logger) biz.PlanResponse {
-	return &instanceTypeResponse{
+// NewPlanRepo .
+func NewPlanRepo(data *Data, logger log.Logger) biz.PlanResponse {
+	return &planResponse{
 		data: data,
 		log:  log.NewHelper(logger),
 	}
 }
 
-func (r *instanceTypeResponse) ListPlans(ctx context.Context, accessToken, planType string, request *govultr.ListOptions) ([]govultr.Plan, *govultr.Meta, error) {
-	client := newClient(
+func (r *planResponse) ListPlans(ctx context.Context, accessToken, planType string, request *govultr.ListOptions) (*biz.ListPlansResponse, error) {
+	client := getClient(
 		accessToken,
 	)
-	result, meta, err := client.Plan.List(ctx, planType, request)
+	plans, meta, err := client.Plan.List(ctx, planType, request)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	return result, meta, nil
+	return &biz.ListPlansResponse{
+		Plans: plans,
+		Meta:  meta,
+	}, nil
 }

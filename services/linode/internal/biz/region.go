@@ -6,8 +6,12 @@ import (
 	"github.com/linode/linodego"
 )
 
+type ListRegionResponse struct {
+	Regions []linodego.Region
+}
+
 type RegionResponse interface {
-	ListRegions(context.Context, string, *linodego.ListOptions) ([]linodego.Region, error)
+	ListRegions(context.Context, string, *linodego.ListOptions) (*ListRegionResponse, error)
 }
 
 // RegionUseCase is a Region UseCase.
@@ -22,6 +26,6 @@ func NewRegionUseCase(repo RegionResponse, logger log.Logger) *RegionUseCase {
 }
 
 // ListRegions List Regions
-func (uc *RegionUseCase) ListRegions(ctx context.Context, accessToken string, request *linodego.ListOptions) ([]linodego.Region, error) {
+func (uc *RegionUseCase) ListRegions(ctx context.Context, accessToken string, request *linodego.ListOptions) (*ListRegionResponse, error) {
 	return uc.repo.ListRegions(ctx, accessToken, request)
 }

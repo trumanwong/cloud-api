@@ -48,7 +48,7 @@ var staticEcsRegions = map[string]*region.Region{
 	"la-south-2":     ecsregion.LA_SOUTH_2,
 }
 
-var staticVpcRegionRegions = map[string]*region.Region{
+var staticVpcRegions = map[string]*region.Region{
 	"af-south-1":     vpcregion.AF_SOUTH_1,
 	"cn-north-4":     vpcregion.CN_NORTH_4,
 	"cn-north-1":     vpcregion.CN_NORTH_1,
@@ -72,19 +72,21 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	}
 }
 
-func (r *regionResponse) ListRegions(ctx context.Context, regionType string) []*region.Region {
+func (r *regionResponse) ListRegions(ctx context.Context, regionType string) *biz.ListRegionResponse {
 	regionFields := staticEcsRegions
 	if regionType == "image" {
 		regionFields = staticImageRegions
+	} else if regionType == "vpc" {
+		regionFields = staticVpcRegions
 	}
-	result := make([]*region.Region, len(regionFields))
+	regions := make([]*region.Region, len(regionFields))
 	i := 0
 	for _, v := range staticImageRegions {
-		result[i] = &region.Region{
+		regions[i] = &region.Region{
 			Id:       v.Id,
 			Endpoint: v.Endpoint,
 		}
 		i++
 	}
-	return result
+	return &biz.ListRegionResponse{Regions: regions}
 }

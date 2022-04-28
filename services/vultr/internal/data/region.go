@@ -20,11 +20,11 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	}
 }
 
-func (r *regionResponse) ListRegions(ctx context.Context, accessToken string, request *govultr.ListOptions) ([]govultr.Region, *govultr.Meta, error) {
-	client := newClient(accessToken)
-	result, meta, err := client.Region.List(ctx, request)
+func (r *regionResponse) ListRegions(ctx context.Context, accessToken string, request *govultr.ListOptions) (*biz.ListRegionsResponse, error) {
+	client := getClient(accessToken)
+	regions, meta, err := client.Region.List(ctx, request)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	return result, meta, nil
+	return &biz.ListRegionsResponse{Regions: regions, Meta: meta}, nil
 }

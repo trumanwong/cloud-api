@@ -21,8 +21,8 @@ type SubnetUseCase struct {
 }
 
 // NewSubnetUseCase new a Subnet UseCase.
-func NewSubnetUseCase(repo RegionResponse, logger log.Logger) *RegionUseCase {
-	return &RegionUseCase{repo: repo, log: log.NewHelper(logger)}
+func NewSubnetUseCase(repo SubnetResponse, logger log.Logger) *SubnetUseCase {
+	return &SubnetUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
 // CreateSubnet create Subnet

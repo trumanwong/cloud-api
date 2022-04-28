@@ -8,7 +8,11 @@ import (
 
 // ImageResponse is a Greater repo.
 type ImageResponse interface {
-	ListImages(context.Context, string, *linodego.ListOptions) ([]linodego.Image, error)
+	ListImages(context.Context, string, *linodego.ListOptions) (*ListImagesResponse, error)
+}
+
+type ListImagesResponse struct {
+	Images []linodego.Image `json:"images"`
 }
 
 // ImageUseCase is a Image UseCase.
@@ -23,6 +27,6 @@ func NewImageUseCase(repo ImageResponse, logger log.Logger) *ImageUseCase {
 }
 
 // ListImages List Image
-func (uc *ImageUseCase) ListImages(ctx context.Context, accessToken string, request *linodego.ListOptions) ([]linodego.Image, error) {
+func (uc *ImageUseCase) ListImages(ctx context.Context, accessToken string, request *linodego.ListOptions) (*ListImagesResponse, error) {
 	return uc.repo.ListImages(ctx, accessToken, request)
 }

@@ -30,13 +30,13 @@ func (r *instanceResponse) CreateInstance(ctx context.Context, accessToken strin
 	return result, nil
 }
 
-func (r *instanceResponse) ListInstances(ctx context.Context, accessToken string, request *linodego.ListOptions) ([]linodego.Instance, error) {
+func (r *instanceResponse) ListInstances(ctx context.Context, accessToken string, request *linodego.ListOptions) (*biz.ListInstancesResponse, error) {
 	client := newClient(accessToken)
-	result, err := client.ListInstances(ctx, request)
+	instances, err := client.ListInstances(ctx, request)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return &biz.ListInstancesResponse{Instances: instances}, nil
 }
 
 func (r *instanceResponse) StartInstance(ctx context.Context, accessToken string, instanceId, configId int) error {

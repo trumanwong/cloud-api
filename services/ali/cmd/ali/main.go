@@ -23,7 +23,7 @@ import (
 // go build -ldflags "-X main.Version=x.y.z"
 var (
 	// Name is the name of the compiled software.
-	Name = "cloud-api.ali.service"
+	Name = "cloud-api.ali.instance.service"
 	// Version is the version of the compiled software.
 	Version = "v1"
 	// flagconf is the config flag.
@@ -52,7 +52,6 @@ func newApp(logger log.Logger, hs *http.Server, gs *grpc.Server, r registry.Regi
 }
 
 func setTracerProvider(url string) error {
-	// Create the Jaeger exporter
 	// Create the Jaeger exporter
 	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
 	if err != nil {

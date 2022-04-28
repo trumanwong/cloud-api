@@ -7,7 +7,11 @@ import (
 )
 
 type PlanResponse interface {
-	ListInstanceTypes(context.Context, string, *linodego.ListOptions) ([]linodego.LinodeType, error)
+	ListInstanceTypes(context.Context, string, *linodego.ListOptions) (*ListInstanceTypesResponse, error)
+}
+
+type ListInstanceTypesResponse struct {
+	InstanceTypes []linodego.LinodeType
 }
 
 // InstanceTypeUseCase is a Plan UseCase.
@@ -22,6 +26,6 @@ func NewInstanceTypeUseCase(repo PlanResponse, logger log.Logger) *InstanceTypeU
 }
 
 // ListInstanceTypes List All InstanceTypes
-func (uc *InstanceTypeUseCase) ListInstanceTypes(ctx context.Context, accessToken string, request *linodego.ListOptions) ([]linodego.LinodeType, error) {
+func (uc *InstanceTypeUseCase) ListInstanceTypes(ctx context.Context, accessToken string, request *linodego.ListOptions) (*ListInstanceTypesResponse, error) {
 	return uc.repo.ListInstanceTypes(ctx, accessToken, request)
 }

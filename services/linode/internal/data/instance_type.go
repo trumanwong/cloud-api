@@ -20,11 +20,11 @@ func NewInstanceTypeRepo(data *Data, logger log.Logger) biz.PlanResponse {
 	}
 }
 
-func (r *instanceTypeResponse) ListInstanceTypes(ctx context.Context, accessToken string, request *linodego.ListOptions) ([]linodego.LinodeType, error) {
+func (r *instanceTypeResponse) ListInstanceTypes(ctx context.Context, accessToken string, request *linodego.ListOptions) (*biz.ListInstanceTypesResponse, error) {
 	client := newClient(accessToken)
-	result, err := client.ListTypes(ctx, request)
+	instanceTypes, err := client.ListTypes(ctx, request)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return &biz.ListInstanceTypesResponse{InstanceTypes: instanceTypes}, nil
 }

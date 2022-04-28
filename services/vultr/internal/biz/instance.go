@@ -7,10 +7,15 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+type ListInstancesResponse struct {
+	Instances []govultr.Instance `json:"instances"`
+	Meta      *govultr.Meta      `json:"meta"`
+}
+
 // InstanceResponse is a Instance repo.
 type InstanceResponse interface {
 	CreateInstance(context.Context, string, *govultr.InstanceCreateReq) (*govultr.Instance, error)
-	ListInstances(context.Context, string, *govultr.ListOptions) ([]govultr.Instance, *govultr.Meta, error)
+	ListInstances(context.Context, string, *govultr.ListOptions) (*ListInstancesResponse, error)
 	StartInstance(context.Context, string, string) error
 	StopInstance(context.Context, string, string) error
 	RebootInstance(context.Context, string, string) error
@@ -33,7 +38,7 @@ func (uc *InstanceUseCase) CreateInstance(ctx context.Context, accessToken strin
 	return uc.repo.CreateInstance(ctx, accessToken, request)
 }
 
-func (uc *InstanceUseCase) ListInstances(ctx context.Context, accessToken string, request *govultr.ListOptions) ([]govultr.Instance, *govultr.Meta, error) {
+func (uc *InstanceUseCase) ListInstances(ctx context.Context, accessToken string, request *govultr.ListOptions) (*ListInstancesResponse, error) {
 	return uc.repo.ListInstances(ctx, accessToken, request)
 }
 

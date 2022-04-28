@@ -7,7 +7,7 @@ import (
 )
 
 type RegionResponse interface {
-	ListRegions(context.Context, string, string, string, string, bool) (*[]subscriptions.Location, error)
+	ListRegions(context.Context, string, string, string, string, *bool) (*[]subscriptions.Location, error)
 }
 
 // RegionUseCase is a Region UseCase.
@@ -22,6 +22,6 @@ func NewRegionUseCase(repo RegionResponse, logger log.Logger) *RegionUseCase {
 }
 
 // ListRegions List All Regions
-func (uc *RegionUseCase) ListRegions(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string, includeExtendedLocations bool) (*[]subscriptions.Location, error) {
+func (uc *RegionUseCase) ListRegions(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string, includeExtendedLocations *bool) (*[]subscriptions.Location, error) {
 	return uc.repo.ListRegions(ctx, tenantID, clientID, clientSecret, subscriptionId, includeExtendedLocations)
 }

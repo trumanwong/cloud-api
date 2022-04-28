@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package api.instance.v1;
 import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
 import "validate/validate.proto";
 
 option go_package = "/api/instance/v1;v1";
@@ -100,14 +101,7 @@ message CreateInstancesRequest {
 }
 
 message CreateInstancesResponse {
-  // 阿里云请求id
-  optional string request_id = 1;
-  // 订单id，该参数只有创建包年包月ECS实例（请求参数InstanceChargeType=PrePaid）时有返回值
-  optional string order_id = 2;
-  // 订单成交价
-  optional float trade_price = 3;
-  // 实例id列表
-  repeated string instance_id_sets = 4;
+  google.protobuf.Any data = 1;
 }
 
 message ListInstancesRequest {
@@ -136,224 +130,7 @@ message ListInstancesRequest {
 }
 
 message ListInstancesResponse {
-  optional string request_id = 1;
-  // 实例状态列表的页码，起始值1，默认值1
-  optional int32 page_number = 2;
-  // 分页查询时设置的每页行数
-  optional int32 page_size = 3;
-  // 查询到的实例总数
-  optional int32 total_count = 4;
-  // 本次调用返回的查询凭证值
-  optional string next_token = 5;
-  message Instance {
-    // 实例创建时间。以ISO8601为标准，并使用UTC+0时间，格式为yyyy-MM-ddTHH:mmZ。
-    optional string creation_time = 1;
-    // 实例序列号。
-    optional string serial_number = 2;
-    // 实例状态
-    optional string status = 3;
-    // 部署集ID。
-    optional string deployment_set_id = 4;
-    // 密钥对名称。
-    optional string key_pair_name = 5;
-    // 实例计费周期。
-    optional string sale_cycle = 6;
-    // 实例是否可以挂载数据盘。
-    optional bool device_available = 7;
-    // 实例挂载的本地存储容量。
-    optional int64 local_storage_capacity = 8;
-    // 实例描述。
-    optional string description = 9;
-    // 抢占式实例的保留时长，单位为小时。可能值为0~6。
-    //  保留时长2~6正在邀测中，如需开通请提交工单。
-    //  值为0，则为无保护期模式。
-    optional int32 spot_duration = 10;
-    // 实例网络类型。可能值：
-    //  classic：经典网络。
-    //  vpc：专有网络VPC。
-    optional string instance_network_type = 11;
-    // 实例名称
-    optional string instance_name = 12;
-    // 实例操作系统的英文名称
-    optional string os_name_en = 13;
-    // 实例所属的HPC集群ID。
-    optional string hpc_cluster_id = 14;
-    // 内存大小，单位为MiB
-    optional int32 memory = 15;
-    // 实例的操作系统名称。
-    optional string os_name = 16;
-    // ECS实例绑定部署集分散部署时，实例在部署集中的分组位置。
-    optional int32 deployment_set_group_no = 17;
-    // 实例运行的镜像ID
-    optional string image_id = 18;
-    // 实例规格附带的GPU类型。
-    optional string gpu_spec = 19;
-    // 按量付费实例的自动释放时间
-    optional string auto_release_time = 20;
-    // 实例释放保护属性，指定是否支持通过控制台或API（DeleteInstance）释放实例。
-    //  true：已开启实例释放保护。
-    //  false：未开启实例释放保护。
-    optional bool deletion_protection = 21;
-    // 实例停机后是否继续收费。可能值：
-    //  KeepCharging：停机后继续收费，为您继续保留库存资源。
-    //  StopCharging：停机后不收费。停机后，我们释放实例对应的资源，例如vCPU、内存和公网IP等资源。重启是否成功依赖于当前地域中是否仍有资源库存。
-    //  Not-applicable：本实例不支持停机不收费功能。
-    optional string stopped_mode = 22;
-    // 实例规格附带的GPU数量
-    optional int32 gpu_amount = 23;
-    // 实例主机名。
-    optional string host_name = 24;
-    // 实例ID
-    optional string instance_id = 25;
-    // 公网出带宽最大值，单位为Mbit/s。
-    optional int32 internet_max_bandwidth_out = 26;
-    // 公网入带宽最大值，单位为Mbit/s。
-    optional int32 internet_max_bandwidth_in = 27;
-    // 实例规格
-    optional string instance_type = 28;
-    // 实例的计费方式。可能值：
-    //  PrePaid：包年包月。
-    //  PostPaid：按量付费。
-    optional string instance_charge_type = 29;
-    // 实例所属地域ID
-    optional string region_id = 30;
-    // 是否为I/O优化型实例。
-    optional bool io_optimized = 31;
-    // 实例最近一次的启动时间。以ISO8601为标准，并使用UTC+0时间，格式为yyyy-MM-ddTHH:mmZ。
-    optional string start_time = 32;
-    // vCPU数
-    optional int32 cpu = 33;
-    // 实例挂载的本地存储数量
-    optional int32 local_storage_amount = 34;
-    // 过期时间。以ISO8601为标准，并使用UTC+0时间，格式为yyyy-MM-ddTHH:mmZ。
-    optional string expired_time = 35;
-    // 实例所属的企业资源组ID。
-    optional string resource_group_id = 36;
-    // 网络计费类型。可能值：
-    //  PayByBandwidth：按固定带宽计费。
-    //  PayByTraffic：按使用流量计费。
-    optional string internet_charge_type = 37;
-    // 实例所属可用区。
-    optional string zone_id = 38;
-    // 实例是否可以回收。
-    optional bool recyclable = 39;
-    // 修改突发性能实例的运行模式。可能值：
-    //  Standard：标准模式。
-    //  Unlimited：无性能约束模式，
-    optional string credit_specification = 40;
-    // 实例规格族。
-    optional string instance_type_family = 41;
-    // 实例的操作系统类型
-    optional string os_type = 42;
-    // 弹性网卡
-    message NetworkInterface {
-      // 弹性网卡类型。可能值：
-      //  Primary：主网卡。
-      //  Secondary：辅助弹性网卡。
-      optional string type = 1;
-      // 弹性网卡的MAC地址。
-      optional string mac_address = 2;
-      // 弹性网卡主私有IP地址。
-      optional string primary_ip_address = 3;
-      // 弹性网卡的ID。
-      optional string network_interface_id = 4;
-      message PrivateIpSet {
-        // 实例的私网IP地址。
-        optional string private_ip_address = 1;
-        // 是否是主私网IP地址。
-        optional bool primary = 2;
-      }
-      // PrivateIpSet组成的集合。
-      repeated PrivateIpSet private_ip_sets = 5;
-      message Ipv6Set {
-        // 为弹性网卡指定的IPv6地址。
-        optional string ipv6_address = 1;
-      }
-      // 为弹性网卡分配的IPv6地址集合。仅当请求参数AdditionalAttributes.N取值为NETWORK_PRIMARY_ENI_IP时，才会返回该参数值。
-      repeated Ipv6Set ipv6_sets = 6;
-    }
-    // 实例包含的弹性网卡集合。
-    repeated NetworkInterface network_interfaces = 43;
-    message OperationLock {
-      // 实例被锁定的描述信息。
-      optional string lock_msg = 1;
-      // 锁定类型。可能值：
-      //  financial：因欠费被锁定。
-      //  security：因安全原因被锁定。
-      //  Recycling：抢占式实例的待释放锁定状态。
-      //  dedicatedhostfinancial：因为专有宿主机欠费导致ECS实例被锁定。
-      //  refunded：因退款被锁定。
-      optional string lock_reason = 2;
-    }
-    // 实例的锁定原因。
-    repeated OperationLock operation_locks = 44;
-    message Tag {
-      // 实例的标签值。
-      optional string tag_value = 1;
-      // 实例的标签键。
-      optional string tag_key = 2;
-    }
-    // 实例的标签集合。
-    repeated Tag tags = 45;
-    // HPC实例的Rdma网络IP
-    repeated string rdma_ip_address = 46;
-    // 实例所属安全组集合
-    repeated string security_group_ids = 47;
-    // 实例公网IP地址
-    repeated string public_ip_address = 48;
-    // 经典网络类型实例的内网IP地址
-    repeated string inner_ip_address = 49;
-    // 专有网络VPC属性。
-    message VpcAttributes {
-      // 专有网络VPC ID。
-      optional string vpc_id = 1;
-      // 云产品的IP，用于VPC云产品之间的网络互通。
-      optional string nat_ip_address = 2;
-      // 虚拟交换机ID。
-      optional string v_switch_id = 3;
-      // 私有IP地址。
-      repeated string private_ip_address = 4;
-    }
-    VpcAttributes vpc_attributes = 50;
-    message EipAddress {
-      // 弹性公网IP的ID
-      optional string allocation_id = 1;
-      // 是否可以解绑弹性公网IP
-      optional bool is_support_un_associate = 2;
-      // 弹性公网IP的计费方式
-      optional string internal_charge_type = 3;
-      // 弹性公网IP
-      optional string ip_address = 4;
-      // 弹性公网IP
-      optional int32 bandwidth = 5;
-    }
-    // 弹性公网IP绑定信息
-    EipAddress eip_address = 51;
-    message DedicatedInstanceAttribute {
-      // 专有宿主机实例是否与专有宿主机关联。可能值：
-      //  default：专有宿主机实例不与专有宿主机关联。停机不收费实例重启后，可能会放置在自动资源部署池中的其它专有宿主机上。
-      //  host：专有宿主机实例与专有宿主机关联。停机不收费实例重启后，仍放置在原专有宿主机上。
-      optional string affinity = 1;
-      // 实例的宿主机类型是否为专有宿主机。可能值：
-      //  default：实例的宿主机类型不是专有宿主机。
-      //  host：实例的宿主机类型为专有宿主机。
-      optional string tenancy = 2;
-    }
-    // 专有宿主机实例的属性。
-    DedicatedInstanceAttribute dedicatedInstanceAttribute = 52;
-    // CPU配置详情。
-    message CpuOptions {
-      // 分配的线程数。可能值为2。
-      optional string numa = 1;
-      // 物理CPU核心数。
-      optional int32 core_count = 2;
-      // CPU线程数。
-      optional int32 thread_per_core = 3;
-    }
-    CpuOptions cpu_options = 53;
-  }
-  // 实例信息
-  repeated Instance instances = 6;
+  google.protobuf.Any data = 1;
 }
 
 message ListRegionsRequest {
@@ -384,20 +161,7 @@ message ListRegionsRequest {
 }
 
 message ListRegionsResponse {
-  message Region {
-    // 地域对应的接入地址（Endpoint）。
-    optional string region_end_point = 1;
-    // 地域名称。
-    optional string local_name = 2;
-    // 地域ID。
-    optional string region_id = 3;
-    // 集群是否售罄。可能值：
-    //  available
-    //  soldOut
-    optional string status = 4;
-  }
-  // 地域信息集合
-  repeated Region regions = 1;
+  google.protobuf.Any data = 1;
 }
 
 message ListImagesRequest {
@@ -427,92 +191,7 @@ message ListImagesRequest {
 }
 
 message ListImagesResponse {
-  // 当前分页包含多少条目。
-  optional int32 page_size = 1;
-  // 当前页码。
-  optional int32 page_number = 2;
-  // 请求ID。
-  optional string request_id = 3;
-  // 镜像总数
-  optional int32 total_count = 4;
-  // 镜像所属地域ID。
-  optional string region_id = 5;
-  message Image {
-    // 镜像的创建时间
-    optional string creation_time = 1;
-    // 镜像的状态。可能值：
-    //  UnAvailable：不可用
-    //  Available：可用
-    //  Creating：创建中
-    //  CreateFailed：创建失败
-    optional string status = 2;
-    // 镜像族系名称
-    optional string image_family = 3;
-    // 镜像完成的进度，单位为百分比。
-    optional string progress = 4;
-    // 是否是拷贝的镜像。
-    optional bool is_copied = 5;
-    // 是否可以在I/O优化实例上运行。
-    optional bool is_support_io_optimized = 6;
-    // 镜像来源。可能值：
-    //  system：阿里云提供的公共镜像。
-    //  self：您创建的自定义镜像。
-    //  others：其他阿里云用户提供的共享镜像或社区镜像。
-    //  marketplace：镜像市场提供的镜像。
-    optional string image_owner_alias = 7;
-    // 是否支持Cloud Init。
-    optional bool is_support_cloud_init = 8;
-    // 镜像版本。
-    optional string image_version = 9;
-    // 有引用关系的资源类型。可能值：
-    //  instance：创建了一台或多台ECS实例。
-    //  none：未创建过ECS实例。
-    optional string usage = 10;
-    // 是否共享过该自定义镜像给其他用户。
-    optional string is_self_shared = 11;
-    // 描述信息。
-    optional string description = 12;
-    // 镜像大小，单位：GiB。
-    optional int32 size = 13;
-    // 镜像所在的企业资源组ID。
-    optional string resource_group_id = 14;
-    // 操作系统平台。
-    optional string platform = 15;
-    // 操作系统的英文显示名称。
-    optional string os_name_en = 16;
-    // 镜像的名称。
-    optional string image_name = 17;
-    // 操作系统的中文显示名称。
-    optional string os_name = 18;
-    // 镜像ID。
-    optional string image_id = 19;
-    // 操作系统类型。可能值：
-    //  windows。
-    //  linux。
-    optional string os_type = 20;
-    // 是否订阅了该镜像的商品码对应的镜像商品的服务条款。
-    optional bool is_subscribed = 21;
-    // 镜像市场的镜像商品标示。
-    optional string product_code = 22;
-    // 镜像系统架构类型。可能值：
-    //  i386。
-    //  x86_64。
-    //  arm64。
-    optional string architecture = 23;
-    // 是否为公开镜像。公开镜像包括阿里云提供的公共镜像以及您已发布为社区镜像的自定义镜像。可能值：
-    //  true：公开镜像。
-    //  false：非公开镜像。
-    optional bool is_public = 24;
-    // 镜像所属的阿里云账号ID。该参数仅在查询共享镜像以及社区镜像时生效。
-    optional int64 image_owner_id = 25;
-    // 当前镜像是否支持非root用户登录。可能值：
-    //  true：支持。
-    //  false：不支持。
-    optional bool login_as_non_root_supported = 26;
-    // 社区镜像认证企业名称。
-    optional string supplier_name = 27;
-  }
-  repeated Image images = 6;
+  google.protobuf.Any data = 1;
 
 }
 
@@ -531,73 +210,7 @@ message ListInstanceTypesRequest {
 }
 
 message ListInstanceTypesResponse {
-  message InstanceType {
-    // 本地盘类型。更多信息，请参见本地盘。可能值：
-    //  localhddpro：实例规格族d1ne和d1搭载的SATA HDD本地盘。
-    //  localssdpro：实例规格族i2、i2g、i1、ga1和gn5等搭载的NVMe SSD本地盘。
-    optional string local_storage_category = 1;
-    // 主网卡默认队列数。
-    optional int32 primary_eni_queue_number = 2;
-    // 内存大小。单位：GiB
-    optional float memory_size = 3;
-    // 实例挂载的本地盘的单盘容量。单位：GiB
-    optional int64 local_storage_capacity = 4;
-    // 实例规格族级别。可能值：
-    //  EntryLevel：入门级（共享型）。
-    //  EnterpriseLevel：企业级。
-    //  CreditEntryLevel：积分入门级。
-    optional string instance_family_level = 5;
-    // 内网入方向网络收发包能力。单位：Pps
-    optional int64 instance_pps_rx = 6;
-    // 单块弹性网卡的IPv6地址上限。
-    optional int32 eni_ipv6_address_quantity = 7;
-    // 单块弹性网卡最大队列数。
-    optional int32 maximum_queue_number_per_eni = 8;
-    // 实例规格ID。
-    optional string instance_type_id = 9;
-    // 内网入方向带宽限制。单位：kbit/s
-    optional int32 instance_bandwidth_rx = 10;
-    // 辅助弹性网卡默认队列数。
-    optional int32 secondary_eni_queue_number = 11;
-    // GPU类型。
-    optional string gpu_spec = 12;
-    // 内网出方向带宽限制。单位：kbit/s
-    optional int32 queue_pair_number = 13;
-    // 弹性RDMA网卡（ERI）数量。
-    optional int32 eri_quatity = 14;
-    // GPU数量。
-    optional int32 gpu_amount = 15;
-    // 实例规格允许修改的弹性网卡队列数总配额。
-    optional int32 total_eni_queue_quantity = 16;
-    // 实例规格所挂载的云盘是否支持NVMe。可能值：
-    //  required：支持。表示云盘以NVMe的方式挂载。
-    //  unsupported：不支持。表示云盘不以NVMe的方式挂载。
-    optional string nvme_support = 17;
-    // 支持挂载的云盘数量上限。
-    optional int32 disk_quantity = 18;
-    // 突发性能实例t5、t6的初始vCPU积分值。
-    optional int32 initial_credit = 19;
-    // 实例挂载的本地盘的数量。
-    optional int32 local_storage_amount = 20;
-    // 突发性能实例t5、t6的基准vCPU计算性能（所有vCPU之和）。
-    optional int32 baseline_credit = 21;
-    // 内网出方向网络收发包能力。单位：Pps
-    optional int64 instance_pps_tx = 22;
-    // 单块弹性网卡的私有IP地址上限。
-    optional int32 eni_private_ip_address_quantity = 23;
-    // vCPU内核数目。
-    optional int32 cpu_core_count = 24;
-    // 实例规格族。
-    optional string instance_type_family = 25;
-    // 支持挂载的弹性网卡上限。
-    optional int32 eni_quantity = 26;
-  }
-  // 请求ID。
-  optional string request_id = 1;
-  // 实例规格集合。
-  repeated InstanceType instance_types = 2;
-  // 本次调用返回的查询凭证（Token）。
-  optional string next_token = 3;
+  google.protobuf.Any data = 1;
 }
 
 message StartInstancesRequest {
@@ -622,24 +235,8 @@ message StartInstancesRequest {
   optional bool dry_run = 7;
 }
 
-message InstanceResponse {
-  // 实例操作结果错误码。返回值200为成功
-  optional string code = 1;
-  // 实例操作返回错误信息。返回值success为成功
-  optional string message = 2;
-  // 实例ID
-  optional string instance_id = 3;
-  // 实例当前状态
-  optional string current_status = 4;
-  // 操作前实例的状态
-  optional string previous_status = 5;
-}
-
 message StartInstancesResponse {
-  // 请求ID
-  optional string request_id = 1;
-  // 由InstanceResponse组成的数组格式，返回每个实例操作的前后状态及操作结果。
-  repeated InstanceResponse instance_responses = 2;
+  google.protobuf.Any data = 1;
 }
 
 message StopInstancesRequest {
@@ -675,9 +272,7 @@ message StopInstancesRequest {
 }
 
 message StopInstancesResponse {
-  optional string request_id = 1;
-  // 由InstanceResponse组成的数组格式，返回每个实例操作的前后状态及操作结果。
-  repeated InstanceResponse instance_responses = 2;
+  google.protobuf.Any data = 1;
 }
 
 message RebootInstancesRequest {
@@ -708,9 +303,7 @@ message RebootInstancesRequest {
 }
 
 message RebootInstancesResponse {
-  optional string request_id = 1;
-  // 由InstanceResponse组成的数组格式，返回每个实例操作的前后状态及操作结果。
-  repeated InstanceResponse instance_responses = 2;
+  google.protobuf.Any data = 1;
 }
 
 message DeleteInstancesRequest {
@@ -738,6 +331,5 @@ message DeleteInstancesRequest {
 }
 
 message DeleteInstancesResponse {
-  // 请求ID。
-  optional string request_id = 1;
+  google.protobuf.Any data = 1;
 }

@@ -1,30 +1,285 @@
 syntax = "proto3";
 
 package services.azure.api.instance.v1;
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "validate/validate.proto";
 
 option go_package = "cloud-api/services/azure/api/instance/v1;v1";
 option java_multiple_files = true;
 option java_package = "services.azure.api.instance.v1";
 
 service Instance {
-	rpc CreateInstance (CreateInstanceRequest) returns (CreateInstanceReply);
-	rpc UpdateInstance (UpdateInstanceRequest) returns (UpdateInstanceReply);
-	rpc DeleteInstance (DeleteInstanceRequest) returns (DeleteInstanceReply);
-	rpc GetInstance (GetInstanceRequest) returns (GetInstanceReply);
-	rpc ListInstance (ListInstanceRequest) returns (ListInstanceReply);
+  // ListLocations this operation provides all the locations that are available for resource providers; however, each resource provider may support a subset of this list.
+  rpc ListRegions (ListRegionsRequest) returns (ListRegionsResponse) {
+    option (google.api.http) = {
+      get: "/api/regions"
+    };
+  };
+  // 查询可以使用的镜像资源
+  rpc ListImages (ListImagesRequest) returns (ListImagesResponse) {
+    option (google.api.http) = {
+      get: "/api/images"
+    };
+  };
+  // 选择实例规格
+  rpc ListInstanceTypes(ListInstanceTypesRequest) returns (ListInstanceTypesResponse) {
+    option (google.api.http) = {
+      get: "/api/instance-types"
+    };
+  };
+  // 创建实例
+  rpc CreateInstances (CreateInstancesRequest) returns (CreateInstancesResponse) {
+    option (google.api.http) = {
+      post: "/api/instances",
+      body: "*"
+    };
+  };
+  // 实例列表
+  rpc ListInstances (ListInstancesRequest) returns (ListInstancesResponse) {
+    option (google.api.http) = {
+      get: "/api/instances"
+    };
+  };
+  // 开机
+  rpc StartInstances(StartInstancesRequest) returns (StartInstancesResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/start",
+      body: "*"
+    };
+  };
+  // 关机
+  rpc StopInstances(StopInstancesRequest) returns (StopInstancesResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/stop",
+      body: "*"
+    };
+  };
+  // 重启
+  rpc RebootInstances(RebootInstancesRequest) returns (RebootInstancesResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/reboot",
+      body: "*"
+    };
+  };
+  // 删除实例
+  rpc DeleteInstances(DeleteInstancesRequest) returns (DeleteInstancesResponse) {
+    option (google.api.http) = {
+      put: "/api/instances/terminate",
+      body: "*"
+    };
+  };
 }
 
-message CreateInstanceRequest {}
-message CreateInstanceReply {}
+message ListRegionsRequest {
+  string tenant_iD = 1 [(validate.rules).string.min_len = 1];
+  string client_iD = 2 [(validate.rules).string.min_len = 1];
+  string client_secret = 3 [(validate.rules).string.min_len = 1];
+	string subscription_id = 4 [(validate.rules).string.min_len = 1];
+	optional bool include_extended_locations = 5;
+}
 
-message UpdateInstanceRequest {}
-message UpdateInstanceReply {}
+message ListRegionsResponse {
+  google.protobuf.Any data = 1;
+}
 
-message DeleteInstanceRequest {}
-message DeleteInstanceReply {}
+message ListImagesRequest {
+  string tenant_iD = 1 [(validate.rules).string.min_len = 1];
+  string client_iD = 2 [(validate.rules).string.min_len = 1];
+  string client_secret = 3 [(validate.rules).string.min_len = 1];
+  string subscription_id = 4 [(validate.rules).string.min_len = 1];
+}
 
-message GetInstanceRequest {}
-message GetInstanceReply {}
+message ListImagesResponse {
+  google.protobuf.Any data = 1;
+}
 
-message ListInstanceRequest {}
-message ListInstanceReply {}
+message ListInstanceTypesRequest {
+}
+
+message ListInstanceTypesResponse {
+  google.protobuf.Any data = 1;
+}
+
+message CreateInstancesRequest {
+  // 阿里云AccessKey ID
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // 阿里云AccessKey Secret
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  // 访问的域名
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
+  // 地域id
+  optional string region_id = 4 [(validate.rules).string.min_len = 1];
+  // 镜像id
+  optional string image_id = 5;
+  // 实例名称
+  optional string name = 6;
+  // 实例规格
+  optional string instance_type = 7;
+  // 系统盘大小
+  optional string system_disk_size = 8;
+  // 是否为instance_name自动添加有序后缀（默认false）
+  optional bool unique_suffix = 9;
+  // 创建数量(1-100，默认1)
+  optional int32 amount = 10;
+  // 实例密码
+  optional string password = 11;
+  // 是否只预检此次请求。取值范围：
+  //  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  //  false（默认）：发送正常请求，通过检查后直接创建实例。
+  optional bool dry_run = 12;
+}
+
+message CreateInstancesResponse {
+  google.protobuf.Any data = 1;
+}
+
+message ListInstancesRequest {
+  // 阿里云AccessKey ID
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // 阿里云AccessKey Secret
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  // 访问的域名
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
+  // 实例所属的地域ID
+  optional string region_id = 4;
+  // 实例状态列表的页码，起始值1，默认值1
+  optional int32 page_number = 5;
+  // 分页查询时设置的每页行数。
+  //  最大值为100。
+  //  默认值为10。
+  optional int32 page_size = 6;
+  // 查询凭证（Token），取值为上一次API调用返回的NextToken参数值
+  optional string next_token = 7;
+  // 实例名称，支持使用通配符*进行模糊搜索。
+  optional string instance_name = 8;
+  // 是否只预检此次请求。取值范围：
+  //  true：发送检查请求，不会查询资源状况。检查项包括AccessKey是否有效、RAM用户的授权情况和是否填写了必需参数。如果检查不通过，则返回对应错误。如果检查通过，会返回错误码DryRunOperation。
+  //  false（默认值）：发送正常请求，通过检查后返回2XX HTTP状态码并直接查询资源状况。
+  optional bool dry_run = 9;
+}
+
+message ListInstancesResponse {
+  google.protobuf.Any data = 1;
+}
+
+message StartInstancesRequest {
+  // 阿里云AccessKey ID
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // 阿里云AccessKey Secret
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  // 访问的域名
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
+  // 地域id
+  optional string region_id = 4 [(validate.rules).string.min_len = 1];
+  // 实例ID, 数组长度取值范围：1~100
+  repeated string instance_ids = 5 [(validate.rules).repeated = {min_items: 1, max_items: 100}];
+  // 设置批量操作模式。取值范围：
+  //  AllTogether：该模式下，如果实例全部启动成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例启动失败，并返回失败信息。
+  //  SuccessFirst：该模式下，分别启动每个实例，返回结果包含每个实例的操作结果信息。
+  //  默认值：AllTogether
+  optional string batch_optimization = 6;
+  // 是否只预检此次请求。取值范围：
+  //  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  //  false（默认）：发送正常请求，通过检查后直接创建实例。
+  optional bool dry_run = 7;
+}
+
+message StartInstancesResponse {
+  google.protobuf.Any data = 1;
+}
+
+message StopInstancesRequest {
+  // 阿里云AccessKey ID
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // 阿里云AccessKey Secret
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  // 访问的域名
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
+  // 地域id
+  optional string region_id = 4 [(validate.rules).string.min_len = 1];
+  // 是否强制关机。取值范围：
+  //  true：强制关机。相当于典型的断电操作，所有未写入存储设备的缓存数据会丢失。
+  //  false：正常关机。
+  //  默认值：false
+  optional bool force_stop = 5;
+  // 停止按量付费ECS实例时，设置的停止模式。取值
+  //  StopCharging：节省停机模式。有关StopCharging生效的条件，请参见按量付费实例节省停机模式的启用条件章节。
+  //  KeepCharging：普通停机模式。实例停止后仍继续收费。
+  //  默认值：如果您在ECS控制台上开启VPC内实例节省停机模式（更多信息，请参见打开默认启用节省停机模式），并符合开启条件，则默认值为StopCharging。否则，默认值为KeepCharging。
+  optional string stopped_mode = 6;
+  // 设置批量操作模式。取值范围：
+  //  AllTogether：该模式下，如果实例全部停止成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例停止失败，并返回失败信息。
+  //  SuccessFirst：该模式下，分别停止每个实例，返回结果包含每个实例的操作结果信息。
+  // 默认值：AllTogether
+  optional string batch_optimization = 7;
+  // 实例ID列表
+  repeated string instance_ids = 8 [(validate.rules).repeated = {min_items: 1, max_items: 100}];
+  // 是否只预检此次请求。取值范围：
+  //  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  //  false（默认）：发送正常请求，通过检查后直接创建实例。
+  optional bool dry_run = 9;
+}
+
+message StopInstancesResponse {
+  google.protobuf.Any data = 1;
+}
+
+message RebootInstancesRequest {
+  // 阿里云AccessKey ID
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // 阿里云AccessKey Secret
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  // 访问的域名
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
+  // 地域id
+  optional string region_id = 4 [(validate.rules).string.min_len = 1];
+  // 是否强制重启。取值范围：
+  //  true：强制重启。相当于典型的断电操作，所有未写入存储设备的缓存数据会丢失。
+  //  false：正常重启。
+  //  默认值：false
+  optional bool force_reboot = 5;
+  // 设置批量操作模式。取值范围：
+  //  AllTogether：该模式下，如果实例全部重启成功，则返回成功信息；如果任意一个实例校验不通过，则所有实例重启失败，并返回失败信息。
+  //  SuccessFirst：该模式下，分别重启每个实例，返回结果包含每个实例的操作结果信息。
+  //  默认值：AllTogether
+  optional string batch_optimization = 6;
+  // 实例ID。N的取值范围：1~100。
+  repeated string instance_ids = 7 [(validate.rules).repeated = {min_items: 1, max_items: 100}];
+  // 是否只预检此次请求。取值范围：
+  //  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  //  false（默认）：发送正常请求，通过检查后直接创建实例。
+  optional bool dry_run = 8;
+}
+
+message RebootInstancesResponse {
+  google.protobuf.Any data = 1;
+}
+
+message DeleteInstancesRequest {
+  // 阿里云AccessKey ID
+  optional string access_key_id = 1 [(validate.rules).string.min_len = 1];
+  // 阿里云AccessKey Secret
+  optional string access_key_secret = 2 [(validate.rules).string.min_len = 1];
+  // 访问的域名
+  optional string endpoint = 3 [(validate.rules).string.min_len = 1];
+  // 地域id
+  optional string region_id = 4 [(validate.rules).string.min_len = 1];
+  // 是否强制释放运行中（Running）的实例。
+  //  true：强制释放运行中（Running）的实例。强制释放相当于断电，实例内存以及存储中的临时数据都会被擦除，无法恢复。
+  //  false：正常释放实例，此时实例必须处于已停止（Stopped）状态。
+  //  默认值为false。
+  optional bool force = 5;
+  // 是否释放已到期的包年包月实例。
+  // 默认值为false。
+  optional bool terminate_subscription = 6;
+  repeated string instance_ids = 7;
+  // 是否只预检此次请求。取值范围：
+  //  true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+  //  false（默认）：发送正常请求，通过检查后直接创建实例。
+  optional bool dry_run = 8;
+}
+
+message DeleteInstancesResponse {
+  google.protobuf.Any data = 1;
+}

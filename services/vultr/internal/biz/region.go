@@ -6,8 +6,13 @@ import (
 	"github.com/vultr/govultr/v2"
 )
 
+type ListRegionsResponse struct {
+	Regions []govultr.Region `json:"regions"`
+	Meta    *govultr.Meta    `json:"meta"`
+}
+
 type RegionResponse interface {
-	ListRegions(context.Context, string, *govultr.ListOptions) ([]govultr.Region, *govultr.Meta, error)
+	ListRegions(context.Context, string, *govultr.ListOptions) (*ListRegionsResponse, error)
 }
 
 // RegionUseCase is a Region UseCase.
@@ -22,6 +27,6 @@ func NewRegionUseCase(repo RegionResponse, logger log.Logger) *RegionUseCase {
 }
 
 // ListRegions List Regions
-func (uc *RegionUseCase) ListRegions(ctx context.Context, accessToken string, request *govultr.ListOptions) ([]govultr.Region, *govultr.Meta, error) {
+func (uc *RegionUseCase) ListRegions(ctx context.Context, accessToken string, request *govultr.ListOptions) (*ListRegionsResponse, error) {
 	return uc.repo.ListRegions(ctx, accessToken, request)
 }

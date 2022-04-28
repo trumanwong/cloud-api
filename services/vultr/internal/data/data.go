@@ -10,7 +10,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewInstanceRepo)
+var ProviderSet = wire.NewSet(NewData, NewInstanceRepo, NewImageRepo, NewRegionRepo, NewPlanRepo)
 
 // Data .
 type Data struct {
@@ -25,7 +25,7 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	return &Data{}, cleanup, nil
 }
 
-func newClient(accessToken string) *govultr.Client {
+func getClient(accessToken string) *govultr.Client {
 	config := &oauth2.Config{}
 	ctx := context.Background()
 	ts := config.TokenSource(ctx, &oauth2.Token{AccessToken: accessToken})
