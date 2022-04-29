@@ -98,7 +98,7 @@ message CreateInstancesRequest {
   // 购买多台实例，如果指定模式串{R:x}，表示生成数字[x, x+n-1]，其中n表示购买实例的数量，例如server_{R:3}，购买1台时，实例显示名称为server_3；购买2台时，实例显示名称分别为server_3，server_4。支持指定多个模式串{R:x}。
   // 购买多台实例，如果不指定模式串，则在实例显示名称添加后缀1、2...n，其中n表示购买实例的数量，例如server_，购买2台时，实例显示名称分别为server_1，server_2。
   // 最多支持60个字符（包含模式串）。
-  optional string name = 6;
+  optional string instance_name = 6;
   // 实例规格
   optional string instance_type = 7;
   // 实例系统盘配置信息。若不指定该参数，则按照系统默认值进行分配。

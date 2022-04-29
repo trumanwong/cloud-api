@@ -83,7 +83,7 @@ message CreateInstancesRequest {
   // 镜像id
   optional string image_id = 5;
   // 实例名称
-  optional string name = 6;
+  optional string instance_name = 6;
   // 实例规格
   optional string instance_type = 7;
   // 系统盘大小

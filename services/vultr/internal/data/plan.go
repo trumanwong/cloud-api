@@ -21,9 +21,7 @@ func NewPlanRepo(data *Data, logger log.Logger) biz.PlanResponse {
 }
 
 func (r *planResponse) ListPlans(ctx context.Context, accessToken, planType string, request *govultr.ListOptions) (*biz.ListPlansResponse, error) {
-	client := getClient(
-		accessToken,
-	)
+	client := getClient(ctx, accessToken)
 	plans, meta, err := client.Plan.List(ctx, planType, request)
 	if err != nil {
 		return nil, err

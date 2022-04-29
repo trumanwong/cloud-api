@@ -21,7 +21,7 @@ type InstanceHTTPServer interface {
 	CreateInstance(context.Context, *CreateInstanceRequest) (*CreateInstanceResponse, error)
 	DeleteInstance(context.Context, *DeleteInstanceRequest) (*DeleteInstanceResponse, error)
 	ListImages(context.Context, *ListImagesRequest) (*ListImagesResponse, error)
-	ListInstance(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error)
+	ListInstances(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error)
 	ListPlans(context.Context, *ListPlansRequest) (*ListPlansResponse, error)
 	ListRegions(context.Context, *ListRegionsRequest) (*ListRegionsResponse, error)
 	RebootInstance(context.Context, *RebootInstanceRequest) (*RebootInstanceResponse, error)
@@ -35,11 +35,11 @@ func RegisterInstanceHTTPServer(s *http.Server, srv InstanceHTTPServer) {
 	r.GET("/api/images", _Instance_ListImages0_HTTP_Handler(srv))
 	r.GET("/api/plans", _Instance_ListPlans0_HTTP_Handler(srv))
 	r.POST("/api/instance", _Instance_CreateInstance0_HTTP_Handler(srv))
-	r.GET("/api/instances", _Instance_ListInstance0_HTTP_Handler(srv))
-	r.PUT("/api/instances/start", _Instance_StartInstance0_HTTP_Handler(srv))
-	r.PUT("/api/instances/stop", _Instance_StopInstance0_HTTP_Handler(srv))
-	r.PUT("/api/instances/reboot", _Instance_RebootInstance0_HTTP_Handler(srv))
-	r.PUT("/api/instances/terminate", _Instance_DeleteInstance0_HTTP_Handler(srv))
+	r.GET("/api/instances", _Instance_ListInstances0_HTTP_Handler(srv))
+	r.PUT("/api/instance/start", _Instance_StartInstance0_HTTP_Handler(srv))
+	r.PUT("/api/instance/stop", _Instance_StopInstance0_HTTP_Handler(srv))
+	r.PUT("/api/instance/reboot", _Instance_RebootInstance0_HTTP_Handler(srv))
+	r.PUT("/api/instance/terminate", _Instance_DeleteInstance0_HTTP_Handler(srv))
 }
 
 func _Instance_ListRegions0_HTTP_Handler(srv InstanceHTTPServer) func(ctx http.Context) error {
@@ -118,15 +118,15 @@ func _Instance_CreateInstance0_HTTP_Handler(srv InstanceHTTPServer) func(ctx htt
 	}
 }
 
-func _Instance_ListInstance0_HTTP_Handler(srv InstanceHTTPServer) func(ctx http.Context) error {
+func _Instance_ListInstances0_HTTP_Handler(srv InstanceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ListInstancesRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/services.vultr.api.instance.v1.Instance/ListInstance")
+		http.SetOperation(ctx, "/services.vultr.api.instance.v1.Instance/ListInstances")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ListInstance(ctx, req.(*ListInstancesRequest))
+			return srv.ListInstances(ctx, req.(*ListInstancesRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -217,7 +217,7 @@ type InstanceHTTPClient interface {
 	CreateInstance(ctx context.Context, req *CreateInstanceRequest, opts ...http.CallOption) (rsp *CreateInstanceResponse, err error)
 	DeleteInstance(ctx context.Context, req *DeleteInstanceRequest, opts ...http.CallOption) (rsp *DeleteInstanceResponse, err error)
 	ListImages(ctx context.Context, req *ListImagesRequest, opts ...http.CallOption) (rsp *ListImagesResponse, err error)
-	ListInstance(ctx context.Context, req *ListInstancesRequest, opts ...http.CallOption) (rsp *ListInstancesResponse, err error)
+	ListInstances(ctx context.Context, req *ListInstancesRequest, opts ...http.CallOption) (rsp *ListInstancesResponse, err error)
 	ListPlans(ctx context.Context, req *ListPlansRequest, opts ...http.CallOption) (rsp *ListPlansResponse, err error)
 	ListRegions(ctx context.Context, req *ListRegionsRequest, opts ...http.CallOption) (rsp *ListRegionsResponse, err error)
 	RebootInstance(ctx context.Context, req *RebootInstanceRequest, opts ...http.CallOption) (rsp *RebootInstanceResponse, err error)
@@ -248,7 +248,7 @@ func (c *InstanceHTTPClientImpl) CreateInstance(ctx context.Context, in *CreateI
 
 func (c *InstanceHTTPClientImpl) DeleteInstance(ctx context.Context, in *DeleteInstanceRequest, opts ...http.CallOption) (*DeleteInstanceResponse, error) {
 	var out DeleteInstanceResponse
-	pattern := "/api/instances/terminate"
+	pattern := "/api/instance/terminate"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/services.vultr.api.instance.v1.Instance/DeleteInstance"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -272,11 +272,11 @@ func (c *InstanceHTTPClientImpl) ListImages(ctx context.Context, in *ListImagesR
 	return &out, err
 }
 
-func (c *InstanceHTTPClientImpl) ListInstance(ctx context.Context, in *ListInstancesRequest, opts ...http.CallOption) (*ListInstancesResponse, error) {
+func (c *InstanceHTTPClientImpl) ListInstances(ctx context.Context, in *ListInstancesRequest, opts ...http.CallOption) (*ListInstancesResponse, error) {
 	var out ListInstancesResponse
 	pattern := "/api/instances"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/services.vultr.api.instance.v1.Instance/ListInstance"))
+	opts = append(opts, http.Operation("/services.vultr.api.instance.v1.Instance/ListInstances"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -313,7 +313,7 @@ func (c *InstanceHTTPClientImpl) ListRegions(ctx context.Context, in *ListRegion
 
 func (c *InstanceHTTPClientImpl) RebootInstance(ctx context.Context, in *RebootInstanceRequest, opts ...http.CallOption) (*RebootInstanceResponse, error) {
 	var out RebootInstanceResponse
-	pattern := "/api/instances/reboot"
+	pattern := "/api/instance/reboot"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/services.vultr.api.instance.v1.Instance/RebootInstance"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -326,7 +326,7 @@ func (c *InstanceHTTPClientImpl) RebootInstance(ctx context.Context, in *RebootI
 
 func (c *InstanceHTTPClientImpl) StartInstance(ctx context.Context, in *StartInstanceRequest, opts ...http.CallOption) (*StartInstanceResponse, error) {
 	var out StartInstanceResponse
-	pattern := "/api/instances/start"
+	pattern := "/api/instance/start"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/services.vultr.api.instance.v1.Instance/StartInstance"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -339,7 +339,7 @@ func (c *InstanceHTTPClientImpl) StartInstance(ctx context.Context, in *StartIns
 
 func (c *InstanceHTTPClientImpl) StopInstance(ctx context.Context, in *StopInstanceRequest, opts ...http.CallOption) (*StopInstanceResponse, error) {
 	var out StopInstanceResponse
-	pattern := "/api/instances/stop"
+	pattern := "/api/instance/stop"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/services.vultr.api.instance.v1.Instance/StopInstance"))
 	opts = append(opts, http.PathTemplate(pattern))

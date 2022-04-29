@@ -21,7 +21,7 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 }
 
 func (r *regionResponse) ListRegions(ctx context.Context, accessToken string, request *govultr.ListOptions) (*biz.ListRegionsResponse, error) {
-	client := getClient(accessToken)
+	client := getClient(ctx, accessToken)
 	regions, meta, err := client.Region.List(ctx, request)
 	if err != nil {
 		return nil, err

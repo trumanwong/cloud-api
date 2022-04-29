@@ -36,7 +36,7 @@ service Instance {
     };
   };
   // Returns a paginated list of Linodes you have permission to view.
-  rpc ListInstance (ListInstancesRequest) returns (ListInstancesResponse) {
+  rpc ListInstances (ListInstancesRequest) returns (ListInstancesResponse) {
     option (google.api.http) = {
       get: "/api/instances"
     };
@@ -44,28 +44,28 @@ service Instance {
   // Boots a Linode you have permission to modify.
   rpc StartInstance(StartInstanceRequest) returns (StartInstanceResponse) {
     option (google.api.http) = {
-      put: "/api/instances/start",
+      put: "/api/instance/start",
       body: "*"
     };
   };
   // Shuts down a Linode you have permission to modify.
   rpc StopInstance(StopInstanceRequest) returns (StopInstanceResponse) {
     option (google.api.http) = {
-      put: "/api/instances/stop",
+      put: "/api/instance/stop",
       body: "*"
     };
   };
   // Reboots a Linode you have permission to modify.
   rpc RebootInstance(RebootInstanceRequest) returns (RebootInstanceResponse) {
     option (google.api.http) = {
-      put: "/api/instances/reboot",
+      put: "/api/instance/reboot",
       body: "*"
     };
   };
   // Deletes a Linode you have permission to read_write.
   rpc DeleteInstance(DeleteInstanceRequest) returns (DeleteInstanceResponse) {
     option (google.api.http) = {
-      put: "/api/instances/terminate",
+      put: "/api/instance/terminate",
       body: "*"
     };
   };

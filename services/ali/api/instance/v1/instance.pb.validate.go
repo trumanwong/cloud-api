@@ -121,8 +121,8 @@ func (m *CreateInstancesRequest) validate(all bool) error {
 		// no validation rules for ImageId
 	}
 
-	if m.Name != nil {
-		// no validation rules for Name
+	if m.InstanceName != nil {
+		// no validation rules for InstanceName
 	}
 
 	if m.InstanceType != nil {

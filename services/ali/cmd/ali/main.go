@@ -104,11 +104,11 @@ func main() {
 		panic(err)
 	}
 
-	var registry conf.Registry
-	if err := c.Scan(&registry); err != nil {
+	var r conf.Registry
+	if err := c.Scan(&r); err != nil {
 		panic(err)
 	}
-	app, cleanup, err := wireApp(bc.Server, &registry, bc.Data, logger)
+	app, cleanup, err := wireApp(bc.Server, &r, bc.Data, logger)
 	if err != nil {
 		panic(err)
 	}

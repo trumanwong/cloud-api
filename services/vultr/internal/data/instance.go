@@ -22,7 +22,7 @@ func NewInstanceRepo(data *Data, logger log.Logger) biz.InstanceResponse {
 }
 
 func (r *instanceResponse) CreateInstance(ctx context.Context, accessToken string, request *govultr.InstanceCreateReq) (*govultr.Instance, error) {
-	client := getClient(accessToken)
+	client := getClient(ctx, accessToken)
 	result, err := client.Instance.Create(ctx, request)
 	if err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func (r *instanceResponse) CreateInstance(ctx context.Context, accessToken strin
 }
 
 func (r *instanceResponse) ListInstances(ctx context.Context, accessToken string, request *govultr.ListOptions) (*biz.ListInstancesResponse, error) {
-	client := getClient(accessToken)
+	client := getClient(ctx, accessToken)
 	instances, meta, err := client.Instance.List(ctx, request)
 	if err != nil {
 		return nil, err
@@ -44,17 +44,17 @@ func (r *instanceResponse) ListInstances(ctx context.Context, accessToken string
 }
 
 func (r *instanceResponse) StartInstance(ctx context.Context, accessToken, instanceId string) error {
-	return getClient(accessToken).Instance.Start(ctx, instanceId)
+	return getClient(ctx, accessToken).Instance.Start(ctx, instanceId)
 }
 
 func (r *instanceResponse) StopInstance(ctx context.Context, accessToken, instanceId string) error {
-	return getClient(accessToken).Instance.Halt(ctx, instanceId)
+	return getClient(ctx, accessToken).Instance.Halt(ctx, instanceId)
 }
 
 func (r *instanceResponse) RebootInstance(ctx context.Context, accessToken, instanceId string) error {
-	return getClient(accessToken).Instance.Reboot(ctx, instanceId)
+	return getClient(ctx, accessToken).Instance.Reboot(ctx, instanceId)
 }
 
 func (r *instanceResponse) DeleteInstance(ctx context.Context, accessToken, instanceId string) error {
-	return getClient(accessToken).Instance.Delete(ctx, instanceId)
+	return getClient(ctx, accessToken).Instance.Delete(ctx, instanceId)
 }

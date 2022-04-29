@@ -258,7 +258,7 @@ components:
                 imageId:
                     type: string
                     description: 镜像id
-                name:
+                instanceName:
                     type: string
                     description: 实例名称, 不指定实例显示名称则默认显示‘未命名’。 购买多台实例，如果指定模式串{R:x}，表示生成数字[x, x+n-1]，其中n表示购买实例的数量，例如server_{R:3}，购买1台时，实例显示名称为server_3；购买2台时，实例显示名称分别为server_3，server_4。支持指定多个模式串{R:x}。 购买多台实例，如果不指定模式串，则在实例显示名称添加后缀1、2...n，其中n表示购买实例的数量，例如server_，购买2台时，实例显示名称分别为server_1，server_2。 最多支持60个字符（包含模式串）。
                 instanceType:

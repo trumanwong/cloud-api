@@ -20,7 +20,7 @@ func NewRegionRepo(data *Data, logger log.Logger) biz.RegionResponse {
 	}
 }
 
-func (r *regionResponse) ListRegions(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeRegionsRequest) (*ecs20140526.DescribeRegionsResponse, error) {
+func (r *regionResponse) ListRegions(ctx context.Context, accessKeyId, accessKeySecret, endpoint *string, request *ecs20140526.DescribeRegionsRequest) (*ecs20140526.DescribeRegionsResponse, error) {
 	client, err := getClient(
 		accessKeyId,
 		accessKeySecret,

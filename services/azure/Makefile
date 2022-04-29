@@ -43,6 +43,9 @@ generate:
 	go get github.com/google/wire/cmd/wire@latest
 	go generate ./...
 
+wire:
+	cd cmd/azure/ && wire
+
 .PHONY: all
 # generate all
 all:

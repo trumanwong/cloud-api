@@ -330,7 +330,7 @@ components:
                 imageId:
                     type: string
                     description: 镜像id
-                name:
+                instanceName:
                     type: string
                     description: 实例名称
                 instanceType:

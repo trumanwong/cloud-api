@@ -20,7 +20,7 @@ func NewInstanceRepo(data *Data, logger log.Logger) biz.InstanceResponse {
 	}
 }
 
-func (r *instanceResponse) CreateInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error) {
+func (r *instanceResponse) CreateInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint *string, request *ecs20140526.RunInstancesRequest) (*ecs20140526.RunInstancesResponseBody, error) {
 	client, err := getClient(
 		accessKeyId,
 		accessKeySecret,
@@ -37,7 +37,7 @@ func (r *instanceResponse) CreateInstances(ctx context.Context, accessKeyId, acc
 	return result.Body, nil
 }
 
-func (r *instanceResponse) ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponse, error) {
+func (r *instanceResponse) ListInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint *string, request *ecs20140526.DescribeInstancesRequest) (*ecs20140526.DescribeInstancesResponse, error) {
 	client, err := getClient(
 		accessKeyId,
 		accessKeySecret,
@@ -53,7 +53,7 @@ func (r *instanceResponse) ListInstances(ctx context.Context, accessKeyId, acces
 	return result, nil
 }
 
-func (r *instanceResponse) StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StartInstancesRequest) (*ecs20140526.StartInstancesResponse, error) {
+func (r *instanceResponse) StartInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint *string, request *ecs20140526.StartInstancesRequest) (*ecs20140526.StartInstancesResponse, error) {
 	client, err := getClient(
 		accessKeyId,
 		accessKeySecret,
@@ -69,7 +69,7 @@ func (r *instanceResponse) StartInstances(ctx context.Context, accessKeyId, acce
 	return result, nil
 }
 
-func (r *instanceResponse) StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.StopInstancesRequest) (*ecs20140526.StopInstancesResponse, error) {
+func (r *instanceResponse) StopInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint *string, request *ecs20140526.StopInstancesRequest) (*ecs20140526.StopInstancesResponse, error) {
 	client, err := getClient(
 		accessKeyId,
 		accessKeySecret,
@@ -85,7 +85,7 @@ func (r *instanceResponse) StopInstances(ctx context.Context, accessKeyId, acces
 	return result, nil
 }
 
-func (r *instanceResponse) RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.RebootInstancesRequest) (*ecs20140526.RebootInstancesResponse, error) {
+func (r *instanceResponse) RebootInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint *string, request *ecs20140526.RebootInstancesRequest) (*ecs20140526.RebootInstancesResponse, error) {
 	client, err := getClient(
 		accessKeyId,
 		accessKeySecret,
@@ -101,7 +101,7 @@ func (r *instanceResponse) RebootInstances(ctx context.Context, accessKeyId, acc
 	return result, nil
 }
 
-func (r *instanceResponse) DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint string, request *ecs20140526.DeleteInstancesRequest) (*ecs20140526.DeleteInstancesResponse, error) {
+func (r *instanceResponse) DeleteInstances(ctx context.Context, accessKeyId, accessKeySecret, endpoint *string, request *ecs20140526.DeleteInstancesRequest) (*ecs20140526.DeleteInstancesResponse, error) {
 	client, err := getClient(
 		accessKeyId,
 		accessKeySecret,

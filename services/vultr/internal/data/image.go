@@ -21,7 +21,7 @@ func NewImageRepo(data *Data, logger log.Logger) biz.ImageResponse {
 }
 
 func (r *imageResponse) ListImages(ctx context.Context, accessToken string, request *govultr.ListOptions) (*biz.ListImagesResponse, error) {
-	client := getClient(accessToken)
+	client := getClient(ctx, accessToken)
 	images, meta, err := client.OS.List(ctx, request)
 	if err != nil {
 		return nil, err

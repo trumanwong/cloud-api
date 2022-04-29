@@ -11,15 +11,17 @@ import (
 func (s *InstanceService) CreateInstances(ctx context.Context, request *v1.CreateInstancesRequest) (*v1.CreateInstancesResponse, error) {
 	runInstancesRequest := cvm.NewRunInstancesRequest()
 	runInstancesRequest.LoginSettings = &cvm.LoginSettings{Password: request.Password}
-	runInstancesRequest.SystemDisk = &cvm.SystemDisk{
-		DiskSize: request.SystemDisk.DiskSize,
-		DiskType: request.SystemDisk.DiskType,
-		CdcId:    request.SystemDisk.CdcId,
+	if request.SystemDisk != nil {
+		runInstancesRequest.SystemDisk = &cvm.SystemDisk{
+			DiskSize: request.SystemDisk.DiskSize,
+			DiskType: request.SystemDisk.DiskType,
+			CdcId:    request.SystemDisk.CdcId,
+		}
 	}
 	runInstancesRequest.InstanceType = request.InstanceType
 	runInstancesRequest.ImageId = request.ImageId
 	runInstancesRequest.InstanceCount = request.InstanceCount
-	runInstancesRequest.InstanceName = request.Name
+	runInstancesRequest.InstanceName = request.InstanceName
 	runInstancesRequest.DryRun = request.DryRun
 	result, err := s.uc.CreateInstances(ctx, request.SecretId, request.SecretKey, request.Region, runInstancesRequest)
 	if err != nil {
@@ -39,9 +41,11 @@ func (s *InstanceService) ListInstances(ctx context.Context, request *v1.ListIns
 	describeInstancesRequest.Limit = request.Limit
 	describeInstancesRequest.Filters = make([]*cvm.Filter, 0)
 	if request.InstanceName != nil {
-		describeInstancesRequest.Filters = append(describeInstancesRequest.Filters, &cvm.Filter{
-			Name: request.InstanceName,
-		})
+		filter := &cvm.Filter{
+			Name:   common.StringPtr("instance-name"),
+			Values: common.StringPtrs([]string{*request.InstanceName}),
+		}
+		describeInstancesRequest.Filters = append(describeInstancesRequest.Filters, filter)
 	}
 	result, err := s.uc.ListInstances(ctx, request.SecretId, request.SecretKey, request.Region, describeInstancesRequest)
 	if err != nil {

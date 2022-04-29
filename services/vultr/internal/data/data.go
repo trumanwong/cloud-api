@@ -25,9 +25,8 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	return &Data{}, cleanup, nil
 }
 
-func getClient(accessToken string) *govultr.Client {
+func getClient(ctx context.Context, accessToken string) *govultr.Client {
 	config := &oauth2.Config{}
-	ctx := context.Background()
 	ts := config.TokenSource(ctx, &oauth2.Token{AccessToken: accessToken})
 	return govultr.NewClient(oauth2.NewClient(ctx, ts))
 }

@@ -85,12 +85,88 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListInstanceTypesResponse'
+    /api/instance/reboot:
+        put:
+            tags:
+                - Instance
+            description: Reboots a Linode you have permission to modify.
+            operationId: Instance_RebootInstance
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RebootInstanceRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RebootInstanceResponse'
+    /api/instance/start:
+        put:
+            tags:
+                - Instance
+            description: Boots a Linode you have permission to modify.
+            operationId: Instance_StartInstance
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/StartInstanceRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StartInstanceResponse'
+    /api/instance/stop:
+        put:
+            tags:
+                - Instance
+            description: Shuts down a Linode you have permission to modify.
+            operationId: Instance_StopInstance
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/StopInstanceRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StopInstanceResponse'
+    /api/instance/terminate:
+        put:
+            tags:
+                - Instance
+            description: Deletes a Linode you have permission to read_write.
+            operationId: Instance_DeleteInstance
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DeleteInstanceRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteInstanceResponse'
     /api/instances:
         get:
             tags:
                 - Instance
             description: Returns a paginated list of Linodes you have permission to view.
-            operationId: Instance_ListInstance
+            operationId: Instance_ListInstances
             parameters:
                 - name: accessToken
                   in: query
@@ -115,82 +191,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListInstancesResponse'
-    /api/instances/reboot:
-        put:
-            tags:
-                - Instance
-            description: Reboots a Linode you have permission to modify.
-            operationId: Instance_RebootInstance
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/RebootInstanceRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/RebootInstanceResponse'
-    /api/instances/start:
-        put:
-            tags:
-                - Instance
-            description: Boots a Linode you have permission to modify.
-            operationId: Instance_StartInstance
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/StartInstanceRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/StartInstanceResponse'
-    /api/instances/stop:
-        put:
-            tags:
-                - Instance
-            description: Shuts down a Linode you have permission to modify.
-            operationId: Instance_StopInstance
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/StopInstanceRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/StopInstanceResponse'
-    /api/instances/terminate:
-        put:
-            tags:
-                - Instance
-            description: Deletes a Linode you have permission to read_write.
-            operationId: Instance_DeleteInstance
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/DeleteInstanceRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/DeleteInstanceResponse'
     /api/regions:
         get:
             tags:

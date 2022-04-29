@@ -13,7 +13,7 @@ func (service *InstanceService) CreateInstances(ctx context.Context, request *v1
 	result, err := service.uc.CreateInstances(ctx, request.AccessKeyId, request.AccessKeySecret, request.Endpoint, &ecs20140526.RunInstancesRequest{
 		RegionId:     request.RegionId,
 		ImageId:      request.ImageId,
-		InstanceName: request.Name,
+		InstanceName: request.InstanceName,
 		InstanceType: request.InstanceType,
 		SystemDisk: &ecs20140526.RunInstancesRequestSystemDisk{
 			Size: request.SystemDiskSize,

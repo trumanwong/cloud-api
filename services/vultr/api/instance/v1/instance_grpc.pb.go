@@ -31,7 +31,7 @@ type InstanceClient interface {
 	// 创建实例
 	CreateInstance(ctx context.Context, in *CreateInstanceRequest, opts ...grpc.CallOption) (*CreateInstanceResponse, error)
 	// 实例列表
-	ListInstance(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error)
+	ListInstances(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error)
 	// 开机
 	StartInstance(ctx context.Context, in *StartInstanceRequest, opts ...grpc.CallOption) (*StartInstanceResponse, error)
 	// 关机
@@ -86,9 +86,9 @@ func (c *instanceClient) CreateInstance(ctx context.Context, in *CreateInstanceR
 	return out, nil
 }
 
-func (c *instanceClient) ListInstance(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error) {
+func (c *instanceClient) ListInstances(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error) {
 	out := new(ListInstancesResponse)
-	err := c.cc.Invoke(ctx, "/services.vultr.api.instance.v1.Instance/ListInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/services.vultr.api.instance.v1.Instance/ListInstances", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +144,7 @@ type InstanceServer interface {
 	// 创建实例
 	CreateInstance(context.Context, *CreateInstanceRequest) (*CreateInstanceResponse, error)
 	// 实例列表
-	ListInstance(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error)
+	ListInstances(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error)
 	// 开机
 	StartInstance(context.Context, *StartInstanceRequest) (*StartInstanceResponse, error)
 	// 关机
@@ -172,8 +172,8 @@ func (UnimplementedInstanceServer) ListPlans(context.Context, *ListPlansRequest)
 func (UnimplementedInstanceServer) CreateInstance(context.Context, *CreateInstanceRequest) (*CreateInstanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateInstance not implemented")
 }
-func (UnimplementedInstanceServer) ListInstance(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListInstance not implemented")
+func (UnimplementedInstanceServer) ListInstances(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListInstances not implemented")
 }
 func (UnimplementedInstanceServer) StartInstance(context.Context, *StartInstanceRequest) (*StartInstanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartInstance not implemented")
@@ -272,20 +272,20 @@ func _Instance_CreateInstance_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Instance_ListInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Instance_ListInstances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListInstancesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InstanceServer).ListInstance(ctx, in)
+		return srv.(InstanceServer).ListInstances(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/services.vultr.api.instance.v1.Instance/ListInstance",
+		FullMethod: "/services.vultr.api.instance.v1.Instance/ListInstances",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstanceServer).ListInstance(ctx, req.(*ListInstancesRequest))
+		return srv.(InstanceServer).ListInstances(ctx, req.(*ListInstancesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -386,8 +386,8 @@ var Instance_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Instance_CreateInstance_Handler,
 		},
 		{
-			MethodName: "ListInstance",
-			Handler:    _Instance_ListInstance_Handler,
+			MethodName: "ListInstances",
+			Handler:    _Instance_ListInstances_Handler,
 		},
 		{
 			MethodName: "StartInstance",
