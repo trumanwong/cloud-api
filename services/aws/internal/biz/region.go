@@ -21,7 +21,7 @@ func NewRegionUseCase(repo RegionResponse, logger log.Logger) *RegionUseCase {
 	return &RegionUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// ListAll List All Regions
-func (uc *RegionUseCase) ListAll(ctx context.Context, accessKeyId, secretAccessKey string, request *ec2.DescribeRegionsInput) (*ec2.DescribeRegionsOutput, error) {
+// ListRegions List All Regions
+func (uc *RegionUseCase) ListRegions(ctx context.Context, accessKeyId, secretAccessKey string, request *ec2.DescribeRegionsInput) (*ec2.DescribeRegionsOutput, error) {
 	return uc.repo.ListRegions(ctx, accessKeyId, secretAccessKey, request)
 }

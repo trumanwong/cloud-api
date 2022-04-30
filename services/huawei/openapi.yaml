@@ -44,6 +44,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListImagesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instance-types:
         get:
             tags:
@@ -76,6 +82,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListInstanceTypesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instances:
         get:
             tags:
@@ -125,6 +137,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         post:
             tags:
                 - Instance
@@ -143,6 +161,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/CreateInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instances/reboot:
         put:
             tags:
@@ -162,6 +186,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/RebootInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instances/start:
         put:
             tags:
@@ -181,6 +211,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/StartInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instances/stop:
         put:
             tags:
@@ -200,6 +236,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/StopInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/instances/terminate:
         put:
             tags:
@@ -219,6 +261,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/DeleteInstancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/job:
         get:
             tags:
@@ -256,6 +304,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ShowJobResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/regions:
         get:
             tags:
@@ -265,7 +319,7 @@ paths:
             parameters:
                 - name: regionType
                   in: query
-                  description: 查询地域类别，查询ims地域：image，查询ecs地域：ecs
+                  description: 查询地域类别，查询ims地域：image，查询ecs地域：ecs, 查询vpc地域：vpc
                   schema:
                     type: string
             responses:
@@ -275,6 +329,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListRegionsResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/subnet:
         get:
             tags:
@@ -312,6 +372,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListSubnetsResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         put:
             tags:
                 - Instance
@@ -330,6 +396,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/UpdateSubnetResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         post:
             tags:
                 - Instance
@@ -348,6 +420,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/CreateSubnetResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         delete:
             tags:
                 - Instance
@@ -389,6 +467,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/DeleteSubnetResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/subnet/query:
         get:
             tags:
@@ -426,6 +510,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ShowSubnetResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/vpc:
         get:
             tags:
@@ -468,6 +558,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListVpcsResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         put:
             tags:
                 - Instance
@@ -486,6 +582,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/UpdateVpcResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         post:
             tags:
                 - Instance
@@ -504,6 +606,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/CreateVpcResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         delete:
             tags:
                 - Instance
@@ -539,6 +647,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/DeleteVpcResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/vpc/query:
         get:
             tags:
@@ -575,19 +689,14 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ShowVpcResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
 components:
     schemas:
-        Any:
-            type: object
-            properties:
-                typeUrl:
-                    type: string
-                    description: 'A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one "/" character. The last segment of the URL''s path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading "." is not accepted). In practice, teams usually precompile into the binary all types that they expect it to use in the context of Any. However, for URLs which use the scheme `http`, `https`, or no scheme, one can optionally set up a type server that maps type URLs to message definitions as follows: * If no scheme is provided, `https` is assumed. * An HTTP GET on the URL must yield a [google.protobuf.Type][]   value in binary format, or produce an error. * Applications are allowed to cache lookup results based on the   URL, or have them precompiled into a binary to avoid any   lookup. Therefore, binary compatibility needs to be preserved   on changes to types. (Use versioned type names to manage   breaking changes.) Note: this functionality is not currently available in the official protobuf release, and it is not used for type URLs beginning with type.googleapis.com. Schemes other than `http`, `https` (or the empty scheme) might be used with implementation specific semantics.'
-                value:
-                    type: string
-                    description: Must be a valid serialized protocol buffer of the above specified type.
-                    format: bytes
-            description: '`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message. Protobuf library provides support to pack/unpack Any values in the form of utility functions or additional generated methods of the Any type. Example 1: Pack and unpack a message in C++.     Foo foo = ...;     Any any;     any.PackFrom(foo);     ...     if (any.UnpackTo(&foo)) {       ...     } Example 2: Pack and unpack a message in Java.     Foo foo = ...;     Any any = Any.pack(foo);     ...     if (any.is(Foo.class)) {       foo = any.unpack(Foo.class);     } Example 3: Pack and unpack a message in Python.     foo = Foo(...)     any = Any()     any.Pack(foo)     ...     if any.Is(Foo.DESCRIPTOR):       any.Unpack(foo)       ... Example 4: Pack and unpack a message in Go      foo := &pb.Foo{...}      any, err := anypb.New(foo)      if err != nil {        ...      }      ...      foo := &pb.Foo{}      if err := any.UnmarshalTo(foo); err != nil {        ...      } The pack methods provided by protobuf library will by default use ''type.googleapis.com/full.type.name'' as the type URL and the unpack methods only use the fully qualified type name after the last ''/'' in the type URL, for example "foo.bar.com/x/y.z" will yield type name "y.z". JSON The JSON representation of an `Any` value uses the regular representation of the deserialized, embedded message, with an additional field `@type` which contains the type URL. Example:     package google.profile;     message Person {       string first_name = 1;       string last_name = 2;     }     {       "@type": "type.googleapis.com/google.profile.Person",       "firstName": <string>,       "lastName": <string>     } If the embedded message type is well-known and has a custom JSON representation, that representation will be embedded adding a field `value` which holds the custom JSON in addition to the `@type` field. Example (for message [google.protobuf.Duration][]):     {       "@type": "type.googleapis.com/google.protobuf.Duration",       "value": "1.212s"     }'
         CreateInstancesRequest:
             type: object
             properties:
@@ -620,10 +729,7 @@ components:
                     description: 待创建云服务器的网卡信息。  约束：  - 网卡对应的子网（subnet）必须属于vpcid对应的VPC。 - 当前单个云服务器支持最多挂载12张网卡。 - 不同的规格对网卡上限有一定的区别，参考[规格清单](https://support.huaweicloud.com/productdesc-ecs/zh-cn_topic_0159822360.html)。
                 rootVolume:
                     $ref: '#/components/schemas/CreateInstancesRequest_RootVolume'
-                uniqueSuffix:
-                    type: boolean
-                    description: 是否为instance_name自动添加有序后缀（默认false）
-                amount:
+                count:
                     type: integer
                     description: 创建数量(1-100，默认1) 不传该字段时默认取值为1。 租户的配额足够时,最大值为500。
                     format: int32
@@ -654,7 +760,7 @@ components:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         CreateSubnetRequest:
             type: object
             properties:
@@ -712,7 +818,7 @@ components:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         CreateVpcRequest:
             type: object
             properties:
@@ -742,7 +848,7 @@ components:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         DeleteInstancesRequest:
             type: object
             properties:
@@ -771,17 +877,17 @@ components:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         DeleteSubnetResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         DeleteVpcResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ExtraDhcpOpts:
             type: object
             properties:
@@ -792,36 +898,44 @@ components:
                     type: string
                     description: 功能说明：子网配置的NTP地址 约束：目前只支持IPv4地址，每个IP地址以逗号隔开，IP地址个数不能超过4个，不能存在相同地址。该字段为null表示取消该子网NTP的设置，不能为””(空字符串)。
             description: 子网配置的NTP地址
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
         ListImagesResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ListInstanceTypesResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ListInstancesResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ListRegionsResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ListSubnetsResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ListVpcsResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         RebootInstancesRequest:
             type: object
             properties:
@@ -847,7 +961,7 @@ components:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ServerId:
             type: object
             properties:
@@ -858,17 +972,17 @@ components:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ShowSubnetResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         ShowVpcResponse:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         StartInstancesRequest:
             type: object
             properties:
@@ -891,7 +1005,23 @@ components:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
         StopInstancesRequest:
             type: object
             properties:
@@ -917,7 +1047,7 @@ components:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         UpdateSubnetRequest:
             type: object
             properties:
@@ -969,7 +1099,7 @@ components:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         UpdateVpcRequest:
             type: object
             properties:
@@ -1004,7 +1134,7 @@ components:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Any'
+                    $ref: '#/components/schemas/GoogleProtobufAny'
         VpcRoute:
             type: object
             properties:

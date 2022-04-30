@@ -30,7 +30,7 @@ func (service *InstanceService) CreateInstances(ctx context.Context, request *v1
 				AdminPass: request.Password,
 				Vpcid:     request.VpcId,
 				Nics:      nics,
-				Count:     request.Amount,
+				Count:     request.Count,
 				RootVolume: &model.PrePaidServerRootVolume{
 					Volumetype: volumeType,
 					Size:       request.RootVolume.Size,

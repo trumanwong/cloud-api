@@ -7,7 +7,7 @@ import (
 )
 
 func (service *InstanceService) ListInstanceTypes(ctx context.Context, request *v1.ListInstanceTypesRequest) (*v1.ListInstanceTypesResponse, error) {
-	result, err := service.itc.ListInstanceType(ctx)
+	result, err := service.itc.ListInstanceTypes(ctx, request.TenantID, request.ClientID, request.ClientSecret, request.SubscriptionId, request.Filter, request.IncludeExtendedLocations)
 	if err != nil {
 		return nil, err
 	}

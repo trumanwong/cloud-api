@@ -81,7 +81,7 @@ func (r *regionResponse) ListRegions(ctx context.Context, regionType string) *bi
 	}
 	regions := make([]*region.Region, len(regionFields))
 	i := 0
-	for _, v := range staticImageRegions {
+	for _, v := range regionFields {
 		regions[i] = &region.Region{
 			Id:       v.Id,
 			Endpoint: v.Endpoint,

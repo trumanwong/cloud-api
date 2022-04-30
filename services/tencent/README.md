@@ -352,8 +352,8 @@ Used to close one or more instances.
 curl --location --request PUT 'http://127.0.0.1:8001/api/instances/stop' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "secretId": "",
-    "secretKey": "",
+    "secretId": "{{yourSecretId}}",
+    "secretKey": "{{yourSecretKey}}",
     "region": "ap-guangzhou",
     "instance_ids": ["ins-r8hr2upy", "ins-5d8a23rs"]
 }'
@@ -378,8 +378,8 @@ This api is used to resboot the instance.
 curl --location --request PUT 'http://127.0.0.1:8001/api/instances/reboot' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "secretId": "",
-    "secretKey": "",
+    "secretId": "{{yourSecretId}}",
+    "secretKey": "{{yourSecretKey}}",
     "region": "ap-guangzhou",
     "instance_ids": ["ins-r8hr2upy", "ins-5d8a23rs"]
 }'
@@ -404,8 +404,8 @@ This api is used to terminate the instance.
 curl --location --request PUT 'http://127.0.0.1:8001/api/instances/terminate' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "secretId": "",
-    "secretKey": "",
+    "secretId": "{{yourSecretId}}",
+    "secretKey": "{{yourSecretKey}}",
     "region": "ap-guangzhou",
     "instance_ids": ["ins-r8hr2upy", "ins-5d8a23rs"]
 }'

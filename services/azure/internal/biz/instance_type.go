@@ -22,6 +22,6 @@ func NewInstanceTypeUseCase(repo InstanceTypeResponse, logger log.Logger) *Insta
 }
 
 // ListInstanceTypes List All InstanceTypes
-func (uc *InstanceTypeUseCase) ListInstanceTypes(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId, location, includeExtendedLocations string) (*compute.ResourceSkusResultPage, error) {
-	return uc.repo.ListInstanceTypes(ctx, tenantID, clientID, clientSecret, subscriptionId, location, includeExtendedLocations)
+func (uc *InstanceTypeUseCase) ListInstanceTypes(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId, filter, includeExtendedLocations string) (*compute.ResourceSkusResultPage, error) {
+	return uc.repo.ListInstanceTypes(ctx, tenantID, clientID, clientSecret, subscriptionId, filter, includeExtendedLocations)
 }

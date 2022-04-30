@@ -55,7 +55,7 @@ The response should like
 }
 ```
 
-For more information about regions, see [DescribeRegions](https://help.aliyun.com/document_detail/25609.html?spm=api-workbench.API Document.0.0.72781e0f2JLh3n).
+For more information about regions, see [DescribeRegions](https://help.aliyun.com/document_detail/25609.html?spm=api-workbench.API%20Document.0.0.72781e0f2JLh3n).
 
 ## List all images
 

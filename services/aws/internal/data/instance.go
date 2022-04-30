@@ -23,6 +23,7 @@ func NewInstanceRepo(data *Data, logger log.Logger) biz.InstanceResponse {
 
 func (r *instanceResponse) CreateInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.RunInstancesInput) (*ec2.RunInstancesOutput, error) {
 	client, err := getClient(
+		ctx,
 		accessKeyId,
 		secretAccessKey,
 		region,
@@ -40,6 +41,7 @@ func (r *instanceResponse) CreateInstances(ctx context.Context, accessKeyId, sec
 
 func (r *instanceResponse) ListInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.DescribeInstancesInput) (*ec2.DescribeInstancesOutput, error) {
 	client, err := getClient(
+		ctx,
 		accessKeyId,
 		secretAccessKey,
 		region,
@@ -56,6 +58,7 @@ func (r *instanceResponse) ListInstances(ctx context.Context, accessKeyId, secre
 
 func (r *instanceResponse) StartInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.StartInstancesInput) (*ec2.StartInstancesOutput, error) {
 	client, err := getClient(
+		ctx,
 		accessKeyId,
 		secretAccessKey,
 		region,
@@ -72,6 +75,7 @@ func (r *instanceResponse) StartInstances(ctx context.Context, accessKeyId, secr
 
 func (r *instanceResponse) StopInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.StopInstancesInput) (*ec2.StopInstancesOutput, error) {
 	client, err := getClient(
+		ctx,
 		accessKeyId,
 		secretAccessKey,
 		region,
@@ -88,6 +92,7 @@ func (r *instanceResponse) StopInstances(ctx context.Context, accessKeyId, secre
 
 func (r *instanceResponse) RebootInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.RebootInstancesInput) (*ec2.RebootInstancesOutput, error) {
 	client, err := getClient(
+		ctx,
 		accessKeyId,
 		secretAccessKey,
 		region,
@@ -104,6 +109,7 @@ func (r *instanceResponse) RebootInstances(ctx context.Context, accessKeyId, sec
 
 func (r *instanceResponse) DeleteInstances(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) {
 	client, err := getClient(
+		ctx,
 		accessKeyId,
 		secretAccessKey,
 		region,

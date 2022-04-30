@@ -22,6 +22,7 @@ func NewInstanceTypeRepo(data *Data, logger log.Logger) biz.InstanceTypeResponse
 
 func (r *instanceTypeResponse) ListInstanceTypes(ctx context.Context, accessKeyId, secretAccessKey, region string, request *ec2.DescribeInstanceTypesInput) (*ec2.DescribeInstanceTypesOutput, error) {
 	client, err := getClient(
+		ctx,
 		accessKeyId,
 		secretAccessKey,
 		region,

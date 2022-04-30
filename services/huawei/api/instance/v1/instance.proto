@@ -172,11 +172,9 @@ message CreateInstancesRequest {
     optional int32 size = 2;
   }
   RootVolume root_volume = 10;
-  // 是否为instance_name自动添加有序后缀（默认false）
-  bool unique_suffix = 11;
   // 创建数量(1-100，默认1)
   // 不传该字段时默认取值为1。 租户的配额足够时,最大值为500。
-  optional int32 amount = 12;
+  optional int32 count = 12;
   // 实例密码
   optional string password = 13;
   // 是否只预检此次请求
@@ -211,7 +209,7 @@ message ListInstancesResponse {
 }
 
 message ListRegionsRequest {
-  // 查询地域类别，查询ims地域：image，查询ecs地域：ecs
+  // 查询地域类别，查询ims地域：image，查询ecs地域：ecs, 查询vpc地域：vpc
   string region_type = 1;
 }
 

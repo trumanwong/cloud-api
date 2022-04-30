@@ -181,10 +181,8 @@ func (m *CreateInstancesRequest) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for UniqueSuffix
-
-	if m.Amount != nil {
-		// no validation rules for Amount
+	if m.Count != nil {
+		// no validation rules for Count
 	}
 
 	if m.Password != nil {
