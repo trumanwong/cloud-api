@@ -79,7 +79,7 @@ message CreateInstancesRequest {
   // Region is the region to send requests to.
   string region = 3 [(validate.rules).string.min_len = 1];
   // The ID of the AMI. An AMI ID is required to launch an instance and must be specified here or in a launch template.
-  string image_id = 4 [(validate.rules).string.min_len = 1];
+  optional string image_id = 4 [(validate.rules).string.min_len = 1];
   // The instance type. For more information, see Instance types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html) in the Amazon EC2 User Guide. Default: m1.small
   string instance_type = 5;
   // Describes a block device mapping, which defines the EBS volumes and instance store volumes to attach to an instance at launch.
@@ -204,7 +204,10 @@ message StartInstancesRequest {
   string secret_key = 2 [(validate.rules).string.min_len = 1];
   // Region is the region to send requests to.
   string region = 3 [(validate.rules).string.min_len = 1];
+  // The IDs of the instances. This member is required.
   repeated string instance_ids = 4;
+  // Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.
+  optional bool dry_run = 6;
 }
 
 message StartInstancesResponse {
@@ -218,7 +221,10 @@ message StopInstancesRequest {
   string secret_key = 2 [(validate.rules).string.min_len = 1];
   // Region is the region to send requests to.
   string region = 3 [(validate.rules).string.min_len = 1];
+  // The IDs of the instances. This member is required.
   repeated string instance_ids = 4;
+  // Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.
+  optional bool dry_run = 6;
 }
 
 message StopInstancesResponse {
@@ -232,7 +238,10 @@ message RebootInstancesRequest {
   string secret_key = 2 [(validate.rules).string.min_len = 1];
   // Region is the region to send requests to.
   string region = 3 [(validate.rules).string.min_len = 1];
+  // The IDs of the instances. This member is required.
   repeated string instance_ids = 4;
+  // Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.
+  optional bool dry_run = 6;
 }
 
 message RebootInstancesResponse {
@@ -246,7 +255,10 @@ message DeleteInstancesRequest {
   string secret_key = 2 [(validate.rules).string.min_len = 1];
   // Region is the region to send requests to.
   string region = 3 [(validate.rules).string.min_len = 1];
+  // The IDs of the instances. This member is required.
   repeated string instance_ids = 4;
+  // Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.
+  optional bool dry_run = 6;
 }
 
 message DeleteInstancesResponse {

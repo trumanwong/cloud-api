@@ -15,14 +15,17 @@ paths:
             parameters:
                 - name: accessKeyId
                   in: query
+                  description: AWS Access key ID
                   schema:
                     type: string
                 - name: secretKey
                   in: query
+                  description: AWS Secret Access Key
                   schema:
                     type: string
                 - name: region
                   in: query
+                  description: Region is the region to send requests to.
                   schema:
                     type: string
             responses:
@@ -41,14 +44,17 @@ paths:
             parameters:
                 - name: accessKeyId
                   in: query
+                  description: AWS Access key ID
                   schema:
                     type: string
                 - name: secretKey
                   in: query
+                  description: AWS Secret Access Key
                   schema:
                     type: string
                 - name: region
                   in: query
+                  description: Region is the region to send requests to.
                   schema:
                     type: string
                 - name: maxResults
@@ -217,10 +223,12 @@ paths:
             parameters:
                 - name: accessKeyId
                   in: query
+                  description: AWS Access key ID
                   schema:
                     type: string
                 - name: secretKey
                   in: query
+                  description: AWS Secret Access Key
                   schema:
                     type: string
             responses:
@@ -335,14 +343,21 @@ components:
             properties:
                 accessKeyId:
                     type: string
+                    description: AWS Access key ID
                 secretKey:
                     type: string
+                    description: AWS Secret Access Key
                 region:
                     type: string
+                    description: Region is the region to send requests to.
                 instanceIds:
                     type: array
                     items:
                         type: string
+                    description: The IDs of the instances. This member is required.
+                dryRun:
+                    type: boolean
+                    description: Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.
         DeleteInstancesResponse:
             type: object
             properties:
@@ -373,14 +388,21 @@ components:
             properties:
                 accessKeyId:
                     type: string
+                    description: AWS Access key ID
                 secretKey:
                     type: string
+                    description: AWS Secret Access Key
                 region:
                     type: string
+                    description: Region is the region to send requests to.
                 instanceIds:
                     type: array
                     items:
                         type: string
+                    description: The IDs of the instances. This member is required.
+                dryRun:
+                    type: boolean
+                    description: Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.
         RebootInstancesResponse:
             type: object
             properties:
@@ -391,14 +413,21 @@ components:
             properties:
                 accessKeyId:
                     type: string
+                    description: AWS Access key ID
                 secretKey:
                     type: string
+                    description: AWS Secret Access Key
                 region:
                     type: string
+                    description: Region is the region to send requests to.
                 instanceIds:
                     type: array
                     items:
                         type: string
+                    description: The IDs of the instances. This member is required.
+                dryRun:
+                    type: boolean
+                    description: Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.
         StartInstancesResponse:
             type: object
             properties:
@@ -409,14 +438,21 @@ components:
             properties:
                 accessKeyId:
                     type: string
+                    description: AWS Access key ID
                 secretKey:
                     type: string
+                    description: AWS Secret Access Key
                 region:
                     type: string
+                    description: Region is the region to send requests to.
                 instanceIds:
                     type: array
                     items:
                         type: string
+                    description: The IDs of the instances. This member is required.
+                dryRun:
+                    type: boolean
+                    description: Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.
         StopInstancesResponse:
             type: object
             properties:

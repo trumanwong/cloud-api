@@ -111,7 +111,7 @@ List all tencent cloud available instance types.
 ### Try it out
 
 ```shell
-curl --location --request GET 'http://127.0.0.1:8001/api/instance-types?secretId={{yourSecretId}}&secretKey={{yourSecretKey}}&region={{listAllRegionsApiFindRegion}}''
+curl --location --request GET 'http://127.0.0.1:8001/api/instance-types?secretId={{yourSecretId}}&secretKey={{yourSecretKey}}&region={{listAllRegionsApiFindRegion}}'
 
 The response should like
 {

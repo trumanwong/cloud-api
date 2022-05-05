@@ -1,0 +1,102 @@
+version: '3'
+
+services:
+  consul:
+    image: consul:1.12.0
+    container_name: consul
+    command: agent -dev -bind=0.0.0.0 -client=0.0.0.0 -data-dir=/consul/data
+    restart: always
+    ports:
+      - "8500:8500"
+    volumes:
+      - ../docker/consul/data:/consul/data
+  jaeger:
+    image: jaegertracing/all-in-one:1.33
+    container_name: jaeger
+    ports:
+      - "14268:14268"
+      - "16686:16686"
+  cloud-api-ali:
+    image: trumanwl/cloud-api:ali
+    container_name: cloud-api-ali
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    volumes:
+      - ../services/ali/configs:/data/conf
+    depends_on:
+      - consul
+      - jaeger
+  cloud-api-tencent:
+    image: trumanwl/cloud-api:tencent
+    container_name: cloud-api-tencent
+    restart: always
+    ports:
+      - "8001:8000"
+      - "9001:9000"
+    volumes:
+      - ../services/tencent/configs:/data/conf
+    depends_on:
+      - consul
+      - jaeger
+  cloud-api-huawei:
+    image: trumanwl/cloud-api:huawei
+    container_name: cloud-api-huawei
+    restart: always
+    ports:
+      - "8002:8000"
+      - "9002:9000"
+    volumes:
+      - ../services/huawei/configs:/data/conf
+    depends_on:
+      - consul
+      - jaeger
+  cloud-api-aws:
+    image: trumanwl/cloud-api:aws
+    container_name: cloud-api-aws
+    restart: always
+    ports:
+      - "8003:8000"
+      - "9003:9000"
+    volumes:
+      - ../services/aws/configs:/data/conf
+    depends_on:
+      - consul
+      - jaeger
+  cloud-api-azure:
+    image: trumanwl/cloud-api:azure
+    container_name: cloud-api-azure
+    restart: always
+    ports:
+      - "8004:8000"
+      - "9004:9000"
+    volumes:
+      - ../services/azure/configs:/data/conf
+    depends_on:
+      - consul
+      - jaeger
+  cloud-api-vultr:
+    image: trumanwl/cloud-api:vultr
+    container_name: cloud-api-vultr
+    restart: always
+    ports:
+      - "8005:8000"
+      - "9005:9000"
+    volumes:
+      - ../services/vultr/configs:/data/conf
+    depends_on:
+      - consul
+      - jaeger
+  cloud-api-linode:
+    image: trumanwl/cloud-api:linode
+    container_name: cloud-api-linode
+    restart: always
+    ports:
+      - "8006:8000"
+      - "9006:9000"
+    volumes:
+      - ../services/linode/configs:/data/conf
+    depends_on:
+      - consul
+      - jaeger

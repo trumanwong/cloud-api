@@ -13,11 +13,11 @@ paths:
             description: List gets the list of Images in the subscription. Use nextLink property in the response to get the next page of Images. Do this till nextLink is null to fetch all the Images.
             operationId: Instance_ListImages
             parameters:
-                - name: tenantID
+                - name: tenantId
                   in: query
                   schema:
                     type: string
-                - name: clientID
+                - name: clientId
                   in: query
                   schema:
                     type: string
@@ -43,11 +43,11 @@ paths:
             description: List gets the list of Microsoft.Compute SKUs available for your Subscription.
             operationId: Instance_ListInstanceTypes
             parameters:
-                - name: tenantID
+                - name: tenantId
                   in: query
                   schema:
                     type: string
-                - name: clientID
+                - name: clientId
                   in: query
                   schema:
                     type: string
@@ -83,11 +83,11 @@ paths:
             description: lists all of the virtual machines in the specified resource group.
             operationId: Instance_ListInstances
             parameters:
-                - name: tenantID
+                - name: tenantId
                   in: query
                   schema:
                     type: string
-                - name: clientID
+                - name: clientId
                   in: query
                   schema:
                     type: string
@@ -217,11 +217,11 @@ paths:
             description: ListLocations this operation provides all the locations that are available for resource providers; however, each resource provider may support a subset of this list.
             operationId: Instance_ListRegions
             parameters:
-                - name: tenantID
+                - name: tenantId
                   in: query
                   schema:
                     type: string
-                - name: clientID
+                - name: clientId
                   in: query
                   schema:
                     type: string
@@ -262,9 +262,9 @@ components:
         CreateInstancesRequest:
             type: object
             properties:
-                tenantID:
+                tenantId:
                     type: string
-                clientID:
+                clientId:
                     type: string
                 clientSecret:
                     type: string
@@ -318,9 +318,9 @@ components:
         DeleteInstancesRequest:
             type: object
             properties:
-                tenantID:
+                tenantId:
                     type: string
-                clientID:
+                clientId:
                     type: string
                 clientSecret:
                     type: string
@@ -363,9 +363,9 @@ components:
         RebootInstancesRequest:
             type: object
             properties:
-                tenantID:
+                tenantId:
                     type: string
-                clientID:
+                clientId:
                     type: string
                 clientSecret:
                     type: string
@@ -385,9 +385,9 @@ components:
         StartInstancesRequest:
             type: object
             properties:
-                tenantID:
+                tenantId:
                     type: string
-                clientID:
+                clientId:
                     type: string
                 clientSecret:
                     type: string
@@ -407,9 +407,9 @@ components:
         StopInstancesRequest:
             type: object
             properties:
-                tenantID:
+                tenantId:
                     type: string
-                clientID:
+                clientId:
                     type: string
                 clientSecret:
                     type: string
@@ -485,6 +485,12 @@ components:
                     type: integer
                     description: DiskSizeGB - Specifies the size of an empty data disk in gigabytes. This element can be used to overwrite the size of the disk in a virtual machine image. <br><br> This value cannot be larger than 1023 GB
                     format: int32
+                imageUri:
+                    type: string
+                    description: The source user image virtual hard disk. The virtual hard disk will be copied before being attached to the virtual machine. If SourceImage is provided, the destination virtual hard drive must not exist.
+                vhdUri:
+                    type: string
+                    description: The virtual hard disk.
             description: OSDisk specifies information about the operating system disk used by the virtual machine. For more information about disks, see [About disks and VHDs for Azure virtual machines](https://docs.microsoft.com/azure/virtual-machines/managed-disks-overview).
 tags:
     - name: Instance

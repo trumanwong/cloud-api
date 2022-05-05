@@ -72,8 +72,8 @@ service Instance {
 }
 
 message ListRegionsRequest {
-  string tenant_iD = 1 [(validate.rules).string.min_len = 1];
-  string client_iD = 2 [(validate.rules).string.min_len = 1];
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];
+  string client_id = 2 [(validate.rules).string.min_len = 1];
   string client_secret = 3 [(validate.rules).string.min_len = 1];
   //  the ID of the target subscription.
   string subscription_id = 4 [(validate.rules).string.min_len = 1];
@@ -86,8 +86,8 @@ message ListRegionsResponse {
 }
 
 message ListImagesRequest {
-  string tenant_iD = 1 [(validate.rules).string.min_len = 1];
-  string client_iD = 2 [(validate.rules).string.min_len = 1];
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];
+  string client_id = 2 [(validate.rules).string.min_len = 1];
   string client_secret = 3 [(validate.rules).string.min_len = 1];
   string subscription_id = 4 [(validate.rules).string.min_len = 1];
 }
@@ -97,8 +97,8 @@ message ListImagesResponse {
 }
 
 message ListInstanceTypesRequest {
-  string tenant_iD = 1 [(validate.rules).string.min_len = 1];
-  string client_iD = 2 [(validate.rules).string.min_len = 1];
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];
+  string client_id = 2 [(validate.rules).string.min_len = 1];
   string client_secret = 3 [(validate.rules).string.min_len = 1];
   string subscription_id = 4 [(validate.rules).string.min_len = 1];
   // the filter to apply on the operation. Only **location** filter is supported currently.
@@ -112,8 +112,8 @@ message ListInstanceTypesResponse {
 }
 
 message CreateInstancesRequest {
-  string tenant_iD = 1 [(validate.rules).string.min_len = 1];
-  string client_iD = 2 [(validate.rules).string.min_len = 1];
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];
+  string client_id = 2 [(validate.rules).string.min_len = 1];
   string client_secret = 3 [(validate.rules).string.min_len = 1];
   string subscription_id = 4 [(validate.rules).string.min_len = 1];
   // the name of the resource group.
@@ -157,6 +157,10 @@ message CreateInstancesRequest {
       optional string name = 2;
       // DiskSizeGB - Specifies the size of an empty data disk in gigabytes. This element can be used to overwrite the size of the disk in a virtual machine image. <br><br> This value cannot be larger than 1023 GB
       optional int32 disk_size_gb = 3;
+      //  The source user image virtual hard disk. The virtual hard disk will be copied before being attached to the virtual machine. If SourceImage is provided, the destination virtual hard drive must not exist.
+      optional string image_uri = 4;
+      // The virtual hard disk.
+      optional string vhd_uri = 5;
     }
     // OsDisk - Specifies information about the operating system disk used by the virtual machine. <br><br> For more information about disks, see [About disks and VHDs for Azure virtual machines](https://docs.microsoft.com/azure/virtual-machines/managed-disks-overview).
     OSDisk os_disk = 2;
@@ -188,8 +192,8 @@ message CreateInstancesResponse {
 }
 
 message ListInstancesRequest {
-  string tenant_iD = 1 [(validate.rules).string.min_len = 1];
-  string client_iD = 2 [(validate.rules).string.min_len = 1];
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];
+  string client_id = 2 [(validate.rules).string.min_len = 1];
   string client_secret = 3 [(validate.rules).string.min_len = 1];
   string subscription_id = 4 [(validate.rules).string.min_len = 1];
   // the name of the resource group.
@@ -203,8 +207,8 @@ message ListInstancesResponse {
 }
 
 message StartInstancesRequest {
-  string tenant_iD = 1 [(validate.rules).string.min_len = 1];
-  string client_iD = 2 [(validate.rules).string.min_len = 1];
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];
+  string client_id = 2 [(validate.rules).string.min_len = 1];
   string client_secret = 3 [(validate.rules).string.min_len = 1];
   string subscription_id = 4 [(validate.rules).string.min_len = 1];
   // the name of the resource group.
@@ -218,8 +222,8 @@ message StartInstancesResponse {
 }
 
 message StopInstancesRequest {
-  string tenant_iD = 1 [(validate.rules).string.min_len = 1];
-  string client_iD = 2 [(validate.rules).string.min_len = 1];
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];
+  string client_id = 2 [(validate.rules).string.min_len = 1];
   string client_secret = 3 [(validate.rules).string.min_len = 1];
   string subscription_id = 4 [(validate.rules).string.min_len = 1];
   // the name of the resource group.
@@ -236,8 +240,8 @@ message StopInstancesResponse {
 }
 
 message RebootInstancesRequest {
-  string tenant_iD = 1 [(validate.rules).string.min_len = 1];
-  string client_iD = 2 [(validate.rules).string.min_len = 1];
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];
+  string client_id = 2 [(validate.rules).string.min_len = 1];
   string client_secret = 3 [(validate.rules).string.min_len = 1];
   string subscription_id = 4 [(validate.rules).string.min_len = 1];
   // the name of the resource group.
@@ -251,8 +255,8 @@ message RebootInstancesResponse {
 }
 
 message DeleteInstancesRequest {
-  string tenant_iD = 1 [(validate.rules).string.min_len = 1];
-  string client_iD = 2 [(validate.rules).string.min_len = 1];
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];
+  string client_id = 2 [(validate.rules).string.min_len = 1];
   string client_secret = 3 [(validate.rules).string.min_len = 1];
   string subscription_id = 4 [(validate.rules).string.min_len = 1];
   // the name of the resource group.

@@ -4,7 +4,6 @@ import (
 	v1 "aws/api/instance/v1"
 	"aws/pkg/util/convert"
 	"context"
-	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
@@ -38,9 +37,12 @@ func (service *InstanceService) CreateInstances(ctx context.Context, request *v1
 		}
 	}
 	result, err := service.uc.CreateInstances(ctx, request.AccessKeyId, request.SecretKey, request.Region, &ec2.RunInstancesInput{
-		ImageId:             aws.String(request.ImageId),
+		ImageId:             request.ImageId,
 		InstanceType:        types.InstanceType(request.InstanceType),
 		BlockDeviceMappings: blockDeviceMappings,
+		MinCount:            request.MinCount,
+		MaxCount:            request.MaxCount,
+		DryRun:              request.DryRun,
 	})
 	if err != nil {
 		return nil, err
@@ -57,6 +59,7 @@ func (service *InstanceService) ListInstances(ctx context.Context, request *v1.L
 	result, err := service.uc.ListInstances(ctx, request.AccessKeyId, request.SecretKey, request.Region, &ec2.DescribeInstancesInput{
 		MaxResults: request.MaxResults,
 		NextToken:  request.NextToken,
+		DryRun:     request.DryRun,
 	})
 	if err != nil {
 		return nil, err
@@ -71,6 +74,7 @@ func (service *InstanceService) ListInstances(ctx context.Context, request *v1.L
 func (service *InstanceService) StartInstances(ctx context.Context, request *v1.StartInstancesRequest) (*v1.StartInstancesResponse, error) {
 	result, err := service.uc.StartInstances(ctx, request.AccessKeyId, request.SecretKey, request.Region, &ec2.StartInstancesInput{
 		InstanceIds: request.InstanceIds,
+		DryRun:      request.DryRun,
 	})
 	if err != nil {
 		return nil, err
@@ -86,6 +90,7 @@ func (service *InstanceService) StartInstances(ctx context.Context, request *v1.
 func (service *InstanceService) StopInstances(ctx context.Context, request *v1.StopInstancesRequest) (*v1.StopInstancesResponse, error) {
 	result, err := service.uc.StopInstances(ctx, request.AccessKeyId, request.SecretKey, request.Region, &ec2.StopInstancesInput{
 		InstanceIds: request.InstanceIds,
+		DryRun:      request.DryRun,
 	})
 	if err != nil {
 		return nil, err
@@ -114,6 +119,7 @@ func (service *InstanceService) RebootInstance(ctx context.Context, request *v1.
 func (service *InstanceService) DeleteInstances(ctx context.Context, request *v1.DeleteInstancesRequest) (*v1.DeleteInstancesResponse, error) {
 	result, err := service.uc.DeleteInstances(ctx, request.AccessKeyId, request.SecretKey, request.Region, &ec2.TerminateInstancesInput{
 		InstanceIds: request.InstanceIds,
+		DryRun:      request.DryRun,
 	})
 	if err != nil {
 		return nil, err

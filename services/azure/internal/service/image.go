@@ -7,7 +7,7 @@ import (
 )
 
 func (service *InstanceService) ListImages(ctx context.Context, request *v1.ListImagesRequest) (*v1.ListImagesResponse, error) {
-	result, err := service.ic.ListImages(ctx, request.TenantID, request.ClientID, request.ClientSecret, request.SubscriptionId)
+	result, err := service.ic.ListImages(ctx, request.TenantId, request.ClientId, request.ClientSecret, request.SubscriptionId)
 	if err != nil {
 		return nil, err
 	}

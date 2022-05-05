@@ -22,7 +22,7 @@ func NewImageUseCase(repo ImageResponse, logger log.Logger) *ImageUseCase {
 	return &ImageUseCase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// ListImage List Image
+// ListImages List Images
 func (uc *ImageUseCase) ListImages(ctx context.Context, tenantID, clientID, clientSecret, subscriptionId string) (*compute.ImageListResultPage, error) {
 	return uc.repo.ListImages(ctx, tenantID, clientID, clientSecret, subscriptionId)
 }

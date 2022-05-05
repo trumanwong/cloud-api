@@ -19,6 +19,7 @@ func (service *InstanceService) CreateInstances(ctx context.Context, request *v1
 	if request.StorageProfile != nil {
 		var imageReference *compute.ImageReference
 		var osDisk *compute.OSDisk
+		var imageUri, vhdUri *compute.VirtualHardDisk
 		var dataDisks []compute.DataDisk
 		if request.StorageProfile.ImageReference != nil {
 			imageReference = &compute.ImageReference{
@@ -32,11 +33,23 @@ func (service *InstanceService) CreateInstances(ctx context.Context, request *v1
 				ID:                      request.StorageProfile.ImageReference.Id,
 			}
 		}
+		if request.StorageProfile.OsDisk.ImageUri != nil {
+			imageUri = &compute.VirtualHardDisk{
+				URI: request.StorageProfile.OsDisk.ImageUri,
+			}
+		}
+		if request.StorageProfile.OsDisk.VhdUri != nil {
+			vhdUri = &compute.VirtualHardDisk{
+				URI: request.StorageProfile.OsDisk.VhdUri,
+			}
+		}
 		if request.StorageProfile.OsDisk != nil {
 			osDisk = &compute.OSDisk{
 				OsType:     compute.OperatingSystemTypes(request.StorageProfile.OsDisk.OsType),
 				Name:       request.StorageProfile.OsDisk.Name,
 				DiskSizeGB: request.StorageProfile.OsDisk.DiskSizeGb,
+				Image:      imageUri,
+				Vhd:        vhdUri,
 			}
 		}
 		if request.StorageProfile.DataDisks != nil {
@@ -62,7 +75,7 @@ func (service *InstanceService) CreateInstances(ctx context.Context, request *v1
 			AdminPassword: request.OsProfile.AdminPassword,
 		}
 	}
-	result, err := service.uc.CreateInstances(ctx, request.TenantID, request.ClientID, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.VmName, virtualMachine)
+	result, err := service.uc.CreateInstances(ctx, request.TenantId, request.ClientId, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.VmName, virtualMachine)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +88,7 @@ func (service *InstanceService) CreateInstances(ctx context.Context, request *v1
 }
 
 func (service *InstanceService) ListInstances(ctx context.Context, request *v1.ListInstancesRequest) (*v1.ListInstancesResponse, error) {
-	result, err := service.uc.ListInstances(ctx, request.TenantID, request.ClientID, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.Filter)
+	result, err := service.uc.ListInstances(ctx, request.TenantId, request.ClientId, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.Filter)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +101,7 @@ func (service *InstanceService) ListInstances(ctx context.Context, request *v1.L
 }
 
 func (service *InstanceService) StartInstances(ctx context.Context, request *v1.StartInstancesRequest) (*v1.StartInstancesResponse, error) {
-	result, err := service.uc.StartInstances(ctx, request.TenantID, request.ClientID, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.VmName)
+	result, err := service.uc.StartInstances(ctx, request.TenantId, request.ClientId, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.VmName)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +114,7 @@ func (service *InstanceService) StartInstances(ctx context.Context, request *v1.
 }
 
 func (service *InstanceService) StopInstances(ctx context.Context, request *v1.StopInstancesRequest) (*v1.StopInstancesResponse, error) {
-	result, err := service.uc.StopInstances(ctx, request.TenantID, request.ClientID, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.VmName, request.SkipShutdown)
+	result, err := service.uc.StopInstances(ctx, request.TenantId, request.ClientId, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.VmName, request.SkipShutdown)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +127,7 @@ func (service *InstanceService) StopInstances(ctx context.Context, request *v1.S
 }
 
 func (service *InstanceService) RebootInstances(ctx context.Context, request *v1.RebootInstancesRequest) (*v1.RebootInstancesResponse, error) {
-	result, err := service.uc.RebootInstances(ctx, request.TenantID, request.ClientID, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.VmName)
+	result, err := service.uc.RebootInstances(ctx, request.TenantId, request.ClientId, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.VmName)
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +140,7 @@ func (service *InstanceService) RebootInstances(ctx context.Context, request *v1
 }
 
 func (service *InstanceService) DeleteInstances(ctx context.Context, request *v1.DeleteInstancesRequest) (*v1.DeleteInstancesResponse, error) {
-	result, err := service.uc.DeleteInstances(ctx, request.TenantID, request.ClientID, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.VmName, request.ForceDeletion)
+	result, err := service.uc.DeleteInstances(ctx, request.TenantId, request.ClientId, request.ClientSecret, request.SubscriptionId, request.ResourceGroupName, request.VmName, request.ForceDeletion)
 	if err != nil {
 		return nil, err
 	}

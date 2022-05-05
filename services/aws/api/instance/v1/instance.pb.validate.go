@@ -90,17 +90,6 @@ func (m *CreateInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetImageId()) < 1 {
-		err := CreateInstancesRequestValidationError{
-			field:  "ImageId",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	// no validation rules for InstanceType
 
 	for idx, item := range m.GetBlockDeviceMapping() {
@@ -133,6 +122,21 @@ func (m *CreateInstancesRequest) validate(all bool) error {
 					cause:  err,
 				}
 			}
+		}
+
+	}
+
+	if m.ImageId != nil {
+
+		if utf8.RuneCountInString(m.GetImageId()) < 1 {
+			err := CreateInstancesRequestValidationError{
+				field:  "ImageId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 	}
@@ -660,9 +664,27 @@ func (m *ListRegionsRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for AccessKeyId
+	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+		err := ListRegionsRequestValidationError{
+			field:  "AccessKeyId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for SecretKey
+	if utf8.RuneCountInString(m.GetSecretKey()) < 1 {
+		err := ListRegionsRequestValidationError{
+			field:  "SecretKey",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return ListRegionsRequestMultiError(errors)
@@ -897,11 +919,38 @@ func (m *ListImagesRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for AccessKeyId
+	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+		err := ListImagesRequestValidationError{
+			field:  "AccessKeyId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for SecretKey
+	if utf8.RuneCountInString(m.GetSecretKey()) < 1 {
+		err := ListImagesRequestValidationError{
+			field:  "SecretKey",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Region
+	if utf8.RuneCountInString(m.GetRegion()) < 1 {
+		err := ListImagesRequestValidationError{
+			field:  "Region",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return ListImagesRequestMultiError(errors)
@@ -1136,11 +1185,38 @@ func (m *ListInstanceTypesRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for AccessKeyId
+	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+		err := ListInstanceTypesRequestValidationError{
+			field:  "AccessKeyId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for SecretKey
+	if utf8.RuneCountInString(m.GetSecretKey()) < 1 {
+		err := ListInstanceTypesRequestValidationError{
+			field:  "SecretKey",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Region
+	if utf8.RuneCountInString(m.GetRegion()) < 1 {
+		err := ListInstanceTypesRequestValidationError{
+			field:  "Region",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if m.MaxResults != nil {
 		// no validation rules for MaxResults
@@ -1383,11 +1459,42 @@ func (m *StartInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for AccessKeyId
+	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+		err := StartInstancesRequestValidationError{
+			field:  "AccessKeyId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for SecretKey
+	if utf8.RuneCountInString(m.GetSecretKey()) < 1 {
+		err := StartInstancesRequestValidationError{
+			field:  "SecretKey",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Region
+	if utf8.RuneCountInString(m.GetRegion()) < 1 {
+		err := StartInstancesRequestValidationError{
+			field:  "Region",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.DryRun != nil {
+		// no validation rules for DryRun
+	}
 
 	if len(errors) > 0 {
 		return StartInstancesRequestMultiError(errors)
@@ -1622,11 +1729,42 @@ func (m *StopInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for AccessKeyId
+	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+		err := StopInstancesRequestValidationError{
+			field:  "AccessKeyId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for SecretKey
+	if utf8.RuneCountInString(m.GetSecretKey()) < 1 {
+		err := StopInstancesRequestValidationError{
+			field:  "SecretKey",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Region
+	if utf8.RuneCountInString(m.GetRegion()) < 1 {
+		err := StopInstancesRequestValidationError{
+			field:  "Region",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.DryRun != nil {
+		// no validation rules for DryRun
+	}
 
 	if len(errors) > 0 {
 		return StopInstancesRequestMultiError(errors)
@@ -1861,11 +1999,42 @@ func (m *RebootInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for AccessKeyId
+	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+		err := RebootInstancesRequestValidationError{
+			field:  "AccessKeyId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for SecretKey
+	if utf8.RuneCountInString(m.GetSecretKey()) < 1 {
+		err := RebootInstancesRequestValidationError{
+			field:  "SecretKey",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Region
+	if utf8.RuneCountInString(m.GetRegion()) < 1 {
+		err := RebootInstancesRequestValidationError{
+			field:  "Region",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.DryRun != nil {
+		// no validation rules for DryRun
+	}
 
 	if len(errors) > 0 {
 		return RebootInstancesRequestMultiError(errors)
@@ -2100,11 +2269,42 @@ func (m *DeleteInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for AccessKeyId
+	if utf8.RuneCountInString(m.GetAccessKeyId()) < 1 {
+		err := DeleteInstancesRequestValidationError{
+			field:  "AccessKeyId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for SecretKey
+	if utf8.RuneCountInString(m.GetSecretKey()) < 1 {
+		err := DeleteInstancesRequestValidationError{
+			field:  "SecretKey",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Region
+	if utf8.RuneCountInString(m.GetRegion()) < 1 {
+		err := DeleteInstancesRequestValidationError{
+			field:  "Region",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.DryRun != nil {
+		// no validation rules for DryRun
+	}
 
 	if len(errors) > 0 {
 		return DeleteInstancesRequestMultiError(errors)

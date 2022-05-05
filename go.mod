@@ -1,6 +1,6 @@
 module cloud-api
 
-go 1.17
+go 1.18
 
 require (
 	github.com/go-kratos/kratos/v2 v2.2.1

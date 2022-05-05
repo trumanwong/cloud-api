@@ -7,7 +7,7 @@ import (
 )
 
 func (service *InstanceService) ListRegions(ctx context.Context, request *v1.ListRegionsRequest) (*v1.ListRegionsResponse, error) {
-	result, err := service.rc.ListRegions(ctx, request.TenantID, request.ClientID, request.ClientSecret, request.SubscriptionId, request.IncludeExtendedLocations)
+	result, err := service.rc.ListRegions(ctx, request.TenantId, request.ClientId, request.ClientSecret, request.SubscriptionId, request.IncludeExtendedLocations)
 	if err != nil {
 		return nil, err
 	}

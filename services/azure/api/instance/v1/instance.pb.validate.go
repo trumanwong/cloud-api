@@ -57,9 +57,9 @@ func (m *ListRegionsRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+	if utf8.RuneCountInString(m.GetTenantId()) < 1 {
 		err := ListRegionsRequestValidationError{
-			field:  "TenantID",
+			field:  "TenantId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -68,9 +68,9 @@ func (m *ListRegionsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+	if utf8.RuneCountInString(m.GetClientId()) < 1 {
 		err := ListRegionsRequestValidationError{
-			field:  "ClientID",
+			field:  "ClientId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -338,9 +338,9 @@ func (m *ListImagesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+	if utf8.RuneCountInString(m.GetTenantId()) < 1 {
 		err := ListImagesRequestValidationError{
-			field:  "TenantID",
+			field:  "TenantId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -349,9 +349,9 @@ func (m *ListImagesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+	if utf8.RuneCountInString(m.GetClientId()) < 1 {
 		err := ListImagesRequestValidationError{
-			field:  "ClientID",
+			field:  "ClientId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -615,9 +615,9 @@ func (m *ListInstanceTypesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+	if utf8.RuneCountInString(m.GetTenantId()) < 1 {
 		err := ListInstanceTypesRequestValidationError{
-			field:  "TenantID",
+			field:  "TenantId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -626,9 +626,9 @@ func (m *ListInstanceTypesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+	if utf8.RuneCountInString(m.GetClientId()) < 1 {
 		err := ListInstanceTypesRequestValidationError{
-			field:  "ClientID",
+			field:  "ClientId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -896,9 +896,9 @@ func (m *CreateInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+	if utf8.RuneCountInString(m.GetTenantId()) < 1 {
 		err := CreateInstancesRequestValidationError{
-			field:  "TenantID",
+			field:  "TenantId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -907,9 +907,9 @@ func (m *CreateInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+	if utf8.RuneCountInString(m.GetClientId()) < 1 {
 		err := CreateInstancesRequestValidationError{
-			field:  "ClientID",
+			field:  "ClientId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -1273,9 +1273,9 @@ func (m *ListInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+	if utf8.RuneCountInString(m.GetTenantId()) < 1 {
 		err := ListInstancesRequestValidationError{
-			field:  "TenantID",
+			field:  "TenantId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -1284,9 +1284,9 @@ func (m *ListInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+	if utf8.RuneCountInString(m.GetClientId()) < 1 {
 		err := ListInstancesRequestValidationError{
-			field:  "ClientID",
+			field:  "ClientId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -1554,9 +1554,9 @@ func (m *StartInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+	if utf8.RuneCountInString(m.GetTenantId()) < 1 {
 		err := StartInstancesRequestValidationError{
-			field:  "TenantID",
+			field:  "TenantId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -1565,9 +1565,9 @@ func (m *StartInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+	if utf8.RuneCountInString(m.GetClientId()) < 1 {
 		err := StartInstancesRequestValidationError{
-			field:  "ClientID",
+			field:  "ClientId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -1835,9 +1835,9 @@ func (m *StopInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+	if utf8.RuneCountInString(m.GetTenantId()) < 1 {
 		err := StopInstancesRequestValidationError{
-			field:  "TenantID",
+			field:  "TenantId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -1846,9 +1846,9 @@ func (m *StopInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+	if utf8.RuneCountInString(m.GetClientId()) < 1 {
 		err := StopInstancesRequestValidationError{
-			field:  "ClientID",
+			field:  "ClientId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -2120,9 +2120,9 @@ func (m *RebootInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+	if utf8.RuneCountInString(m.GetTenantId()) < 1 {
 		err := RebootInstancesRequestValidationError{
-			field:  "TenantID",
+			field:  "TenantId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -2131,9 +2131,9 @@ func (m *RebootInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+	if utf8.RuneCountInString(m.GetClientId()) < 1 {
 		err := RebootInstancesRequestValidationError{
-			field:  "ClientID",
+			field:  "ClientId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -2401,9 +2401,9 @@ func (m *DeleteInstancesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetTenantID()) < 1 {
+	if utf8.RuneCountInString(m.GetTenantId()) < 1 {
 		err := DeleteInstancesRequestValidationError{
-			field:  "TenantID",
+			field:  "TenantId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -2412,9 +2412,9 @@ func (m *DeleteInstancesRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetClientID()) < 1 {
+	if utf8.RuneCountInString(m.GetClientId()) < 1 {
 		err := DeleteInstancesRequestValidationError{
-			field:  "ClientID",
+			field:  "ClientId",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -3260,6 +3260,14 @@ func (m *CreateInstancesRequest_StorageProfile_OSDisk) validate(all bool) error 
 
 	if m.DiskSizeGb != nil {
 		// no validation rules for DiskSizeGb
+	}
+
+	if m.ImageUri != nil {
+		// no validation rules for ImageUri
+	}
+
+	if m.VhdUri != nil {
+		// no validation rules for VhdUri
 	}
 
 	if len(errors) > 0 {
