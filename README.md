@@ -34,7 +34,9 @@ Open /q/swagger-ui/ in Web Browser in order to access Swagger UI.
 
 ### Usage
 
-Visit http://127.0.0.1:9000/q/swagger-ui access aliyun swagger ui.
+Visit http://127.0.0.1:8000/q/swagger-ui access aliyun swagger ui. follows:
+
+![img](./swagger.png)
 
 ## Consul
 
